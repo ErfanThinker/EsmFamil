@@ -19,7 +19,15 @@ class Usermodel extends CI_Model {
         return True;
     }
 
-    function addUser(){
+    function addUser($name, $bdate, $mail, $nick_name, $pass){
+    	$data = array(
+		   'name' => $name ,
+		   'mail' => $mail ,
+		   'nickname' => $nick_name,
+		   'bdate' => $bdate,
+		   'pass' => crypt($pass)
+		);
 
+		$this->db->insert('esmFamil_user', $data); 
     }
 }
