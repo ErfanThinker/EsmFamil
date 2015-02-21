@@ -38,12 +38,23 @@ class Usermodel extends CI_Model {
 		   'mail' => $mail ,
 		   'nickname' => $nick_name,
 		   'bdate' => $bdate,
-		   'pass' => crypt($pass)
+		   'pass' => crypt($pass),
+		   'isActive' => 0
 		);
 
 		$query = $this->db->insert('esmFamil_user', $data);
         echo "register result = ".$query;
         return $query; 
+    }
+
+    function activateUser($email){
+	    $data = array(
+               'isActive' => 1,
+            );
+
+        $this->db->where('mail', $email);
+        $this->db->update('esmFamil_user', $data); 
+	
     }
     
 };
