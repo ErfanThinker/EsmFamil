@@ -20,7 +20,15 @@ class Usermodel extends CI_Model {
     }
     
     function nicknameExists($nickname){
+        $this->db->select("nickname");
+        $this->db->from("esmFamil_user");
+        $this->db->where("nickname",$nickname);
+        $count = $this->db->count_all_results();
+
+        if($count == 0)
+            return False;
         
+        return True;
     }
 
     function addUser($name, $bdate, $mail, $nick_name, $pass){
