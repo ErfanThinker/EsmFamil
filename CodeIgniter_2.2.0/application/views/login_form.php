@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html >
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <body>
-<form method="post" action="localhost/EsmFamil/authentication/registerUser">
+<form method="post" action="http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/registerUser">
 نام و نام خانوادگی:<br>
 <br>
 <input type="text" name="name">
