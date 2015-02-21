@@ -18,6 +18,10 @@ class Usermodel extends CI_Model {
         
         return True;
     }
+    
+    function nicknameExists($nickname){
+        
+    }
 
     function addUser($name, $bdate, $mail, $nick_name, $pass){
     	$data = array(
@@ -28,6 +32,8 @@ class Usermodel extends CI_Model {
 		   'pass' => crypt($pass)
 		);
 
-		$this->db->insert('esmFamil_user', $data); 
+		$query = $this->db->insert('esmFamil_user', $data);
+        return $query; 
     }
-}
+    
+};
