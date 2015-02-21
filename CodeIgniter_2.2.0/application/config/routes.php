@@ -38,6 +38,7 @@
 |
 */
 
+$route["authentication/(:any)"]="authentication/registerUser";
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 

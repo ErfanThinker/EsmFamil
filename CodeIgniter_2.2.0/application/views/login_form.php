@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<form>
+<form method="post" action="localhost/EsmFamil/authentication/registerUser">
 نام و نام خانوادگی:<br>
 <br>
 <input type="text" name="name">
