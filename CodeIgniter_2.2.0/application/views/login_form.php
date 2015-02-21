@@ -2,7 +2,7 @@
 <html >
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <body>
-<form method="post" action="http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/registerUser">
+<form method="post" action="authentication/registerUser">
 نام و نام خانوادگی:<br>
 <br>
 <input type="text" name="name">
@@ -21,11 +21,11 @@
 <br><br>
 ایمیل<br>
 <br>
-<input type="text" name="mail">
+<input type="text" name="email">
 <br><br>
 نام کاربری<br>
 <br>
-<input type="text" name="username">
+<input type="text" name="nickname">
 <br><br>
 رمز عبور<br>
 <br>

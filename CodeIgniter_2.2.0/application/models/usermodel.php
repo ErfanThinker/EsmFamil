@@ -12,7 +12,7 @@ class Usermodel extends CI_Model {
         $this->db->from("esmFamil_user");
         $this->db->where("mail",$email);
         $count = $this->db->count_all_results();
-
+        echo "count of users Exist = ".$count;
         if($count == 0)
             return False;
         
@@ -20,11 +20,12 @@ class Usermodel extends CI_Model {
     }
     
     function nicknameExists($nickname){
+        
         $this->db->select("nickname");
         $this->db->from("esmFamil_user");
         $this->db->where("nickname",$nickname);
         $count = $this->db->count_all_results();
-
+        echo "count of nickname Exist = ".$count;
         if($count == 0)
             return False;
         
@@ -41,6 +42,7 @@ class Usermodel extends CI_Model {
 		);
 
 		$query = $this->db->insert('esmFamil_user', $data);
+        echo "register result = ".$query;
         return $query; 
     }
     
