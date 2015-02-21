@@ -6,6 +6,8 @@ class Authentication extends CI_Controller {
     {
         parent::__construct();
         $this -> load -> model("usermodel");
+        $this -> load -> library("email");
+        $emailConfig = $this->config->load('email');
     }
     
     public function registerUser(){
