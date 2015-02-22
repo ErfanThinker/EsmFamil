@@ -43,7 +43,7 @@ class Usermodel extends CI_Model {
 		);
 
 		$query = $this->db->insert('esmFamil_user', $data);
-        echo "register result = ".$query;
+        /*echo "register result = ".$query;*/
         return $query; 
     }
 
