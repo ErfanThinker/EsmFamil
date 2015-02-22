@@ -56,5 +56,35 @@ class Usermodel extends CI_Model {
         $this->db->update('esmFamil_user', $data); 
 	
     }
+
+    function addVerificationToken($token, $email){
+        $data = array(
+            'mail' => $email,
+            'token' => $token,
+            'timestamp' => round(microtime(true) * 1000)
+            );
+        $query = $this->db->insert('esmFamil_verf', $data);
+        return $query; 
+    }
+    function updateVerf($token, $email){
+        $data = array(
+            'token' => $token,
+            'timestamp' => round(microtime(true) * 1000)
+            );
+        $this->db->where('mail', $email);
+        $this->db->update('esmFamil_verf', $data); 
+    }
+    function confirmValidation($token, $email){
+        $this->db->select();
+        $this->db->from("esmFamil_verf");
+        $this->db->where("mail",$email);
+        $this->db->where("token",$token);
+        $count = $this->db->count_all_results();
+        if($count == 0)
+            return False;
+        
+        return True;
+
+    }
     
 };
