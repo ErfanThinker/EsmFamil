@@ -78,15 +78,15 @@ Please click this link to activate your account:
 http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?email='.$email.'&hash='.$hash.'
  
 '; // Our message above including the link
-                        $subject = "EsmFamil Registration";
+                        //move email message to an html file and load it here;
+                        $subject = "EsmFamil - Confirm Your Registration";
                         $senderName = "EsmFamil";
                         $emailResult = $this -> sendEmail($from, $to, $message, $subject, $senderName);
                         if($emailResult){
                             echo "Email sent successfuly";
                         }else{
-                            echo "Email sending problem";
+                            echo "Email sending problem but user added successfully";
                         }
-
                     }else{
                         echo "error in adding User";
                     }
@@ -97,7 +97,6 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
                 echo "Email Exists";
             }
         }
-        
     }
 
     public function generateValidationToken(){
