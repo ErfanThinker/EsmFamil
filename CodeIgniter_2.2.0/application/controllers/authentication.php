@@ -8,12 +8,18 @@ class Authentication extends CI_Controller {
         $this -> load -> model("usermodel");
         $this -> load -> library("email");
         $emailConfig = $this->config->load('email');
+        ;
     }
+
+	function generateValidationToken($username){
+	    return  crypt(round(microtime(true) * 1000)."".$username);
+	}
     
     public function registerUser(){
         
         if(empty($_POST)){
             $this -> load -> view("login_form");
+            
         }else{
             $name = $this -> input -> post("name");
             $email = $this -> input -> post("email");
@@ -46,6 +52,8 @@ class Authentication extends CI_Controller {
         }
         
     }
+
+    
 }
 
 /* End of file welcome.php */
