@@ -92,4 +92,20 @@ class Usermodel extends CI_Model {
 
     }
     
+    function removeOldCaptcha(){
+        $expiration = time()-60;
+        //this query should change to active record
+        $this->db->query("DELETE FROM captcha WHERE time < ".$expiration);
+        
+        //old images should remove from captcha directory here.
+    }
+    
+    function addNewCaptcha($time , $ip , $word){
+        $data1 = array('time'=> $time,'ip'=> $ip,'word'=> $word);
+        
+        $query = $this->db->insert_string('captcha', $data1);
+        $this->db->query($query);
+        
+    }
+    
 };

@@ -41,7 +41,7 @@ class Authentication extends CI_Controller {
         }else{
             $name = $this -> input -> post("name");
             $email = $this -> input -> post("email");
-            //check email format
+            //check email format $valid = filter_var($Email, FILTER_VALIDATE_EMAIL);
             $bday = $this -> input -> post("bday");
             $bmonth = $this -> input -> post("bmonth");
             $byear = $this -> input -> post("byear");
@@ -129,7 +129,27 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
             echo "There was a problem in activation please try again";
         }
     }
+    
+    public function createCaptcha(){
+        $this->load->helper('captcha');
+        
+        $this ->usermodel -> removeOldCaptcha();
+        
+        //it should work properly $this->deleteExpiredImages();
+        
+        // font missed
+        $vals = array(  'img_path' => '../../css/captcha',
+                'img_url' => 'localhost/Esmfamil/CodeIgniter_2.2.0/css/captcha/',
+                'captcha_word_length' => 5,
+                'font_path' => '',
+                'img_width' => '120',
+                'expiration' => 7200);
 
+        $cap = create_captcha($vals);
+        $this -> usermodel -> addNewCaptcha($cap['time'],$this -> input -> ip_address() , $cap['word']);
+
+        echo json_encode($data);
+    }
     
 }
 
