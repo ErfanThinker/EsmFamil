@@ -9,9 +9,9 @@
 
   <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="../../css/css/normalize.css">
 
-    <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="../../css/css/style.css" media="screen" type="text/css" />
 
 </head>
 
@@ -104,7 +104,7 @@
             <label style="width: 90%;">
               عبارت موجود در کادر را وارد کنید:<span class="req">*</span>
             </label>
-            <input type="text"required autocomplete="off" name="captcha"style="text-align: right;"/>
+            <input cid ="<?php $cid?>" type="text"required autocomplete="off" name="captcha"style="text-align: right;"/>
           </div>
 
           <button type="submit" class="button button-block"/>ثبت</button>
@@ -152,9 +152,9 @@
 
 </div> <!-- /form -->
 
-  <script src='js/jquery.js'></script>
+  <script src='../../css/js/index.js'></script>
 
-  <script src="js/index.js"></script>
+  <script src="../../css/js/jquery.js"></script>
 
 </body>
 
