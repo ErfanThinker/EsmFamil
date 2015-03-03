@@ -12,10 +12,8 @@ class Usermodel extends CI_Model {
         $this->db->from("esmFamil_user");
         $this->db->where("mail",$email);
         $count = $this->db->count_all_results();
-        if($count == 0)
-            return False;
         
-        return True;
+        return $count;
     }
     
     function nicknameExists($nickname){
