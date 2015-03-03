@@ -53,7 +53,7 @@ class Authentication extends CI_Controller {
             $checkUser = $this -> usermodel -> userExists($email);
             $checkNickname = $this -> usermodel -> nicknameExists($nickname);
             
-            if(!$checkUser){
+            if(0 == $checkUser){
                 if(!$checkNickname){
                     $registerResult = $this -> usermodel -> addUser($name, $bdate, $email, $nickname, $password);
                     if($registerResult){                        
