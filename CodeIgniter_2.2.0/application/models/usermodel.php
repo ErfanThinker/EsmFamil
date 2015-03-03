@@ -12,8 +12,10 @@ class Usermodel extends CI_Model {
         $this->db->from("esmFamil_user");
         $this->db->where("mail",$email);
         $count = $this->db->count_all_results();
+        if($count == 0)
+            return False;
         
-        return $count;
+        return True;
     }
     
     function nicknameExists($nickname){
@@ -105,5 +107,58 @@ class Usermodel extends CI_Model {
         $this->db->query($query);
         
     }
-    
+
+    //it checks $password for $nickname is correct or not, if it is correct return true else return false
+    function checkPassword($nickname, $password){
+        $this->db->select("password");
+        $this->db->from("esmFamil_user");
+        $this->db->where('password', $password);
+        $count = $this->db->count_all_results();
+        if($count == 0){
+            return False;
+        }else{
+            return TRUE; 
+        }
+    }
+
+    //it changes password of $nickname to $newPassword
+    function changePassword($nickname, $oldPassword, $newPassword){
+        $bool = checkPassword($nickname, $oldPassword);
+        if($bool == False){
+            return False;
+        }else{
+            $this->db->select("password");
+            $this->db->from("esmFamil_user");
+            $this->db->where("password", $password);
+            $this->db->update("password", $newPassword);
+            return True;
+        }
+    }
+
+    //edit the "$what_field" field of user with nickname "$nickname" to "$to" value
+    function editProfile($nickname, $what_field, $to){
+        //checking if user with "$nickname" nickname exist?
+        $exist = nicknameExists($nickname);
+        if($exist == false)
+            return false;
+
+        if($what_field == 'name'){
+            $data = array(
+               'name' => $name ,
+            );
+        }else if($what_field == 'mail'){
+            $data = array(
+               'mail' => $mail ,
+            );
+
+        }else if($what_field == 'bdate'){
+            $data = array(
+               'bdate' => $bdate,
+            );
+        }
+
+        $this->db->where('nickname', $nickname);
+        $this->db->update($what_field, $data); 
+        return true;
+    }
 };
