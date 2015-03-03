@@ -141,21 +141,11 @@ class Usermodel extends CI_Model {
         $exist = nicknameExists($nickname);
         if($exist == false)
             return false;
-
-        if($what_field == 'name'){
-            $data = array(
-               'name' => $name ,
-            );
-        }else if($what_field == 'mail'){
-            $data = array(
-               'mail' => $mail ,
-            );
-
-        }else if($what_field == 'bdate'){
-            $data = array(
-               'bdate' => $bdate,
-            );
-        }
+        
+        $data = array(
+           'name' => $name ,
+           'bdate' => $bdate
+        );
 
         $this->db->where('nickname', $nickname);
         $this->db->update($what_field, $data); 
