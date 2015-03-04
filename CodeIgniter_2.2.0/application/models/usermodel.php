@@ -136,7 +136,7 @@ class Usermodel extends CI_Model {
     }
 
     //edit the "$what_field" field of user with nickname "$nickname" to "$to" value
-    function editProfile($nickname, $what_field, $to){
+    function editProfile($nickname, $name, $bdate){
         //checking if user with "$nickname" nickname exist?
         $exist = nicknameExists($nickname);
         if($exist == false)
