@@ -110,9 +110,9 @@ class Usermodel extends CI_Model {
 
     //it checks $password for $nickname is correct or not, if it is correct return true else return false
     function checkPassword($nickname, $password){
-        $this->db->select("password");
+        $this->db->select();
         $this->db->from("esmFamil_user");
-        $this->db->where('password', $password);
+        $this->db->where('pass', crypt($password));
         $count = $this->db->count_all_results();
         if($count == 0){
             return False;
@@ -127,6 +127,9 @@ class Usermodel extends CI_Model {
         if($bool == False){
             return False;
         }else{
+            $data = array(
+               'pass' => crypt($password)
+            );
             $this->db->select("password");
             $this->db->from("esmFamil_user");
             $this->db->where("password", $password);
