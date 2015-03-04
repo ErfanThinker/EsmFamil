@@ -31,27 +31,27 @@ class Usermodel extends CI_Model {
     }
 
     function addUser($name, $bdate, $mail, $nick_name, $pass){
-    	$data = array(
-		   'name' => $name ,
-		   'mail' => $mail ,
-		   'nickname' => $nick_name,
-		   'bdate' => $bdate,
-		   'pass' => crypt($pass),
-		   'isActive' => 0
-		);
+        $data = array(
+           'name' => $name ,
+           'mail' => $mail ,
+           'nickname' => $nick_name,
+           'bdate' => $bdate,
+           'pass' => crypt($pass),
+           'isActive' => 0
+        );
 
-		$query = $this->db->insert('esmFamil_user', $data);
+        $query = $this->db->insert('esmFamil_user', $data);
         return $query; 
     }
 
     function activateUser($email){
-	    $data = array(
+        $data = array(
                'isActive' => 1,
             );
 
         $this->db->where('mail', $email);
         $this->db->update('esmFamil_user', $data); 
-	
+    
     }
 
     function addVerificationToken($token, $email){
@@ -111,7 +111,8 @@ class Usermodel extends CI_Model {
     //it checks $password for $nickname is correct or not, if it is correct return true else return false
     function checkPassword($nickname, $password){
         $this->db->select();
-        $this->db->from("esmFamil_user");
+        $this->db->from('esmFamil_user');
+        $this->db->where('nickname', $nickname);
         $this->db->where('pass', crypt($password));
         $count = $this->db->count_all_results();
         if($count == 0){
@@ -128,12 +129,12 @@ class Usermodel extends CI_Model {
             return False;
         }else{
             $data = array(
-               'pass' => crypt($password)
+               'pass' => crypt($newPassword)
             );
-            $this->db->select("password");
-            $this->db->from("esmFamil_user");
-            $this->db->where("password", $password);
-            $this->db->update("password", $newPassword);
+            $this->db->select();
+            $this->db->from('esmFamil_user');
+            $this->db->where('nickname', $nickname);
+            $this->db->update('pass', $newPassword);
             return True;
         }
     }
@@ -151,7 +152,7 @@ class Usermodel extends CI_Model {
         );
 
         $this->db->where('nickname', $nickname);
-        $this->db->update($what_field, $data); 
+        $this->db->update('esmFamil_user', $data); 
         return true;
     }
 };
