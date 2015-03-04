@@ -7,7 +7,7 @@
 	        $this -> load -> model("usermodel");
 	    }
 
-	    public function edit_user(){
+	    public function editUser(){
 	    	if(empty($_POST)){
             	$this -> load -> view("login_form");//TODO: change to edit_form
 	        }else{
@@ -27,7 +27,7 @@
 	        }
 	    }
 
-	    public function change_password(){
+	    public function changePassword(){
 	    	if(empty($_POST)){
             	$this -> load -> view("login_form");//TODO: change to change_password
 	        }else{
