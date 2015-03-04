@@ -131,10 +131,8 @@ class Usermodel extends CI_Model {
             $data = array(
                'pass' => crypt($newPassword)
             );
-            $this->db->select();
-            $this->db->from('esmFamil_user');
             $this->db->where('nickname', $nickname);
-            $this->db->update('pass', $newPassword);
+            $this->db->update('esmFamil_user', $data);
             return True;
         }
     }
@@ -150,7 +148,6 @@ class Usermodel extends CI_Model {
            'name' => $name ,
            'bdate' => $bdate
         );
-
         $this->db->where('nickname', $nickname);
         $this->db->update('esmFamil_user', $data); 
         return true;
