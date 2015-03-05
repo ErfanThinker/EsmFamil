@@ -191,6 +191,3 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
     
 }
 ?>
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
