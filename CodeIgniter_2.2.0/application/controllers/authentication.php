@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+session_start(); //we need to start session in order to access it through CI
 class Authentication extends CI_Controller {
 
     public function __construct()
@@ -7,6 +7,7 @@ class Authentication extends CI_Controller {
         parent::__construct();
         $this -> load -> model("usermodel");
         $this -> load -> library("email");
+        $this->load->library('session');
         $emailConfig = $this->config->load('email');
         ;
     }
@@ -150,8 +151,46 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 
         echo json_encode($data);
     }
+
+    public function signIn(){
+    	if(empty($_POST)){
+            	$this -> load -> view("login_form");//TODO: change to edit_form
+	        }else{
+	        	$nickname = $this -> input -> post("nickname");
+	            $password = $this -> input -> post("password");
+	            $checkPass = $this -> usermodel -> checkPassword($nickname,$password);
+	            
+	            if($checkPass){
+	                echo "Signed in successfully";
+
+	                $sess_array = array(
+						'nickname' => $this->input->post('nickname')
+						);
+	                // Add user data in session
+					$this->session->set_userdata('logged_in', $sess_array);
+
+					$this->load->view('admin_page', $sess_array);//TODO: give proper page
+	                
+	            }else{
+	                echo "Username or Password is incorrect!";
+	            }
+	        }
+
+    }
+
+    public function signOut() {
+
+		// Removing session data
+		$sess_array = array(
+			'nickname' => ''
+		);
+		$this->session->unset_userdata('logged_in', $sess_array);
+		echo "successfuly signed out";
+		$this->load->view('login_form', $data);
+	}
     
 }
+?>
 
 /* End of file welcome.php */
 /* Location: ./application/controllers/welcome.php */
