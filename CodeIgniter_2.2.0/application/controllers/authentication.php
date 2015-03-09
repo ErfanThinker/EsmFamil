@@ -183,12 +183,26 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 				$this->load->view('welcome_message', $sess_array);//TODO: give proper page
                 
             }else{
-            	$this -> load -> view("signin");
-                echo "Username or Password is incorrect!";
+            	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+				echo "Username or Password is incorrect!";
+                
             }
         }
 
     }
+    
+    public function signOut() {
+
+		// Removing session data
+		$sess_array = array(
+			'nickname' => ''
+		);
+		
+		$this->session->unset_userdata('nickname', $sess_array);
+		
+		header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+
+	}
 
     
     
