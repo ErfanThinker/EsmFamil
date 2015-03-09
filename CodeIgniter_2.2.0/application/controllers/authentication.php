@@ -178,8 +178,6 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 					);
                 // Add user data in session
 				$this->session->set_userdata('nickname', $this->input->post('nickname'));
-                $nnickname = $this->session->userdata('nickname');
-                echo $nnickname." Signed in successfully";
 				$this->load->view('welcome_message', $sess_array);//TODO: give proper page
                 
             }else{
