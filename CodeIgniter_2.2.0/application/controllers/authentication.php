@@ -143,24 +143,20 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
     }
     
     public function createCaptcha(){
+        
         $this->load->helper('captcha');
         
         $this ->usermodel -> removeOldCaptcha();
         
-        //it should work properly $this->deleteExpiredImages();
-        
-        // font missed
-        $vals = array(  'img_path' => '../../css/captcha',
-                'img_url' => 'localhost/Esmfamil/CodeIgniter_2.2.0/css/captcha/',
-                'captcha_word_length' => 5,
-                'font_path' => '',
-                'img_width' => '120',
-                'expiration' => 7200);
+        $vals = array(
+            'img_path'  => './css/captcha/',
+            'img_url'   => 'localhost/EsmFamil/CodeIgniter_2.2.0/css/captcha/'
+            );
 
         $cap = create_captcha($vals);
-        $this -> usermodel -> addNewCaptcha($cap['time'],$this -> input -> ip_address() , $cap['word']);
+        $cid = $this -> usermodel -> addNewCaptcha($cap['time'],$this -> input -> ip_address() , $cap['word']);
 
-        echo json_encode($data);
+        //echo json_encode($data);
     }
 
     public function signIn(){
