@@ -14,17 +14,6 @@ class AuthenticatedControllerBase extends authentication {
 		}
 	}
 
-	public function signOut() {
-
-		// Removing session data
-		$sess_array = array(
-			'nickname' => ''
-		);
-		$this->session->unset_userdata('logged_in', $sess_array);
-		echo "successfuly signed out";
-		redirect('signin');
-	}
-
 	public function startNewGame($gname, $maxnumofplayers, $pass){
 		if(empty($_POST)){
             $this -> load -> view("new_game");
@@ -32,7 +21,8 @@ class AuthenticatedControllerBase extends authentication {
 			$nickname = $this->session->userdata('nickname');
 			$gname = $this -> input -> post("gname");
             $maxnumofplayers = $this -> input -> post("maxnumofplayers");
-            $pass = $this -> input -> post("pass");
+            //$pass = $this -> input -> post("pass");
+            $rounds = $this -> input -> post("rounds");
             addGame($gname, $maxnumofplayers, $pass, $nickname);
         	
         }

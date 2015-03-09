@@ -13,7 +13,7 @@ class Usermodel extends CI_Model {
         $this->db->where("mail",$email);
         $count = $this->db->count_all_results();
         if($count == 0)
-            return False;
+            return FALSE;
         
         return True;
     }
@@ -25,7 +25,7 @@ class Usermodel extends CI_Model {
         $this->db->where("nickname",$nickname);
         $count = $this->db->count_all_results();
         if($count == 0)
-            return False;
+            return FALSE;
         
         return True;
     }
@@ -81,7 +81,7 @@ class Usermodel extends CI_Model {
         $count = $this->db->count_all_results();
         
         if($count == 0){
-            return False;
+            return FALSE;
         }else{
             $this -> activateUser($email);
             return TRUE; 
@@ -89,7 +89,7 @@ class Usermodel extends CI_Model {
 
     }
     
-    function removeOldCaptcha(){
+    function removeOldCaptcha(){//Checked
     
         $expiration = time()-60;
         $this->db->query("DELETE FROM captcha WHERE time < ".$expiration);
@@ -98,13 +98,13 @@ class Usermodel extends CI_Model {
     
     }
     
-    function deleteExpiredImages(){
+    function deleteExpiredImages(){//Checked
         
         $result ="";
         $path = "/var/www/EsmFamil/CodeIgniter_2.2.0/css/captcha/";
         // Open a known directory, and proceed to read its contents
         if ($dh = opendir($path)) {
-            while (($file = readdir($dh)) !== false){
+            while (($file = readdir($dh)) !== FALSE){
                 $temp = explode(".", $file);
                 $extension = end($temp);
                 if($extension == "jpg"){
@@ -119,7 +119,7 @@ class Usermodel extends CI_Model {
         closedir($dh);
     }
     
-    function addNewCaptcha($time , $ip , $word){
+    function addNewCaptcha($time , $ip , $word){//Checked
         $data1 = array('time'=> $time,'ip'=> $ip,'word'=> $word);
         
         $query = $this->db->insert_string('captcha', $data1);
@@ -128,41 +128,51 @@ class Usermodel extends CI_Model {
         return $cid;
     }
 
-    //it checks $password for $nickname is correct or not, if it is correct return true else return false
-    function checkPassword($nickname, $password){
+    function checkPassword($nickname, $password){//Checked
+    
         $this->db->select();
         $this->db->from('esmFamil_user');
         $this->db->where('nickname', $nickname);
         $this->db->where('pass', md5($password));
         $count = $this->db->count_all_results();
+        
+        
         if($count == 0){
-            return False;
+            return FALSE;
         }else{
             return TRUE; 
         }
+        
     }
 
     //it changes password of $nickname to $newPassword
-    function changePassword($nickname, $oldPassword, $newPassword){
-        $bool = checkPassword($nickname, $oldPassword);
-        if($bool == False){
-            return False;
+    function changePassword($nickname, $oldPassword, $newPassword){//Checked
+        
+        $check = $this->checkPassword($nickname, $oldPassword);
+        
+        if($check == FALSE){
+            return FALSE;
         }else{
             $data = array(
                'pass' => md5($newPassword)
             );
+            
             $this->db->where('nickname', $nickname);
-            $this->db->update('esmFamil_user', $data);
-            return True;
+            $result = $this->db->update('esmFamil_user', $data);
+            
+            return $result;
+            
         }
+        
+        
     }
 
-    //edit the "$what_field" field of user with nickname "$nickname" to "$to" value
-    function editProfile($nickname, $name, $bdate){
-        //checking if user with "$nickname" nickname exist?
+    function editProfile($nickname, $name, $bdate){//Checked
+        
         $exist = $this->nicknameExists($nickname);
-        if($exist == false)
-            return false;
+        
+        if($exist == FALSE)
+            return FALSE;
         
         $data = array(
            'name' => $name ,
@@ -171,16 +181,18 @@ class Usermodel extends CI_Model {
         $this->db->where('nickname', $nickname);
         $result = $this->db->update('esmFamil_user', $data);
         return $result; 
+        
     }
     
-    function checkVerified($nickname){
+    function checkVerified($nickname){//Checked
         $this->db->select();
         $this->db->from('esmFamil_user');
         $this->db->where('nickname', $nickname);
         $this->db->where('isActive', 1);
         $count = $this->db->count_all_results();
+        
         if($count == 0){
-            return False;
+            return FALSE;
         }else{
             return TRUE; 
         }

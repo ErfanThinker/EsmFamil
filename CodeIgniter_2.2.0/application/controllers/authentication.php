@@ -201,8 +201,5 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 		header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
 
 	}
-
-    
-    
 }
 ?>

@@ -6,9 +6,10 @@ class Game extends CI_Controller {
     {
         parent::__construct();
         $this -> load -> model("gamemodel");
+        $this->load->library('session');
     }
     
-    public function createNewGame(){
+    public function createNewGame(){//Checked
         
         if(!isset($_POST)){
             $this->load->view('index');
@@ -18,7 +19,7 @@ class Game extends CI_Controller {
         $gname = $this->input->post('gname');
         $maxPlayer = intval($this->input->post('maxPlayer'));
         $rounds = intval($this->input->post('rounds'));
-        $creatorNickname = $_SESSION['nickname'];
+        $creatorNickname = $this->session->userdata('nickname');
         
         if(!isset($creatorNickname))
             echo "Please first attemp to signin so you can create a game.";
