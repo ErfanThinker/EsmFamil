@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/EsmFamil/CodeIgniter_2.2.0/';
+$config['base_url']	= 'http://localhost/EsmFamil.git/CodeIgniter_2.2.0/';
 
 /*
 |--------------------------------------------------------------------------
