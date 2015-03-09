@@ -83,6 +83,26 @@
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 </div>
+<form action="signOut" method="post">
+
+          
+            
+	
+            <!-- <div class="field-wrap">
+              
+            </div>
+            <div class="field-wrap">
+              
+            </div> -->
+          
+
+          
+    
+    		
+          
+        
+
+          <button type="submit" class="button button-block"/>ثبت</button>
 
 </body>
 </html>
