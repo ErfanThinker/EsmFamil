@@ -9,7 +9,6 @@ class Authentication extends CI_Controller {
         $this -> load -> library("email");
         $this->load->library('session');
         $emailConfig = $this->config->load('email');
-        ;
     }
     
     public function sendEmail($from,$to,$msg,$subject,$senderName){
@@ -38,19 +37,31 @@ class Authentication extends CI_Controller {
     public function registerUser(){
         
         if(empty($_POST)){
+            
             $this -> load -> view("login_form");
+            
         }else{
+            
             $name = $this -> input -> post("name");
             $email = $this -> input -> post("email");
-            //check email format $valid = filter_var($Email, FILTER_VALIDATE_EMAIL);
+            
+            
+            $valid = filter_var($email, FILTER_VALIDATE_EMAIL);
+            if(!$valid)
+                echo "Email syntax is invalid";
+            
+            
             $bday = $this -> input -> post("bday");
             $bmonth = $this -> input -> post("bmonth");
             $byear = $this -> input -> post("byear");
             $bdate = "$byear/"."$bmonth"."/$bday";
+            
+            
             $captcha = $this -> input -> post("captcha");
             $nickname = $this -> input -> post("nickname");
-            //check email uniqeness
             $password = $this -> input -> post("password");
+            
+            
             $checkUser = $this -> usermodel -> userExists($email);
             $checkNickname = $this -> usermodel -> nicknameExists($nickname);
             
@@ -78,8 +89,7 @@ Password: '.$password.'
 Please click this link to activate your account:
 http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?email='.$email.'&hash='.$hash.'
  
-'; // Our message above including the link
-                        //move email message to an html file and load it here;
+';//move email message to an html file and load it here;
                         $subject = "EsmFamil - Confirm Your Registration";
                         $senderName = "EsmFamil";
                         $emailResult = $this -> sendEmail($from, $to, $message, $subject, $senderName);
@@ -101,9 +111,10 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
     }
 
     public function generateValidationToken(){
-        //return  crypt(round(microtime(true) * 1000)."".$username.rand());
+        
         return md5( rand(0,1000) );//Generate random 32 character hash and assign it to a local variable.
         // Example output: f4552671f8909587cf485ea990207f3b
+        
     }
 
     public function saveVerificationLink($email,$hash){
@@ -167,7 +178,7 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 						'nickname' => $this->input->post('nickname')
 						);
 	                // Add user data in session
-					$this->session->set_userdata('logged_in', $sess_array);
+					$this->session->set_userdata('nickname', $this->input->post('nickname'));/// I changed This ::Emad::
 
 					$this->load->view('admin_page', $sess_array);//TODO: give proper page
 	                
@@ -184,7 +195,7 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 		$sess_array = array(
 			'nickname' => ''
 		);
-		$this->session->unset_userdata('logged_in', $sess_array);
+		$this->session->unset_userdata('nickname', '');/// I changed this ::Emad::
 		echo "successfuly signed out";
 		$this->load->view('login_form', $data);
 	}
