@@ -152,4 +152,16 @@ class Usermodel extends CI_Model {
         $this->db->update('esmFamil_user', $data); 
         return true;
     }
+    function checkVerified($nickname){
+        $this->db->select();
+        $this->db->from('esmFamil_user');
+        $this->db->where('nickname', $nickname);
+        $this->db->where('isActive', 1);
+        $count = $this->db->count_all_results();
+        if($count == 0){
+            return False;
+        }else{
+            return TRUE; 
+        }
+    }
 };
