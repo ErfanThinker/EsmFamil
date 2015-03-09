@@ -93,11 +93,34 @@ class Usermodel extends CI_Model {
     }
     
     function removeOldCaptcha(){
+    
         $expiration = time()-60;
         //this query should change to active record
         $this->db->query("DELETE FROM captcha WHERE time < ".$expiration);
         
-        //old images should remove from captcha directory here.
+        $this->deleteExpiredImages();
+    
+    }
+    
+    function deleteExpiredImages(){
+        
+        $result ="";
+        $path = "/var/www/EsmFamil/CodeIgniter_2.2.0/css/captcha/";
+        // Open a known directory, and proceed to read its contents
+        if ($dh = opendir($path)) {
+            while (($file = readdir($dh)) !== false){
+                $temp = explode(".", $file);
+                $extension = end($temp);
+                if($extension == "jpg"){
+                    $time = $temp[0].'.'.$temp[1];
+                    if(intval($time) < time() - 60){
+                        $tempPath = $path.$file;
+                        unlink($tempPath);
+                    }
+                }
+            }
+        }
+        closedir($dh);
     }
     
     function addNewCaptcha($time , $ip , $word){
@@ -105,7 +128,8 @@ class Usermodel extends CI_Model {
         
         $query = $this->db->insert_string('captcha', $data1);
         $this->db->query($query);
-        
+        $cid = $this -> db -> insert_id();
+        return $cid;
     }
 
     //it checks $password for $nickname is correct or not, if it is correct return true else return false
