@@ -164,41 +164,36 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
     }
 
     public function signIn(){
-    	if(empty($_POST)){
-            	$this -> load -> view("login_form");//TODO: change to edit_form
-	        }else{
-	        	$nickname = $this -> input -> post("nickname");
-	            $password = $this -> input -> post("password");
-	            $checkPass = $this -> usermodel -> checkPassword($nickname,$password);
-	            
-	            if($checkPass){
-	                echo "Signed in successfully";
+		if(empty($_POST)){
+        	$this -> load -> view("signin");
+        	
+        }else{
+        	$nickname = $this -> input -> post("nickname");
+            $password = $this -> input -> post("password");
+            $checkPass = $this -> usermodel -> checkPassword($nickname,$password);
+            $checkActive = $this -> usermodel -> checkVerified($nickname);
+            
+            if($checkPass && $checkActive){
 
-	                $sess_array = array(
-						'nickname' => $this->input->post('nickname')
-						);
-	                // Add user data in session
-					$this->session->set_userdata('nickname', $this->input->post('nickname'));/// I changed This ::Emad::
-
-					$this->load->view('admin_page', $sess_array);//TODO: give proper page
-	                
-	            }else{
-	                echo "Username or Password is incorrect!";
-	            }
-	        }
+                session_start(); //we need to start session in order to access it through CI                   
+                $sess_array = array(
+					'nickname' => $this->input->post('nickname')
+					);
+                // Add user data in session
+				$this->session->set_userdata('nickname', $this->input->post('nickname'));
+                $nnickname = $this->session->userdata('nickname');
+                echo $nnickname." Signed in successfully";
+				$this->load->view('welcome_message', $sess_array);//TODO: give proper page
+                
+            }else{
+            	$this -> load -> view("signin");
+                echo "Username or Password is incorrect!";
+            }
+        }
 
     }
 
-    public function signOut() {
-
-		// Removing session data
-		$sess_array = array(
-			'nickname' => ''
-		);
-		$this->session->unset_userdata('nickname', '');/// I changed this ::Emad::
-		echo "successfuly signed out";
-		$this->load->view('login_form', $data);
-	}
+    
     
 }
 ?>
