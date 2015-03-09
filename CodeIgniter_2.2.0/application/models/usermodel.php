@@ -6,7 +6,7 @@ class Usermodel extends CI_Model {
         $this->load->database();
     }
 
-    function userExists($email){
+    function userExists($email){//Checked
 
         $this->db->select("mail");
         $this->db->from("esmFamil_user");
@@ -18,7 +18,7 @@ class Usermodel extends CI_Model {
         return True;
     }
     
-    function nicknameExists($nickname){
+    function nicknameExists($nickname){//Checked
         
         $this->db->select("nickname");
         $this->db->from("esmFamil_user");
@@ -30,7 +30,7 @@ class Usermodel extends CI_Model {
         return True;
     }
 
-    function addUser($name, $bdate, $mail, $nick_name, $pass){
+    function addUser($name, $bdate, $mail, $nick_name, $pass){//Checked
         $data = array(
            'name' => $name ,
            'mail' => $mail ,
@@ -44,7 +44,7 @@ class Usermodel extends CI_Model {
         return $query; 
     }
 
-    function activateUser($email){
+    function activateUser($email){// Checked
         $data = array(
                'isActive' => 1,
             );
@@ -54,7 +54,7 @@ class Usermodel extends CI_Model {
     
     }
 
-    function addVerificationToken($token, $email){
+    function addVerificationToken($token, $email){//Checked
         $data = array(
             'mail' => $email,
             'token' => $token,
@@ -73,15 +73,12 @@ class Usermodel extends CI_Model {
         $this->db->update('esmFamil_verf', $data); 
     }
 
-    function confirmValidation($token, $email){
+    function confirmValidation($token, $email){//Checked
         $this->db->select();
         $this->db->from("esmFamil_verf");
         $this->db->where("mail",$email);
         $this->db->where("token",$token);
         $count = $this->db->count_all_results();
-        
-        //check timestamp Here...
-        
         
         if($count == 0){
             return False;
@@ -93,11 +90,33 @@ class Usermodel extends CI_Model {
     }
     
     function removeOldCaptcha(){
+    
         $expiration = time()-60;
-        //this query should change to active record
         $this->db->query("DELETE FROM captcha WHERE time < ".$expiration);
         
-        //old images should remove from captcha directory here.
+        $this->deleteExpiredImages();
+    
+    }
+    
+    function deleteExpiredImages(){
+        
+        $result ="";
+        $path = "/var/www/EsmFamil/CodeIgniter_2.2.0/css/captcha/";
+        // Open a known directory, and proceed to read its contents
+        if ($dh = opendir($path)) {
+            while (($file = readdir($dh)) !== false){
+                $temp = explode(".", $file);
+                $extension = end($temp);
+                if($extension == "jpg"){
+                    $time = $temp[0].'.'.$temp[1];
+                    if(intval($time) < time() - 60){
+                        $tempPath = $path.$file;
+                        unlink($tempPath);
+                    }
+                }
+            }
+        }
+        closedir($dh);
     }
     
     function addNewCaptcha($time , $ip , $word){
@@ -105,7 +124,8 @@ class Usermodel extends CI_Model {
         
         $query = $this->db->insert_string('captcha', $data1);
         $this->db->query($query);
-        
+        $cid = $this -> db -> insert_id();
+        return $cid;
     }
 
     //it checks $password for $nickname is correct or not, if it is correct return true else return false
@@ -140,7 +160,7 @@ class Usermodel extends CI_Model {
     //edit the "$what_field" field of user with nickname "$nickname" to "$to" value
     function editProfile($nickname, $name, $bdate){
         //checking if user with "$nickname" nickname exist?
-        $exist = nicknameExists($nickname);
+        $exist = $this->nicknameExists($nickname);
         if($exist == false)
             return false;
         
@@ -149,8 +169,8 @@ class Usermodel extends CI_Model {
            'bdate' => $bdate
         );
         $this->db->where('nickname', $nickname);
-        $this->db->update('esmFamil_user', $data); 
-        return true;
+        $result = $this->db->update('esmFamil_user', $data);
+        return $result; 
     }
     
     function checkVerified($nickname){
