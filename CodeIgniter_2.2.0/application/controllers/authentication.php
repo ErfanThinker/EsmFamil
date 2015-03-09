@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-session_start(); //we need to start session in order to access it through CI
+
 class Authentication extends CI_Controller {
 
     public function __construct()
@@ -160,6 +160,7 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
     }
 
     public function signIn(){
+        
 		if(empty($_POST)){
         	$this -> load -> view("signin");
         	
