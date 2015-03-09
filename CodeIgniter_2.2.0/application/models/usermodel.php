@@ -36,7 +36,7 @@ class Usermodel extends CI_Model {
            'mail' => $mail ,
            'nickname' => $nick_name,
            'bdate' => $bdate,
-           'pass' => crypt($pass),
+           'pass' => md5($pass),
            'isActive' => 0
         );
 
@@ -113,7 +113,7 @@ class Usermodel extends CI_Model {
         $this->db->select();
         $this->db->from('esmFamil_user');
         $this->db->where('nickname', $nickname);
-        $this->db->where('pass', crypt($password));
+        $this->db->where('pass', md5($password));
         $count = $this->db->count_all_results();
         if($count == 0){
             return False;
@@ -129,7 +129,7 @@ class Usermodel extends CI_Model {
             return False;
         }else{
             $data = array(
-               'pass' => crypt($newPassword)
+               'pass' => md5($newPassword)
             );
             $this->db->where('nickname', $nickname);
             $this->db->update('esmFamil_user', $data);
@@ -152,4 +152,20 @@ class Usermodel extends CI_Model {
         $this->db->update('esmFamil_user', $data); 
         return true;
     }
+
+    function checkVerified($nickname){
+        $this->db->select();
+        $this->db->from('esmFamil_user');
+        $this->db->where('nickname', $nickname);
+        $this->db->where('isActive', 1);
+        $count = $this->db->count_all_results();
+        if($count == 0){
+            return False;
+        }else{
+            return TRUE; 
+        }
+    }
+
+
+    
 };
