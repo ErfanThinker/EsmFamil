@@ -21,7 +21,7 @@ class Gamemodel extends CI_Model {
         return $query; 
     }
 
-    function checkIfUserIsInGame($nickname){
+    /*function checkIfUserIsInGame($nickname){
         $this->db->select();
         $this->db->from('esmFamil_game');
         $this->db->where('creaternickname', $creaternickname);
@@ -81,7 +81,7 @@ class Gamemodel extends CI_Model {
            'pnickname' => $pnickname
         ));
         return $query; 
-    }
+    }*/
 
     function getListOfGames(){
         return $this->db->get_where('esmFamil_game',array('isfinished' => 0));

@@ -9,7 +9,7 @@ class Loader extends CI_Controller {
 
     public function loadDashbord(){
 
-        $this -> load -> view("index");
+        $this -> load -> view("home");
     }
 
     public function loadNewGame(){

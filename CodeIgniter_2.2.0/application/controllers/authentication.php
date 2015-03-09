@@ -160,11 +160,12 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
     }
 
     public function signIn(){
-        
-		if(empty($_POST)){
-        	$this -> load -> view("signin");
-        	
+
+		if(!isset($_POST)){
+        	$this -> load -> view("login_form");
+
         }else{
+
         	$nickname = $this -> input -> post("nickname");
             $password = $this -> input -> post("password");
             $checkPass = $this -> usermodel -> checkPassword($nickname,$password);
@@ -178,10 +179,11 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 					);
                 // Add user data in session
 				$this->session->set_userdata('nickname', $this->input->post('nickname'));
-				$this->load->view('welcome_message', $sess_array);//TODO: give proper page
+                header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
                 
             }else{
-            	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+
+            	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/signIn");
 				echo "Username or Password is incorrect!";
                 
             }
@@ -201,5 +203,6 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 		header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
 
 	}
+    
 }
 ?>

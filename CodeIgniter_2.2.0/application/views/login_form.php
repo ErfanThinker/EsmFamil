@@ -27,7 +27,7 @@
         <div id="signup">   
           <h1>ثبت نام</h1>
 
-          <form action="authentication/registerUser" method="post">
+          <form action="registerUser" method="post">
 
           <div class="req">
             <div class="field-wrap ">
@@ -199,20 +199,20 @@
         <div id="login">   
           <h1>وارد شوید</h1>
 
-          <form action="authentication/signIn" method="post">
+          <form action="signIn" method="post">
 
             <div class="field-wrap">
             <label style="width: 90%; text-align: center;">
-              پست الکترونیکی<span class="req">*</span>
+              نام کاربری<span class="req">*</span>
             </label>
-            <input type="email"required autocomplete="off"style="text-align: center;"/>
+            <input type="text"name = "nickname" required autocomplete="off"style="text-align: center;"/>
           </div>
 
           <div class="field-wrap">
             <label style="width: 90%; text-align: center;">
               رمز ورود<span class="req">*</span>
             </label>
-            <input type="password"required autocomplete="off"style="text-align: center;"/>
+            <input type="password" name="password" autocomplete="off"style="text-align: center;"/>
           </div>
 
           <button class="button button-block"/>ورود</button>
