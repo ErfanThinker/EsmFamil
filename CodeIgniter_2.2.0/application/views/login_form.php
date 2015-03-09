@@ -5,13 +5,13 @@
 
   <meta charset="UTF-8">
 
-  <title>EsmFamil Registration</title>
+  <title>EsmFamil Registration2</title>
 
-  <link href="<?php echo asset_url()?>css/css" rel='stylesheet' type='text/css'>
+  <link href="<?php echo $this->config->base_url();?>css/css/css" rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="<?php echo asset_url()?>css/normalize.css" >
+  <link rel="stylesheet" href="<?php echo $this->config->base_url();?>css/css/normalize.css" >
 
-    <link rel="stylesheet" href="<?php echo asset_url()?>css/style.css" media="screen" type="text/css" />
+    <link rel="stylesheet" href="<?php echo $this->config->base_url();?>css/css/style.css" media="screen" type="text/css" />
 
 </head>
 
@@ -27,7 +27,7 @@
         <div id="signup">   
           <h1>ثبت نام</h1>
 
-          <form action="registerUser" method="post">
+          <form action="authentication/registerUser" method="post">
 
           <div class="req">
             <div class="field-wrap ">
@@ -199,7 +199,7 @@
         <div id="login">   
           <h1>وارد شوید</h1>
 
-          <form action="/" method="post">
+          <form action="authentication/signIn" method="post">
 
             <div class="field-wrap">
             <label style="width: 90%; text-align: center;">
@@ -225,9 +225,9 @@
 
 </div> <!-- /form -->
 
-  <script src="<?php echo asset_url()?>js/jquery.js"></script>
+  <script src="<?php echo $this->config->base_url();?>css/js/jquery.js"></script>
 
-  <script src="<?php echo asset_url()?>js/index.js"></script>
+  <script src="<?php echo $this->config->base_url();?>css/js/index.js"></script>
 
 </body>
 
