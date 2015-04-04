@@ -4,6 +4,7 @@ class Gamemodel extends CI_Model {
     public function __construct()
     {
         $this->load->database();
+        $this->load->helper('array');
     }
     
     public function createNewGame($gname,$maxPlayer,$rounds,$creatorNickname){
@@ -68,7 +69,7 @@ class Gamemodel extends CI_Model {
           foreach($query->result() as $row){
             if(isset($row->maxnumofplayers)){
                 $maxNum = $row->maxnumofplayers;
-                echo $row->maxnumofplayers;
+                //echo $row->maxnumofplayers;
             } 
           }
         }
@@ -124,12 +125,39 @@ class Gamemodel extends CI_Model {
         return $query; 
     }
 
-    function getListOfGames(){
-        return $this->db->get_where('esmfamil_game',array('isfinished' => 0));
+    function getListOfGames(){//checked
+        $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0));
+        $result = array();
+        if ($query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+               array_push($result, $row);
+            }
+        }
+        /*
+        *Usage of result of this function:
+        *
+        *foreach($result as $row){
+        *    echo $row['gid'];
+        *    echo $row['creaternickname'];
+        *    echo $row['rounds'];
+        *    echo $row['gname'];
+        *    ...
+        *}
+        */
+        return $result;
 
     }
     function getListOfGamesUserCreatedAndFinished($creaternickname){
-        return $this->db->get_where('esmfamil_game',array('isfinished' => 1,'creaternickname' => $creaternickname));
+        $query = $this->db->get_where('esmfamil_game',array('isfinished' => 1,'creaternickname' => $creaternickname));
+        $result = array();
+        if ($query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+               array_push($result, $row);
+            }
+        }
+        return $result;
     }
 
     

@@ -12,7 +12,7 @@ class Game extends CI_Controller {
     public function createNewGame(){//Checked
         
         if(!isset($_POST)){
-            $this->load->view('index');
+            $this->load->view('index');//TODO: change to related view
             return;
         }
         
@@ -54,7 +54,7 @@ class Game extends CI_Controller {
     public function addPlayerToGame(){//Checked
         
         if(!isset($_POST)){
-            $this->load->view('index');
+            $this->load->view('index');//TODO: change to related view
             return;
         }
         
@@ -85,9 +85,9 @@ class Game extends CI_Controller {
         }
     }
 
-    public function removePlayerFromGame(){
+    public function removePlayerFromGame(){//checked
         if(!isset($_POST)){
-            $this->load->view('index');
+            $this->load->view('index');//TODO: change to related view
             return;
         }
         $gid = $this->input->post('gid');
@@ -99,17 +99,20 @@ class Game extends CI_Controller {
         }
         if(!isset($gid)){
             echo "Game doesn't exist";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         $result = $this -> gamemodel -> removePlayerFromGame($gid, $pnickname);
         if($result){
             echo "Left the game Successfully";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         else {
             echo "There was an error leaving the game.";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
 
-    public function removeGame(){//checked
+    public function removeGame(){
         if(!isset($_POST)){
             $this->load->view('index');
             return;
@@ -123,17 +126,43 @@ class Game extends CI_Controller {
         }
         if(!isset($gid)){
             echo "Game doesn't exist";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         if(!($this -> gamemodel -> ownsTheGame($pnickname, $gid))){
             echo "Error: Unauthorized access tried to remove a game";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         $result = $this -> gamemodel -> removeGame($gid);
         if($result){
             echo "Removed the game Successfully";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         else {
             echo "There was an error removing the game.";
+            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
+
+    public function getListOfGames(){//checked
+        $data = array('gameList' => $this -> gamemodel ->getListOfGames());
+        $this->load->view('signin', $data);//TODO: change to your view
+
+        /* Usage in view:
+        *<body>
+        *<?php 
+        * foreach($gameList as $row){
+        *            echo $row['gid'];
+        *            echo $row['creaternickname'];
+        *            echo $row['rounds'];
+        *            echo $row['gname'];
+        *            ...
+        *        }
+        *        ?>
+        *
+        *</body>
+        */
+    }
+
+
 }
 ?>
