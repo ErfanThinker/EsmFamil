@@ -7,9 +7,9 @@ class Loader extends CI_Controller {
         parent::__construct();
     }
 
-    public function loadDashbord(){
+    public function loadhome(){
 
-        $this -> load -> view("home");
+        $this->load->view("home");
     }
 
     public function loadNewGame(){
@@ -21,7 +21,11 @@ class Loader extends CI_Controller {
 
         $this -> load -> view("list_of_games");
     }
+    
+    public function loadGameList(){
 
+	$this->load->view("gamelist");
+    }
     public function loadErrorPage(){
         $this -> load -> view("error_page");
     }
