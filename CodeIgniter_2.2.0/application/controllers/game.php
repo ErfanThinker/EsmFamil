@@ -145,7 +145,7 @@ class Game extends CI_Controller {
 
     public function getListOfGames(){//checked
         $data = array('gameList' => $this -> gamemodel ->getListOfGames());
-        $this->load->view('signin', $data);//TODO: change to your view
+        $this->load->view('gamelist', $data);//TODO: change to your view
 
         /* Usage in view:
         *<body>

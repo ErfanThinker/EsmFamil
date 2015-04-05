@@ -179,11 +179,10 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 					);
                 // Add user data in session
 				$this->session->set_userdata('nickname', $this->input->post('nickname'));
-                header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-                
+                header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/game/getListOfGames");
             }else{
 
-            	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/signIn");
+            	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
 				echo "Username or Password is incorrect!";
                 
             }
@@ -200,7 +199,7 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 		
 		$this->session->unset_userdata('nickname', $sess_array);
 		
-		header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+		header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
 
 	}
     
