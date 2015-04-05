@@ -83,7 +83,7 @@
 	      <a href="#" class="btn btn-default btn-flat">اطلاعات شخصی</a>
 	    </div>
 	    <div class="pull-right">
-	      <a href="#" class="btn btn-default btn-flat">خروج</a>
+	      <a href="http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/signOut" class="btn btn-default btn-flat">خروج</a>
 	    </div>
 	  </li>
 	</ul>
@@ -382,23 +382,53 @@
                   <table id="example1" class="table table-bordered table-striped" style="text-align: right;">
                     <thead>
                       <tr>
-                        <th>آخرین وظعیت</th>
+                        <th>تعداد دور</th>
                         <th>حداکثر ظرفیت</th>
                         <th>تعداد بازیکنان کنونی</th>
                         <th>ایجاد شده توسط</th>
                       </tr>
                     </thead>
+					
+					<!-- <?php 
+						$output = "<tbody>\n";
+									        foreach($gameList as $row){
+									         		$output .= "<tr>\n";
+									         		/*$npt = $row['creaternickname'];
+									         		echo $npt."\n";*/
+									         		$output .= "<td>".$row['rounds']."</td>\n";
+									         		$output .= "<td>".$row['maxnumofplayers']."</td>\n";
+									         		$output .= "<td>".$row['currentlyJoined']."</td>\n";
+									         		$output .= "<td>".$row['creaternickname']."</td>\n";
+									                $output .= "</tr>\n";
+									                   
+									            }
+									        $output = "</tbody>\n";
+									        echo $output;
+								        ?>
+					 -->
                     <tbody>
+                    <?php foreach($gameList as $row){ ?>
                       <tr>
-                        <td>ali</td>
-                        <td>4</td>
-                        <td>3</td>
-                        <td>شروع نشده</td>
+                        <td>
+                        	<?php echo $row['rounds']; ?>
+                        </td>
+                        <td>
+							<?php echo $row['maxnumofplayers']; ?>
+                        </td>
+                        <td>
+							<?php echo $row['currentlyJoined']; ?>
+                        </td>
+                        <td>
+							<?php echo $row['creaternickname']; ?>
+                        </td>
                       </tr>
+                      <?php } ?>
                     </tbody>
+                    
+
                     <tfoot>
                       <tr>
-                        <th>آخرین وظعیت</th>
+                        <th>تعداد دور</th>
                         <th>حداکثر ظرفیت</th>
                         <th>تعداد بازیکنان کنونی</th>
                         <th>ایجاد شده توسط</th>
@@ -410,12 +440,12 @@
 		    <div class="col-xs-6" style="float: left; direction: ltr;">
 			<div class="dataTables_paginate paging_bootstrap">
 			  <ul class="pagination">
-			   <li class="prev disabled"><a href="#"> previous</a></li>
-			   <li class="active"><a href="#">1</a></li>
-			   <li><a href="#">2</a></li>
-			   <li><a href="#">3</a></li>
-			   <li><a href="#">4</a></li>
-			   <li><a href="#">next</a></li>
+			   <li class="prev disabled"><a href="#"> قبلی</a></li>
+			   <li class="active"><a href="#">۱</a></li>
+			   <li><a href="#">۲</a></li>
+			   <li><a href="#">۳</a></li>
+			   <li><a href="#">۴</a></li>
+			   <li><a href="#">بعدی</a></li>
 			  </ul>
 			 </div>
 		    </div>
