@@ -131,7 +131,14 @@ class Gamemodel extends CI_Model {
         if ($query->num_rows() > 0){
             foreach ($query->result_array() as $row)
             {
-               array_push($result, $row);
+
+                $this->db->select();
+                $this->db->from("esmfamil_game_members");
+                $this->db->where("gid",$row['gid']);
+                $row['currentlyJoined'] = $this->db->count_all_results();
+                
+                
+                array_push($result, $row);
             }
         }
         /*
