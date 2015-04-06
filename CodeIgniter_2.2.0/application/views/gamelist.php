@@ -408,7 +408,7 @@
 					 -->
                     <tbody>
                     <?php foreach($gameList as $row){ ?>
-                      <tr>
+                      <tr onclick="clickedf(<?php echo $row['gid']; ?>)">
                         <td>
                         	<?php echo $row['rounds']; ?>
                         </td>
@@ -505,5 +505,42 @@
 
     <!-- AdminLTE for demo purposes -->
     <script src="<?php echo $this->config->base_url();?>css/js/demo.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    	//refresh list every 10 sec
+    	setInterval(function(){
+    		$.ajax({url: "refreshListOfGames", success: function(result){
+		        $("tbody").html(result);
+		    }});	
+    	}, 10000);
+
+		function clickedf($gid){
+			alert($gid);
+			post('addPlayerToGame', {gid: $gid});
+		}
+
+		function post(path, params, method) {
+		    method = method || "post"; // Set method to post by default if not specified.
+
+		    // The rest of this code assumes you are not using a library.
+		    // It can be made less wordy if you use one.
+		    var form = document.createElement("form");
+		    form.setAttribute("method", method);
+		    form.setAttribute("action", path);
+
+		    for(var key in params) {
+		        if(params.hasOwnProperty(key)) {
+		            var hiddenField = document.createElement("input");
+		            hiddenField.setAttribute("type", "hidden");
+		            hiddenField.setAttribute("name", key);
+		            hiddenField.setAttribute("value", params[key]);
+
+		            form.appendChild(hiddenField);
+		         }
+		    }
+
+		    document.body.appendChild(form);
+		    form.submit();
+		}
+    </script>
   </body>
 </html>
