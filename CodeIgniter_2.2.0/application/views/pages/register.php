@@ -1,4 +1,4 @@
-<form>
+<form action="registerUser" method="post">
   <div class="form-group">
     <label for="exampleInputName">نام</label>
     <input type="text" class="form-control" name="name" id="exampleInputName" placeholder="نام">

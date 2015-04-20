@@ -37,6 +37,7 @@
 | in the URL cannot be matched to a valid route.
 |
 */
+$route["registerUser"]="authentication/registerUser";
 $route["login"]="authentication/signIn";
 $route["authentication"]="authentication/registerUser";
 $route['default_controller'] = "welcome";
