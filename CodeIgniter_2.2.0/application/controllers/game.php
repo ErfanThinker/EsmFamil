@@ -164,8 +164,33 @@ class Game extends CI_Controller {
     }
 
     public function refreshListOfGames(){
+
         $data = array('gameList' => $this -> gamemodel ->getListOfGames());
         $this->load->view('refresh_gamelist', $data);//TODO: change to your view        
+
+    }
+
+    public function createNewTurn($gid){
+
+        if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
+
+            $tid = $this -> gamemodel -> createNewTurn($gid);
+
+            echo $tid;
+            
+            return $tid;
+
+        }
+
+        echo "Game rounds Completed";
+
+    }
+
+    public function test(){
+
+        echo "emadok khar";
+
+        $this -> gamemodel -> gameRoundNumber(1);
     }
 
 

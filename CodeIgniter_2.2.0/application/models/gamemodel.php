@@ -59,8 +59,6 @@ class Gamemodel extends CI_Model {
                'pnickname' => $pnickname
             );
 
-
-
         //Check if game has capacity
         $this->db->select('*');
         $query = $this->db->get_where('esmfamil_game', array('gid' => $gid), 1);
@@ -69,14 +67,9 @@ class Gamemodel extends CI_Model {
           foreach($query->result() as $row){
             if(isset($row->maxnumofplayers)){
                 $maxNum = $row->maxnumofplayers;
-                //echo $row->maxnumofplayers;
             } 
           }
         }
-        //echo $row->maxnumofplayers;
-        //$maxNum = $row->maxnumofplayers;
-        
-
 
         $this->db->select();
         $this->db->from("esmfamil_game_members");
@@ -118,10 +111,12 @@ class Gamemodel extends CI_Model {
     }
 
     function removePlayerFromGame($gid,$pnickname){
+
         $this->db->delete('esmfamil_game_members', array(
            'gid' => $gid,
            'pnickname' => $pnickname
         ));
+
         return $query; 
     }
 
@@ -141,20 +136,13 @@ class Gamemodel extends CI_Model {
                 array_push($result, $row);
             }
         }
-        /*
-        *Usage of result of this function:
-        *
-        *foreach($result as $row){
-        *    echo $row['gid'];
-        *    echo $row['creaternickname'];
-        *    echo $row['rounds'];
-        *    echo $row['gname'];
-        *    ...
-        *}
-        */
+
         return $result;
 
     }
+
+
+
     function getListOfGamesUserCreatedAndFinished($creaternickname){
         $query = $this->db->get_where('esmfamil_game',array('isfinished' => 1,'creaternickname' => $creaternickname));
         $result = array();
@@ -165,6 +153,29 @@ class Gamemodel extends CI_Model {
             }
         }
         return $result;
+    }
+
+
+    public function isGameRoundsCompleted($gid){
+
+
+
+    }
+
+    public function gameRoundNumber($gid){
+
+        $this -> db -> select("rounds");
+        $this -> db -> from("esmfamil_game");
+        $this -> db -> where("gid",$gid);
+        $query = $this -> db -> get();
+        $myArray = $query->result();
+
+        foreach ($myArray as $key) {
+            echo $key;
+        }
+
+        return $query -> array_result();
+
     }
 
     
