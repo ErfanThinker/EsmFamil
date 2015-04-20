@@ -1,0 +1,66 @@
+.page-header {
+    margin: 0px 0 0px;
+    padding-bottom: 0px;
+ }
+
+.navbar {
+	background-color: #00af64;
+	margin-bottom: 0px;
+}
+
+.navbar-default .navbar-nav>li>a{
+	color: #000;
+}
+
+.navbar-default .navbar-brand{
+	color: #ff0000;
+}
+
+html{
+	color: black;
+}
+
+.navbar-nav li:before {
+content: "|";
+position: absolute;
+top: 15px;
+
+}
+
+.navbar-nav li:first-child:before {
+content: none;
+}
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #80ea69;
+  text-align: center;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+  width: auto;
+  padding: 0 15px;
+}
+.container .text-muted {
+  margin: 20px 0;
+}

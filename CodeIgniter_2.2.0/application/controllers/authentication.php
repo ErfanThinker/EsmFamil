@@ -37,9 +37,9 @@ class Authentication extends CI_Controller {
     public function registerUser(){
         
         if(empty($_POST)){
-            
-            $this -> load -> view("login_form");
-            
+            $this->load->view('templates/header');
+            $this->load->view('pages/register');
+            $this->load->view('templates/footer');            
         }else{
             
             $name = $this -> input -> post("name");
@@ -161,9 +161,10 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 
     public function signIn(){
 
-		if(!isset($_POST)){
-        	$this -> load -> view("login_form");
-
+		if(empty($_POST)){
+            $this->load->view('templates/header');
+            $this->load->view('pages/login');
+            $this->load->view('templates/footer');            
         }else{
 
         	$nickname = $this -> input -> post("nickname");
