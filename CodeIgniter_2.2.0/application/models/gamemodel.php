@@ -120,7 +120,7 @@ class Gamemodel extends CI_Model {
         return $query; 
     }
 
-    function getListOfGames(){//checked
+    function getListOfGames(){ // Checked
         $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0));
         $result = array();
         if ($query->num_rows() > 0){
@@ -131,7 +131,6 @@ class Gamemodel extends CI_Model {
                 $this->db->from("esmfamil_game_members");
                 $this->db->where("gid",$row['gid']);
                 $row['currentlyJoined'] = $this->db->count_all_results();
-                
                 
                 array_push($result, $row);
             }
@@ -156,25 +155,42 @@ class Gamemodel extends CI_Model {
     }
 
 
-    public function isGameRoundsCompleted($gid){
+    public function isGameRoundsCompleted($gid){ // Checked
 
+        if($this -> getNumberOfGameRoundsPlayed($gid) >= $this -> gameRoundNumber($gid)){
+            return TRUE;
+        }
 
+        return False;
 
     }
 
-    public function gameRoundNumber($gid){
+
+    public function getNumberOfGameRoundsPlayed($gid){ // Checked
+
+        $this -> db -> from("esmfamil_game_turns");
+        $this -> db -> where("gid",$gid);
+        $query = $this -> db -> count_all_results();
+
+        return $query;
+
+    }
+
+    public function gameRoundNumber($gid){ // Checked
 
         $this -> db -> select("rounds");
         $this -> db -> from("esmfamil_game");
         $this -> db -> where("gid",$gid);
         $query = $this -> db -> get();
-        $myArray = $query->result();
+        $row = $query->row();
+        
+        return $row->rounds;
 
-        foreach ($myArray as $key) {
-            echo $key;
-        }
+    }
 
-        return $query -> array_result();
+
+    public function createNewTurn($gid){
+
 
     }
 

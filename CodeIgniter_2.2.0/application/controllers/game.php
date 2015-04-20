@@ -188,9 +188,9 @@ class Game extends CI_Controller {
 
     public function test(){
 
-        echo "emadok khar";
+        echo "emadok";
 
-        $this -> gamemodel -> gameRoundNumber(1);
+        $this -> gamemodel -> getListOfGames();
     }
 
 
