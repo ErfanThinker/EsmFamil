@@ -180,7 +180,7 @@ http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?
 					);
                 // Add user data in session
 				$this->session->set_userdata('nickname', $this->input->post('nickname'));
-                header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/game/getListOfGames");
+                header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/gamelist");
             }else{
 
             	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");

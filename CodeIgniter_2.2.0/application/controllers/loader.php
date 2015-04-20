@@ -5,6 +5,7 @@ class Loader extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
+        $this->load->model("gamemodel");
     }
 
     public function loadhome(){
@@ -18,8 +19,12 @@ class Loader extends CI_Controller {
     }
 
     public function loadListOfGames(){
+        $data["gameList"] = $this->gamemodel->getListOfGames();
+        $this->load->view('templates/header');
+        $this->load->view('pages/list_of_games', $data);
+        $this->load->view('templates/footer');            
 
-        $this -> load -> view("list_of_games");
+        //$this -> load -> view("pages/list_of_games");
     }
     
     public function loadGameList(){

@@ -131,12 +131,12 @@
 
   <div class="form-group">
     <label for="exampleInputNickName">نام کاربری</label>
-    <input type="text" class="form-control" id="exampleInputNickName" placeholder="نام کاربری">
+    <input type="text" class="form-control" name="nickname" id="exampleInputNickName" placeholder="نام کاربری">
   </div>
 
   <div class="form-group ">
     <label for="exampleInputPassword1">گذر واژه</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="گذر واژه">
+    <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="گذر واژه">
   </div>
 
 

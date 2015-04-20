@@ -1,4 +1,4 @@
-<form class="form-inline">
+<form class="form-inline" action="login" method="post">
   <div class="form-group">
     <label for="nickName">نام کاربری</label>
     <input type="text" class="form-control" name="nickname" id="nickName" placeholder="نام کاربری">

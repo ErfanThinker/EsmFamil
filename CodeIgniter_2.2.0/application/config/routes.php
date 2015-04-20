@@ -37,6 +37,8 @@
 | in the URL cannot be matched to a valid route.
 |
 */
+
+$route["gamelist"]="loader/loadListOfGames";
 $route["registerUser"]="authentication/registerUser";
 $route["login"]="authentication/signIn";
 $route["authentication"]="authentication/registerUser";

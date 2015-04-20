@@ -357,20 +357,8 @@
 		  <div class="row">
 		    <div class="col-xs-6" style="float: left; direction: ltr;">
 		      
-		      <label>
-			<select name="recordPerPage" size="1">
-			  <option value="10" selected="selected">
-			    10
-			  </option>
-			  <option value="50">
-			    50
-			  </option>
-			  <option value="100">
-			    100
-			  </option>
-			</select>
-		      </label>
-		      تعداد رکوردها
+
+
 		    </div>
 		    <div class="col-xs-6">
 		      <label>
@@ -389,23 +377,7 @@
                       </tr>
                     </thead>
 					
-					<!-- <?php 
-						$output = "<tbody>\n";
-									        foreach($gameList as $row){
-									         		$output .= "<tr>\n";
-									         		/*$npt = $row['creaternickname'];
-									         		echo $npt."\n";*/
-									         		$output .= "<td>".$row['rounds']."</td>\n";
-									         		$output .= "<td>".$row['maxnumofplayers']."</td>\n";
-									         		$output .= "<td>".$row['currentlyJoined']."</td>\n";
-									         		$output .= "<td>".$row['creaternickname']."</td>\n";
-									                $output .= "</tr>\n";
-									                   
-									            }
-									        $output = "</tbody>\n";
-									        echo $output;
-								        ?>
-					 -->
+		
                     <tbody>
                     <?php foreach($gameList as $row){ ?>
                       <tr onclick="clickedf(<?php echo $row['gid']; ?>)">
