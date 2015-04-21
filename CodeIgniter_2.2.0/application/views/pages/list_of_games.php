@@ -2,11 +2,11 @@
 
 <section class="content">
   <!-- Small boxes (Stat box) -->
-  <div class="row" style="text-align: right;">
-    <div class="col-xs-9">
+  <div class="row" style="text-align: right;" >
+    <div class="col-xs-9" align="center">
     <div class="box">
-                <div class="box-header">
-                  <h3 class="box-title">لیست بازی ها</h3>
+                <div class="box-header" >
+                  <h3 class="box-title" >لیست بازی ها</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body" style="text-align: right;">
 
@@ -21,7 +21,7 @@
                       </tr>
                     </thead>
           
-                    <tbody>
+                    <tbody id="ajax-tbody">
                     <?php foreach($gameList as $row){ ?>
                       <tr >
                         <td>
@@ -54,7 +54,7 @@
                     </tfoot> -->
                   </table>
                 </div><!-- /.box-body -->
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-xs-6" style="float: left; direction: ltr;">
       <div class="dataTables_paginate paging_bootstrap">
         <ul class="pagination">
@@ -67,7 +67,7 @@
         </ul>
        </div>
         </div>
-                </div><!-- /.box -->
+                </div> -->
 
     </div><!-- /.col -->
   </div>
@@ -76,15 +76,17 @@
 </div>
 
 <script type="text/javascript">
+//some thing alaki
       //refresh list every 10 sec
       setInterval(function(){
-        $.ajax({url: "refreshListOfGames", success: function(result){
-            $("tbody").html(result);
+        $.ajax({url: "<?php echo $this->config->base_url();?>index.php/refreshListOfGames", success: function(result){
+            //alert("gameList refreshed");
+            $("#ajax-tbody").html(result);
         }});  
       }, 10000);
 
     function clickedf($gid){
-      alert($gid);
+      //alert($gid);
       post('addPlayerToGame', {gid: $gid});
     }
 
@@ -112,3 +114,4 @@
         form.submit();
     }
     </script>
+

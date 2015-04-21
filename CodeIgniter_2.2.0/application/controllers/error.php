@@ -3,6 +3,10 @@
 class Error extends CI_Controller {
 
     public function error($text){
-    	$this -> load -> view('error-page.php', $text);
+    	$data["text"] = $text;
+		$this->load->view('templates/header');
+        $this->load->view('pages/error', $data);
+        $this->load->view('templates/footer');            
+
 	}
 }

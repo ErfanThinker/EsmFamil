@@ -7,6 +7,10 @@
 <link href="<?php echo $this->config->base_url();?>bootstrap/css/bootstrap-rtl.min.css" rel="stylesheet">
 <link href="<?php echo $this->config->base_url();?>custom/css/custom.css" rel="stylesheet">
 <script src="<?php echo $this->config->base_url();?>bootstrap/js/bootstrap.min.js" type="text/javascript"></script>  
+
+<!-- jQuery -->
+    <script src="<?php echo $this->config->base_url();?>bootstrap/js/jquery.js"></script>
+
 </head>
 <body>
 <div class="container">

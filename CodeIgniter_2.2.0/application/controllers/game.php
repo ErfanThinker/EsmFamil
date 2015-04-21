@@ -167,9 +167,8 @@ class Game extends CI_Controller {
     }
 
     public function refreshListOfGames(){
-
-        $data = array('gameList' => $this -> gamemodel ->getListOfGames());
-        $this->load->view('refresh_gamelist', $data);//TODO: change to your view        
+        $data['gameList']=$this -> gamemodel ->getListOfGames();
+        $this->load->view('pages/refresh_gamelist', $data);//TODO: change to your view        
 
     }
 

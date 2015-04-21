@@ -1,9 +1,10 @@
 <div id="center-block" style="width:50%;">
 <form action="registerUser" method="post">
-    <div class="form-head-lable">
-        فرم ثبت نام
+    <div class="box-header">
+      <h3 class="box-title">فرم ثبت نام</h3>
     </div>
-  <div class="form-group">
+    <br>
+  <div class="form-group ">
     <label for="exampleInputName">نام</label>
     <input type="text" class="form-control" name="name" id="exampleInputName" placeholder="نام">
   </div>
@@ -146,6 +147,6 @@
 
 
   
-  <button type="submit" class="btn btn-default">ارسال</button>
+  <button type="submit" class="btn btn-default" style="">ارسال</button>
 </form>
 </div>
