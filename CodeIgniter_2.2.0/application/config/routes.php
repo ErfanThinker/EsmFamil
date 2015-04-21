@@ -43,6 +43,7 @@ $route["addPlayerToGame"]="game/addPlayerToGame";
 $route["gamelist"]="loader/loadListOfGames";
 $route["registerUser"]="authentication/registerUser";
 $route["login"]="authentication/signIn";
+$route["logout"]="authentication/signOut";
 $route["authentication"]="authentication/registerUser";
 $route['default_controller'] = "welcome";
 $route['404_override'] = '';
