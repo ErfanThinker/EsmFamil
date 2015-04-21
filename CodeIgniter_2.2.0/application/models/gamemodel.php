@@ -131,7 +131,7 @@ class Gamemodel extends CI_Model {
                 $this->db->from("esmfamil_game_members");
                 $this->db->where("gid",$row['gid']);
                 $row['currentlyJoined'] = $this->db->count_all_results();
-                
+
                 array_push($result, $row);
             }
         }
@@ -191,6 +191,47 @@ class Gamemodel extends CI_Model {
 
     public function createNewTurn($gid){
 
+        $letter = $this -> randomLetter();
+
+
+        $data = array(
+           'letter' => $letter
+        );
+
+        $this->db->insert('esmfamil_turn', $data); 
+        $tid = $this->db->insert_id();
+
+        if($this -> gameExists($gid)){
+            $data = array(
+               'gid' => $gid ,
+               'tid' => $tid
+            );
+
+            $this->db->insert('esmfamil_game_turns', $data); 
+
+        }
+
+    }
+
+    public function randomLetter(){ // Checked
+
+        $pool = "abcdefghijklmnopqrstuvwxyz";
+        $rand = rand(0,25);
+
+        return $pool[$rand];
+    }
+
+
+    public function gameExists($gid){ // Checked
+
+        $this->db->where('gid', $gid);
+        $this->db->from('esmfamil_game');
+        
+        if($this->db->count_all_results() == 0){
+            return False;
+        }
+
+        return TRUE;
 
     }
 

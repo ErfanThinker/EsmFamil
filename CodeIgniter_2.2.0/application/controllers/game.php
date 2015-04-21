@@ -179,7 +179,7 @@ class Game extends CI_Controller {
 
             $tid = $this -> gamemodel -> createNewTurn($gid);
 
-            echo $tid;
+               
             
             return $tid;
 
@@ -193,7 +193,7 @@ class Game extends CI_Controller {
 
         echo "emadok";
 
-        $this -> gamemodel -> getListOfGames();
+        echo $this -> gamemodel -> createNewTurn(2);
     }
 
 
