@@ -38,6 +38,8 @@
 |
 */
 
+$route["refreshListOfGames"]="game/refreshListOfGames";
+$route["addPlayerToGame"]="game/addPlayerToGame";
 $route["gamelist"]="loader/loadListOfGames";
 $route["registerUser"]="authentication/registerUser";
 $route["login"]="authentication/signIn";

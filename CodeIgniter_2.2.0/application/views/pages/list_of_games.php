@@ -1,3 +1,5 @@
+<div id="center-block">
+
 <section class="content">
   <!-- Small boxes (Stat box) -->
   <div class="row" style="text-align: right;">
@@ -15,12 +17,13 @@
                         <th>حداکثر ظرفیت</th>
                         <th>تعداد بازیکنان کنونی</th>
                         <th>ایجاد شده توسط</th>
+                        <th></th>
                       </tr>
                     </thead>
           
                     <tbody>
                     <?php foreach($gameList as $row){ ?>
-                      <tr onclick="clickedf(<?php echo $row['gid']; ?>)">
+                      <tr >
                         <td>
                           <?php echo $row['rounds']; ?>
                         </td>
@@ -33,19 +36,22 @@
                         <td>
               <?php echo $row['creaternickname']; ?>
                         </td>
+                        <td>
+              <a onclick="clickedf(<?php echo $row['gid']; ?>)"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span></a>
+                        </td>
                       </tr>
                       <?php } ?>
                     </tbody>
                     
 
-                    <tfoot>
+                    <!-- <tfoot>
                       <tr>
                         <th>تعداد دور</th>
                         <th>حداکثر ظرفیت</th>
                         <th>تعداد بازیکنان کنونی</th>
                         <th>ایجاد شده توسط</th>
                       </tr>
-                    </tfoot>
+                    </tfoot> -->
                   </table>
                 </div><!-- /.box-body -->
     <div class="row">
@@ -66,3 +72,43 @@
     </div><!-- /.col -->
   </div>
 </section>      
+
+</div>
+
+<script type="text/javascript">
+      //refresh list every 10 sec
+      setInterval(function(){
+        $.ajax({url: "refreshListOfGames", success: function(result){
+            $("tbody").html(result);
+        }});  
+      }, 10000);
+
+    function clickedf($gid){
+      alert($gid);
+      post('addPlayerToGame', {gid: $gid});
+    }
+
+    function post(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+             }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+    </script>

@@ -1,4 +1,8 @@
+<div id="center-block" style="width:50%;">
 <form action="registerUser" method="post">
+    <div class="form-head-lable">
+        فرم ثبت نام
+    </div>
   <div class="form-group">
     <label for="exampleInputName">نام</label>
     <input type="text" class="form-control" name="name" id="exampleInputName" placeholder="نام">
@@ -12,7 +16,7 @@
   <div class ="form-group field-wrap date">
     <label for="year">تاریخ تولد</label> <br>
               سال
-                <select name="byear" id="year" class="form-control" style="width:80px;display:inline-flex;">
+                <select name="byear" id="year" class="form-control" style="width:100px;display:inline-flex;">
                         <option value="1330" >1330</option>
                         <option value="1331" >1331</option>
                         <option value="1332" >1332</option>
@@ -72,7 +76,7 @@
                     </select>
 
          ماه
-                <select name="bmonth" id="month" class="form-control" style="width:80px;display:inline-flex;">
+                <select name="bmonth" id="month" class="form-control" style="width:100px;display:inline-flex;">
                         <option value="1" >فروردین</option>
                         <option value="2">اردیبهشت</option>
                         <option value="3">خرداد</option>
@@ -88,7 +92,7 @@
                     </select>
 
          روز
-                <select name="bday" id="day" class="form-control" style="width:80px;display:inline-flex;">
+                <select name="bday" id="day" class="form-control" style="width:100px;display:inline-flex;">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -144,3 +148,4 @@
   
   <button type="submit" class="btn btn-default">ارسال</button>
 </form>
+</div>
