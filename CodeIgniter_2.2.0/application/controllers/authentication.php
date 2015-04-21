@@ -87,7 +87,7 @@ Password: '.$password.'
 ------------------------
  
 Please click this link to activate your account:
-http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?email='.$email.'&hash='.$hash.'
+http://www.namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/verifyUser?email='.$email.'&hash='.$hash.'
  
 ';//move email message to an html file and load it here;
                         $subject = "EsmFamil - Confirm Your Registration";
