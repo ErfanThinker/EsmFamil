@@ -97,20 +97,20 @@ class Game extends CI_Controller {
         $result = NULL;
         if(!isset($pnickname)){
             echo "Please first attemp to signin before you can join a game.";
-            header("Location: <?php echo $this->config->base_url();?>/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
         }
         if(!isset($gid)){
             echo "Game doesn't exist";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         $result = $this -> gamemodel -> removePlayerFromGame($gid, $pnickname);
         if($result){
             echo "Left the game Successfully";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         else {
             echo "There was an error leaving the game.";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
 
@@ -124,24 +124,24 @@ class Game extends CI_Controller {
         $result = NULL;
         if(!isset($pnickname)){
             echo "Error: You are not signed in.";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
         }
         if(!isset($gid)){
             echo "Game doesn't exist";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         if(!($this -> gamemodel -> ownsTheGame($pnickname, $gid))){
             echo "Error: Unauthorized access tried to remove a game";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         $result = $this -> gamemodel -> removeGame($gid);
         if($result){
             echo "Removed the game Successfully";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
         else {
             echo "There was an error removing the game.";
-            header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
 
