@@ -25,7 +25,7 @@ class Game extends CI_Controller {
         $result = NULL;
         if(!isset($creatorNickname)){
             echo "Please first attemp to signin before you can create a game.";
-            header("Location: <?php echo $this->config->base_url();?>/index.php/login");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
         }
         
         if(!isset($gname)){
@@ -65,7 +65,7 @@ class Game extends CI_Controller {
         $result = NULL;
         if(!isset($pnickname)){
             echo "Please first attemp to signin before you can join a game.";
-            header("Location: <?php echo $this->config->base_url();?>index.php/login");
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
         }
         
         if(!isset($gid)){
