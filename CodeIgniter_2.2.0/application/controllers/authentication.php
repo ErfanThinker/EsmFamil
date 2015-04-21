@@ -183,7 +183,7 @@ http://www.namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/ver
                 header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/gamelist");
             }else{
 
-            	header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
+            	header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
 				echo "Username or Password is incorrect!";
                 
             }
@@ -200,7 +200,7 @@ http://www.namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/ver
 		
 		$this->session->unset_userdata('nickname', $sess_array);
 		
-		header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
+		header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
 
 	}
     
