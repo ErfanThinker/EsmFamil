@@ -180,10 +180,10 @@ http://www.namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/ver
 					);
                 // Add user data in session
 				$this->session->set_userdata('nickname', $this->input->post('nickname'));
-                header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/gamelist");
+                header("Location: <?php echo $this->config->base_url();?>/CodeIgniter_2.2.0/index.php/gamelist");
             }else{
 
-            	header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
+            	header("Location: <?php echo $this->config->base_url();?>/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
 				echo "Username or Password is incorrect!";
                 
             }
@@ -200,7 +200,7 @@ http://www.namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication/ver
 		
 		$this->session->unset_userdata('nickname', $sess_array);
 		
-		header("Location: http://localhost/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
+		header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/authentication");
 
 	}
     
