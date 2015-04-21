@@ -6,6 +6,8 @@ class Game extends CI_Controller {
     {
         parent::__construct();
         $this -> load -> model("gamemodel");
+        $this -> load -> model("namesmodel");
+        $this -> load -> model("usermodel");
         $this->load->library('session');
     }
     
@@ -178,8 +180,11 @@ class Game extends CI_Controller {
 
             $tid = $this -> gamemodel -> createNewTurn($gid);
 
-               
-            
+            $users = $this -> gamemodel -> getGameMembers($gid);
+            $userIds = $this -> usermodel -> getUserIds($users);
+
+            $this -> namesmodel -> createNames($tid,$userIds);
+                       
             return $tid;
 
         }
@@ -192,7 +197,9 @@ class Game extends CI_Controller {
 
         echo "emadok";
 
-        echo $this -> gamemodel -> createNewTurn(2);
+        echo $this -> createNewTurn(2);
+
+        //echo $this -> usermodel ->getUserIdByNickname("emadok");
     }
 
 

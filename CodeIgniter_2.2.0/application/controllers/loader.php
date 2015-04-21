@@ -31,8 +31,13 @@ class Loader extends CI_Controller {
 
 	$this->load->view("gamelist");
     }
-    public function loadErrorPage(){
-        $this -> load -> view("error_page");
+    public function loadErrorPage($text){
+        
+        $data["text"] = $text;
+        $this->load->view('templates/header');
+        $this->load->view('pages/error', $data);
+        $this->load->view('templates/footer');  
+        
     }
 
 

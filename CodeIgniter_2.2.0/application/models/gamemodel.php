@@ -154,6 +154,18 @@ class Gamemodel extends CI_Model {
         return $result;
     }
 
+    public function getGameMembers($gid){ // Checked
+
+        $this -> db -> select("pnickname");
+        $this -> db -> from("esmfamil_game_members");
+        $this -> db -> where("gid",$gid);
+        $query = $this -> db -> get();
+
+        return $query -> result_array();
+
+
+    }
+
 
     public function isGameRoundsCompleted($gid){ // Checked
 
@@ -189,7 +201,7 @@ class Gamemodel extends CI_Model {
     }
 
 
-    public function createNewTurn($gid){
+    public function createNewTurn($gid){ // Checked
 
         $letter = $this -> randomLetter();
 
@@ -207,7 +219,9 @@ class Gamemodel extends CI_Model {
                'tid' => $tid
             );
 
-            $this->db->insert('esmfamil_game_turns', $data); 
+            $this->db->insert('esmfamil_game_turns', $data);
+
+            return $tid;
 
         }
 

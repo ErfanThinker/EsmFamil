@@ -197,4 +197,33 @@ class Usermodel extends CI_Model {
             return TRUE; 
         }
     }
+
+    public function getUserIdByNickname($nickname){ // Checked
+
+        $this -> db -> select("id");
+        $this -> db -> from("esmFamil_user");
+        $this -> db -> where("nickname",$nickname);
+        $query = $this -> db -> get();
+
+        if ($query->num_rows() > 0)
+        {
+           $row = $query->row();
+
+           return $row -> id;
+        } 
+
+    }
+
+    public function getUserIds($users){
+
+        $userIds = array();
+
+        foreach ($users as $user) {
+            $id = $this -> getUserIdByNickname($user["pnickname"]);
+            array_push($userIds, $id);
+        }
+
+        return $userIds;
+
+    }
 };
