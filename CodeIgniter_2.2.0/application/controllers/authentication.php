@@ -166,8 +166,6 @@ class Authentication extends CI_Controller {
 
                 echo json_decode("30"); // Login Sucessfully
 
-                echo $this -> session -> userdata("nickname");
-
             }
         }
 
