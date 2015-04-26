@@ -13,9 +13,9 @@ class Usermodel extends CI_Model {
         $this->db->where("mail",$email);
         $count = $this->db->count_all_results();
         if($count == 0)
-            return FALSE;
+            return 0;
         
-        return True;
+        return 1;
     }
     
     function nicknameExists($nickname){//Checked
@@ -119,7 +119,7 @@ class Usermodel extends CI_Model {
         closedir($dh);
     }
     
-    function addNewCaptcha($time , $ip , $word){//Checked
+    public function addNewCaptcha($time , $ip , $word){//Checked
         $data1 = array('time'=> $time,'ip'=> $ip,'word'=> $word);
         
         $query = $this->db->insert_string('captcha', $data1);
@@ -128,9 +128,8 @@ class Usermodel extends CI_Model {
         return $cid;
     }
 
-    function checkPassword($nickname, $password){//Checked
+    public function checkPassword($nickname, $password){//Checked
     
-        $this->db->select();
         $this->db->from('esmFamil_user');
         $this->db->where('nickname', $nickname);
         $this->db->where('pass', md5($password));
@@ -138,9 +137,9 @@ class Usermodel extends CI_Model {
         
         
         if($count == 0){
-            return FALSE;
+            return 0;
         }else{
-            return TRUE; 
+            return 1; 
         }
         
     }
@@ -185,6 +184,7 @@ class Usermodel extends CI_Model {
     }
     
     function checkVerified($nickname){//Checked
+
         $this->db->select();
         $this->db->from('esmFamil_user');
         $this->db->where('nickname', $nickname);
@@ -192,9 +192,9 @@ class Usermodel extends CI_Model {
         $count = $this->db->count_all_results();
         
         if($count == 0){
-            return FALSE;
+            return 0;
         }else{
-            return TRUE; 
+            return 1; 
         }
     }
 
