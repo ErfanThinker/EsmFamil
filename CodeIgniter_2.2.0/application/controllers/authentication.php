@@ -232,9 +232,9 @@ class Authentication extends CI_Controller {
         $validationResult = $this -> usermodel -> confirmValidation($hash,$email);
         
         if($validationResult == TRUE){
-            return 1;
+            echo "Your account verfied secessfully.";
         }else{
-            return 0;
+            echo "There was a problem in verfing your email, please try again.";
         }
     }
     //
