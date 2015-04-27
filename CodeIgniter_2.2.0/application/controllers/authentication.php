@@ -23,13 +23,13 @@ class Authentication extends CI_Controller {
         
         if(!isset($_POST)){
             
-            echo json_decode("20"); // errorCode : Method should be POST
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
         }else if(!isset($_POST['name']) || !isset($_POST['email']) || !isset($_POST['bday'])
                     || !isset($_POST['bmonth']) || !isset($_POST['byear']) || !isset($_POST['nickname'])
                     || !isset($_POST['password']) || count($_POST) != 7 ){
 
-            echo json_decode("27"); // Post Parameters are invalid.
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
         }else{
             
@@ -40,7 +40,7 @@ class Authentication extends CI_Controller {
             $valid = filter_var($email, FILTER_VALIDATE_EMAIL);
             if(!$valid){
 
-                echo json_decode("21");// errorCode : Email syntax is invalid
+                echo json_encode(array("result" => "21"));// errorCode : Email syntax is invalid
 
             }
             else{
@@ -86,22 +86,22 @@ class Authentication extends CI_Controller {
                             $emailResult = $this -> sendEmail($from, $to, $message, $subject, $senderName);
 
                             if($emailResult){
-                                echo json_decode("22"); // Email sent successfuly
+                                echo json_encode(array("result" => "22")); // Email sent successfuly
 
                             }else{
-                                echo json_decode("23");  // Email sending problem but user added successfully
+                                echo json_encode(array("result" => "23"));  // Email sending problem but user added successfully
 
                             }
                         }else{
-                            echo json_decode("24"); // error in adding User
+                            echo json_encode(array("result" => "24")); // error in adding User
 
                         }
                     }else{
-                        echo json_decode("25"); // nickname Exists
+                        echo json_encode(array("result" => "25")); // nickname Exists
 
                     }
                 }else{
-                    echo json_decode("26"); // Email Exists
+                    echo json_encode(array("result" => "26")); // Email Exists
 
                 }
             }
@@ -121,7 +121,7 @@ class Authentication extends CI_Controller {
 
         $this-> session -> sess_destroy();
 
-        echo json_decode("31"); // Signout sucessfully
+        echo json_encode(array("result" => "31")); // Signout sucessfully
 		//header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
 
 	}
@@ -133,11 +133,11 @@ class Authentication extends CI_Controller {
 
         if(!isset($_POST)){
 
-            echo json_decode("20"); // Method should be POST
+            echo json_encode(array("result" => "20")); // Method should be POST
 
         }else if(!isset($_POST['nickname']) || !isset($_POST['password']) || count($_POST) != 2 ){
 
-            echo json_decode("27"); // Post Parameters are invalid.
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
         }else{
 
@@ -149,11 +149,11 @@ class Authentication extends CI_Controller {
             
             if(!$checkPass){
 
-                echo json_decode("28"); // invalid nickname or password
+                echo json_encode(array("result" => "28")); // invalid nickname or password
 
             }else if(!$checkActive){
 
-                echo json_decode("29"); // email is not active
+                echo json_encode(array("result" => "29")); // email is not active
                 
             }else{
 
@@ -164,7 +164,7 @@ class Authentication extends CI_Controller {
                 // Add user data in session
                 $this->session->set_userdata('nickname', $nickname);
 
-                echo json_decode("30"); // Login Sucessfully
+                echo json_encode(array("result" => "30")); // Login Sucessfully
 
             }
         }
@@ -176,7 +176,7 @@ class Authentication extends CI_Controller {
     //
     public function test(){
         
-        echo $this -> session -> userdata("nickname");
+        echo json_encode(array("result" => "30")); // Login Sucessfully
 
     }
     //
