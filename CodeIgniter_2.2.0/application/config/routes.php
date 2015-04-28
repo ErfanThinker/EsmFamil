@@ -37,7 +37,7 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-
+$route["editUser"]="Usermanagement/editUser";
 $route["refreshListOfGames"]="game/refreshListOfGames";
 $route["addPlayerToGame"]="game/addPlayerToGame";
 $route["gamelist"]="loader/loadListOfGames";

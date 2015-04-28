@@ -166,7 +166,7 @@ class Usermodel extends CI_Model {
         
     }
 
-    function editProfile($nickname, $name, $bdate){//Checked
+    function editProfile($nickname, $name){//Checked
         
         $exist = $this->nicknameExists($nickname);
         
@@ -174,8 +174,7 @@ class Usermodel extends CI_Model {
             return FALSE;
         
         $data = array(
-           'name' => $name ,
-           'bdate' => $bdate
+           'name' => $name
         );
         $this->db->where('nickname', $nickname);
         $result = $this->db->update('esmFamil_user', $data);
@@ -228,7 +227,7 @@ class Usermodel extends CI_Model {
     }
 
     public function getName($nickname){
-        $this->db->select();
+        $this->db->select("name");
         $this -> db -> from("esmFamil_user");
         $this -> db -> where("nickname",$nickname);
         $query = $this -> db -> get();

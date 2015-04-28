@@ -9,27 +9,27 @@
 	    }
 
 	    public function editUser(){//Checked
-	    	if(empty($_POST)){
+	    	if(!isset($_POST)){
 	    	    
-            	$this -> load -> view("login_form");//TODO: change to edit_form
+            	echo json_encode(array("result" => "20")); // errorCode : Method should be POST
             	
-	        }else{
+	        }else if(!isset($_POST['name']) || count($_POST) != 1 ){
+
+            	echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+
+        	}else{
              
 	            $name = $this -> input -> post("name");
-	            $bday = $this -> input -> post("bday");
-	            $bmonth = $this -> input -> post("bmonth");
-	            $byear = $this -> input -> post("byear");
-	            $bdate = "$byear/"."$bmonth"."/$bday";
                 $nickname = $this->session->userdata('nickname');
 	            $checkNickname = $this -> usermodel -> editProfile($nickname, $name, $bdate);
 	            
 	            if($checkNickname){
 	                
-	                echo "Editing user was a success";
+	                echo json_encode(array("result" => "32")); // Edit was a success
                     
 	            }else{
 	                
-	                echo "Edit user failed!";
+	                echo json_encode(array("result" => "33")); // Edit was a Failure
                     
 	            }
 	        }
