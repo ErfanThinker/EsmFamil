@@ -200,7 +200,7 @@ class Usermodel extends CI_Model {
 
     public function getUserIdByNickname($nickname){ // Checked
 
-        $this -> db -> select("id");
+        $this->db->select();
         $this -> db -> from("esmFamil_user");
         $this -> db -> where("nickname",$nickname);
         $query = $this -> db -> get();
@@ -228,13 +228,17 @@ class Usermodel extends CI_Model {
     }
 
     public function getName($nickname){
-        $this->db->select('name');
-        $query = $this->db->get_where('esmFamil_user', array('nickname' => $nickname), 1);
-        $row =  $query->result();
-        $name = NULL;
-        if(isset($row->name)){
-            $name = $row->name;
-        }
-        return $name;
+        $this->db->select();
+        $this -> db -> from("esmFamil_user");
+        $this -> db -> where("nickname",$nickname);
+        $query = $this -> db -> get();
+
+        if ($query->num_rows() > 0)
+        {
+           $row = $query->row();
+
+           return $row -> name;
+        } 
+        return NULL;
     }
 };

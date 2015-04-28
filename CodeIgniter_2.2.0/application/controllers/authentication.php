@@ -176,7 +176,9 @@ class Authentication extends CI_Controller {
     //
     public function test(){
         
-        echo json_encode(array("result" => "30")); // Login Sucessfully
+        $name = $this -> usermodel -> getName("erfan");	       
+
+        echo json_encode(array("result" => "30", "name" => $name)); // Login Sucessfully
 
     }
     //
