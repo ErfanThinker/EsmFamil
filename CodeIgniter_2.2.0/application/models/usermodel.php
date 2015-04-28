@@ -231,6 +231,10 @@ class Usermodel extends CI_Model {
         $this->db->select('name');
         $query = $this->db->get_where('esmFamil_user', array('nickname' => $nickname), 1);
         $row =  $query->result();
-        return $row;
+        $name = NULL;
+        if(isset($row->name)){
+            $name = $row->name;
+        }
+        return $name;
     }
 };
