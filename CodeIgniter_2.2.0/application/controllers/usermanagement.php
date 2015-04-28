@@ -17,11 +17,9 @@
 
             	echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
-        	}else if(!isset($this->session->userdata('nickname'))){
+        	}else if(NULL  == ($this->session->userdata('nickname'))){
                 echo json_encode(array("result" => "34")); // cookie missing!
             }else {
-
-             
 	            $name = $this -> input -> post("name");
                 $nickname = $this->session->userdata('nickname');
 
