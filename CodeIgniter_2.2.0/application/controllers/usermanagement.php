@@ -17,10 +17,14 @@
 
             	echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
-        	}else{
+        	}else if(!isset($this->session->userdata('nickname'))){
+                echo json_encode(array("result" => "34")); // cookie missing!
+            }else {
+
              
 	            $name = $this -> input -> post("name");
                 $nickname = $this->session->userdata('nickname');
+
 	            $checkNickname = $this -> usermodel -> editProfile($nickname, $name, $bdate);
 	            
 	            if($checkNickname){
