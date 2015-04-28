@@ -226,4 +226,11 @@ class Usermodel extends CI_Model {
         return $userIds;
 
     }
+
+    public function getName($nickname){
+        $this->db->select('name');
+        $query = $this->db->get_where('esmFamil_user', array('nickname' => $nickname), 1);
+        $row =  $query->result();
+        return $row;
+    }
 };
