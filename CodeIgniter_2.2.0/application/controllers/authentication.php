@@ -133,11 +133,11 @@ class Authentication extends CI_Controller {
 
         if(!isset($_POST)){
 
-            echo json_encode(array("result" => "20")); // Method should be POST
+            echo json_encode(array("code" => array("result" => "20"))); // Method should be POST
 
         }else if(!isset($_POST['nickname']) || !isset($_POST['password']) || count($_POST) != 2 ){
 
-            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+            echo json_encode(array("code" => array("result" => "27"))); // Post Parameters are invalid.
 
         }else{
 
@@ -149,14 +149,14 @@ class Authentication extends CI_Controller {
             
             if(!$checkPass){
 
-                echo json_encode(array("result" => "28")); // invalid nickname or password
+                echo json_encode(array("code" => array("result" => "28"))); // invalid nickname or password
 
             }else if(!$checkActive){
 
-                echo json_encode(array("result" => "29")); // email is not active
+                echo json_encode(array("code" => array("result" => "29"))); // email is not active
                 
             }else{
-
+            	$name = "test";//$this -> usermodel -> getName($nickname);	
                 session_start(); //we need to start session in order to access it through CI                   
                 $sess_array = array(
                     'nickname' => $nickname
@@ -164,7 +164,7 @@ class Authentication extends CI_Controller {
                 // Add user data in session
                 $this->session->set_userdata('nickname', $nickname);
 
-                echo json_encode(array("result" => "30")); // Login Sucessfully
+                echo json_encode(array("code" => array("result" => "30"),"info" => array("name" => $name))); // Login Sucessfully
 
             }
         }
