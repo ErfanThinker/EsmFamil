@@ -36,12 +36,12 @@
 	            }
 	        }
         }
-
+        	//35 change password movafaghiat amiz
 	    public function changePassword(){//Checked
-	    	if(empty($_POST)){
-	    	    
-            	$this -> load -> view("login_form");//TODO: change to change_password
-            	
+	    	if(!isset($_POST)){
+            	echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+            }else if(!isset($_POST['name']){
+            	echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 	        }else{
 	            
 	        	$nickname = $this->session->userdata('nickname');
@@ -50,9 +50,10 @@
 	            $changePassResult = $this -> usermodel -> changePassword($nickname, $oldPassword, $newPassword);
 	            
 	            if($changePassResult){
-	                echo "Change password was a success";
+	                echo json_encode(array("result" => "35")); // ChangePassword was a success
 	            }else{
-	                echo "Change password failed!";
+					echo json_encode(array("result" => "36")); // ChangePassword was a Failure
+
 	            }
 	        }
 	    }
