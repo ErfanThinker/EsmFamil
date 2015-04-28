@@ -40,7 +40,7 @@
 	    public function changePassword(){//Checked
 	    	if(!isset($_POST)){
             	echo json_encode(array("result" => "20")); // errorCode : Method should be POST
-            }else if(!isset($_POST['name']){
+            }else if(count($_POST) != 2){
             	echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 	        }else{
 	            
