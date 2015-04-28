@@ -148,10 +148,7 @@ class Game extends CI_Controller {
     public function getListOfGames(){//checked
         $data = array('gameList' => $this -> gamemodel ->getListOfGames());
 
-        $this->load->view('templates/header');
-        $this->load->view('gamelist', $data);
-        $this->load->view('templates/footer');            
-
+        echo json_encode($data);
         /* Usage in view:
         *<body>
         *<?php 
