@@ -37,11 +37,12 @@
 | in the URL cannot be matched to a valid route.
 |
 */
+$route["gamelist"]="game/getListOfGames";
 $route["changePassword"]="usermanagement/changePassword";
 $route["editUser"]="usermanagement/editUser";
 $route["refreshListOfGames"]="game/refreshListOfGames";
 $route["addPlayerToGame"]="game/addPlayerToGame";
-$route["gamelist"]="loader/loadListOfGames";
+//$route["gamelist"]="loader/loadListOfGames";
 $route["registerUser"]="authentication/registerUser";
 $route["login"]="authentication/signIn";
 $route["logout"]="authentication/signOut";

@@ -9,6 +9,7 @@
 	    }
 
 	    public function editUser(){//Checked
+
 	    	if(!isset($_POST)){
 	    	    
             	echo json_encode(array("result" => "20")); // errorCode : Method should be POST
