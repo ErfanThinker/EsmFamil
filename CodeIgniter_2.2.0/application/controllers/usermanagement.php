@@ -23,7 +23,7 @@
 	            $name = $this -> input -> post("name");
                 $nickname = $this->session->userdata('nickname');
 
-	            $checkNickname = $this -> usermodel -> editProfile($nickname, $name, $bdate);
+	            $checkNickname = $this -> usermodel -> editProfile($nickname, $name);
 	            
 	            if($checkNickname){
 	                
