@@ -5,8 +5,11 @@ class Usermodel extends CI_Model {
     {
         $this->load->database();
     }
-
-    function userExists($email){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function userExists($email){//Checked
 
         $this->db->select("mail");
         $this->db->from("esmFamil_user");
@@ -17,8 +20,11 @@ class Usermodel extends CI_Model {
         
         return 1;
     }
-    
-    function nicknameExists($nickname){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function nicknameExists($nickname){//Checked
         
         $this->db->select("nickname");
         $this->db->from("esmFamil_user");
@@ -29,8 +35,11 @@ class Usermodel extends CI_Model {
         
         return True;
     }
-
-    function addUser($name, $bdate, $mail, $nick_name, $pass){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function addUser($name, $bdate, $mail, $nick_name, $pass){//Checked
 
         $data = array(
            'name' => $name ,
@@ -44,8 +53,11 @@ class Usermodel extends CI_Model {
         $query = $this->db->insert('esmFamil_user', $data);
         return $query; 
     }
-
-    function activateUser($email){// Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function activateUser($email){// Checked
 
         $data = array(
                'isActive' => 1,
@@ -55,8 +67,11 @@ class Usermodel extends CI_Model {
         $this->db->update('esmFamil_user', $data); 
     
     }
-
-    function addVerificationToken($token, $email){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function addVerificationToken($token, $email){//Checked
 
         $data = array(
             'mail' => $email,
@@ -67,8 +82,11 @@ class Usermodel extends CI_Model {
         return $query; 
 
     }
-    
-    function updateVerf($token, $email){
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function updateVerf($token, $email){
 
         $data = array(
             'token' => $token,
@@ -78,8 +96,11 @@ class Usermodel extends CI_Model {
         $this->db->update('esmFamil_verf', $data); 
 
     }
-
-    function confirmValidation($token, $email){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function confirmValidation($token, $email){//Checked
 
         $this->db->select();
         $this->db->from("esmFamil_verf");
@@ -88,15 +109,165 @@ class Usermodel extends CI_Model {
         $count = $this->db->count_all_results();
         
         if($count == 0){
+
             return FALSE;
+
         }else{
+
             $this -> activateUser($email);
             return TRUE; 
         }
 
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function checkPassword($nickname, $password){//Checked
     
-    function removeOldCaptcha(){//Checked
+        $this->db->from('esmFamil_user');
+        $this->db->where('nickname', $nickname);
+        $this->db->where('pass', md5($password));
+        $count = $this->db->count_all_results();
+        
+        
+        if($count == 0){
+
+            return 0;
+
+        }else{
+
+            return 1; 
+
+        }
+        
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //it changes password of $nickname to $newPassword
+    public function changePassword($nickname, $oldPassword, $newPassword){//Checked
+        
+        $check = $this->checkPassword($nickname, $oldPassword);
+        
+        if($check == FALSE){
+
+            return FALSE;
+
+        }else{
+
+            $data = array(
+               'pass' => md5($newPassword)
+            );
+            
+            $this -> db ->where('nickname', $nickname);
+            $result = $this-> db-> update('esmFamil_user', $data);
+            
+            return $result;
+            
+        }
+        
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function editProfile($nickname, $name){//Checked
+        
+        $exist = $this->nicknameExists($nickname);
+        
+        if($exist == FALSE)
+            return FALSE;
+        
+        $data = array(
+           'name' => $name
+        );
+
+        $this->db->where('nickname', $nickname);
+        $result = $this->db->update('esmFamil_user', $data);
+
+        return $result; 
+        
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function checkVerified($nickname){//Checked
+
+        $this->db->select();
+        $this->db->from('esmFamil_user');
+        $this->db->where('nickname', $nickname);
+        $this->db->where('isActive', 1);
+        $count = $this->db->count_all_results();
+        
+        if($count == 0){
+            return 0;
+        }else{
+            return 1; 
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getUserIdByNickname($nickname){ // Checked
+
+        $this->db->select();
+        $this -> db -> from("esmFamil_user");
+        $this -> db -> where("nickname",$nickname);
+        $query = $this -> db -> get();
+
+        if ($query->num_rows() > 0)
+        {
+           $row = $query->row();
+
+           return $row -> id;
+        } 
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getUserIds($users){
+
+        $userIds = array();
+
+        foreach ($users as $user) {
+            $id = $this -> getUserIdByNickname($user["pnickname"]);
+            array_push($userIds, $id);
+        }
+
+        return $userIds;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getName($nickname){
+
+        $this -> db -> select("name");
+        $this -> db -> from("esmFamil_user");
+        $this -> db -> where("nickname",$nickname);
+        $query = $this -> db -> get();
+
+        if ($query->num_rows() > 0)
+        {
+           $row = $query->row();
+
+           return $row -> name;
+        } 
+        return NULL;
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    /*public function removeOldCaptcha(){//Checked
     
         $expiration = time()-60;
         $this->db->query("DELETE FROM captcha WHERE time < ".$expiration);
@@ -104,8 +275,11 @@ class Usermodel extends CI_Model {
         $this->deleteExpiredImages();
     
     }
-    
-    function deleteExpiredImages(){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function deleteExpiredImages(){//Checked
         
         $result ="";
         $path = "/var/www/EsmFamil/CodeIgniter_2.2.0/css/captcha/";
@@ -126,7 +300,10 @@ class Usermodel extends CI_Model {
         closedir($dh);
 
     }
-    
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function addNewCaptcha($time , $ip , $word){//Checked
 
         $data1 = array('time'=> $time,'ip'=> $ip,'word'=> $word);
@@ -136,120 +313,9 @@ class Usermodel extends CI_Model {
         $cid = $this -> db -> insert_id();
         return $cid;
 
-    }
-
-    public function checkPassword($nickname, $password){//Checked
-    
-        $this->db->from('esmFamil_user');
-        $this->db->where('nickname', $nickname);
-        $this->db->where('pass', md5($password));
-        $count = $this->db->count_all_results();
-        
-        
-        if($count == 0){
-            return 0;
-        }else{
-            return 1; 
-        }
-        
-    }
-
-    //it changes password of $nickname to $newPassword
-    function changePassword($nickname, $oldPassword, $newPassword){//Checked
-        
-        $check = $this->checkPassword($nickname, $oldPassword);
-        
-        if($check == FALSE){
-            return FALSE;
-        }else{
-            $data = array(
-               'pass' => md5($newPassword)
-            );
-            
-            $this->db->where('nickname', $nickname);
-            $result = $this->db->update('esmFamil_user', $data);
-            
-            return $result;
-            
-        }
-        
-        
-    }
-
-    function editProfile($nickname, $name){//Checked
-        
-        $exist = $this->nicknameExists($nickname);
-        
-        if($exist == FALSE)
-            return FALSE;
-        
-        $data = array(
-           'name' => $name
-        );
-        $this->db->where('nickname', $nickname);
-        $result = $this->db->update('esmFamil_user', $data);
-        return $result; 
-        
-    }
-    
-    function checkVerified($nickname){//Checked
-
-        $this->db->select();
-        $this->db->from('esmFamil_user');
-        $this->db->where('nickname', $nickname);
-        $this->db->where('isActive', 1);
-        $count = $this->db->count_all_results();
-        
-        if($count == 0){
-            return 0;
-        }else{
-            return 1; 
-        }
-
-    }
-
-    public function getUserIdByNickname($nickname){ // Checked
-
-        $this->db->select();
-        $this -> db -> from("esmFamil_user");
-        $this -> db -> where("nickname",$nickname);
-        $query = $this -> db -> get();
-
-        if ($query->num_rows() > 0)
-        {
-           $row = $query->row();
-
-           return $row -> id;
-        } 
-
-    }
-
-    public function getUserIds($users){
-
-        $userIds = array();
-
-        foreach ($users as $user) {
-            $id = $this -> getUserIdByNickname($user["pnickname"]);
-            array_push($userIds, $id);
-        }
-
-        return $userIds;
-
-    }
-
-    public function getName($nickname){
-        
-        $this->db->select("name");
-        $this -> db -> from("esmFamil_user");
-        $this -> db -> where("nickname",$nickname);
-        $query = $this -> db -> get();
-
-        if ($query->num_rows() > 0)
-        {
-           $row = $query->row();
-
-           return $row -> name;
-        } 
-        return NULL;
-    }
+    }*/
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
 };

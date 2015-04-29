@@ -156,7 +156,7 @@ class Authentication extends CI_Controller {
                 echo json_encode(array("result" => "29")); // email is not active
                 
             }else{
-                
+
             	$name = $this -> usermodel -> getName($nickname);	
                 session_start(); //we need to start session in order to access it through CI                   
                 $sess_array = array(
@@ -181,6 +181,25 @@ class Authentication extends CI_Controller {
 
         echo json_encode(array("result" => "30", "name" => $name)); // Login Sucessfully
 
+    }
+    //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function verifyUser(){
+
+        $url = parse_url($_SERVER['REQUEST_URI']);
+        parse_str($url['query'], $params);
+        
+        $email  = $params["email"];
+        $hash   = $params["hash"];
+        $validationResult = $this -> usermodel -> confirmValidation($hash,$email);
+        
+        if($validationResult == TRUE){
+            echo "Your account verfied secessfully.";
+        }else{
+            echo "There was a problem in verfing your email, please try again.";
+        }
     }
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,25 +238,6 @@ class Authentication extends CI_Controller {
             return $hash;
         }else{
             return false;
-        }
-    }
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    public function verifyUser(){
-
-        $url = parse_url($_SERVER['REQUEST_URI']);
-        parse_str($url['query'], $params);
-        
-        $email  = $params["email"];
-        $hash   = $params["hash"];
-        $validationResult = $this -> usermodel -> confirmValidation($hash,$email);
-        
-        if($validationResult == TRUE){
-            echo "Your account verfied secessfully.";
-        }else{
-            echo "There was a problem in verfing your email, please try again.";
         }
     }
     //
