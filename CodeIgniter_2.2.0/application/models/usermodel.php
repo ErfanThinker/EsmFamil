@@ -31,6 +31,7 @@ class Usermodel extends CI_Model {
     }
 
     function addUser($name, $bdate, $mail, $nick_name, $pass){//Checked
+
         $data = array(
            'name' => $name ,
            'mail' => $mail ,
@@ -45,6 +46,7 @@ class Usermodel extends CI_Model {
     }
 
     function activateUser($email){// Checked
+
         $data = array(
                'isActive' => 1,
             );
@@ -55,6 +57,7 @@ class Usermodel extends CI_Model {
     }
 
     function addVerificationToken($token, $email){//Checked
+
         $data = array(
             'mail' => $email,
             'token' => $token,
@@ -62,18 +65,22 @@ class Usermodel extends CI_Model {
             );
         $query = $this->db->insert('esmFamil_verf', $data);
         return $query; 
+
     }
     
     function updateVerf($token, $email){
+
         $data = array(
             'token' => $token,
             'timestamp' => round(microtime(true) * 1000)
             );
         $this->db->where('mail', $email);
         $this->db->update('esmFamil_verf', $data); 
+
     }
 
     function confirmValidation($token, $email){//Checked
+
         $this->db->select();
         $this->db->from("esmFamil_verf");
         $this->db->where("mail",$email);
@@ -117,15 +124,18 @@ class Usermodel extends CI_Model {
             }
         }
         closedir($dh);
+
     }
     
     public function addNewCaptcha($time , $ip , $word){//Checked
+
         $data1 = array('time'=> $time,'ip'=> $ip,'word'=> $word);
         
         $query = $this->db->insert_string('captcha', $data1);
         $this->db->query($query);
         $cid = $this -> db -> insert_id();
         return $cid;
+
     }
 
     public function checkPassword($nickname, $password){//Checked
@@ -195,6 +205,7 @@ class Usermodel extends CI_Model {
         }else{
             return 1; 
         }
+
     }
 
     public function getUserIdByNickname($nickname){ // Checked
@@ -227,6 +238,7 @@ class Usermodel extends CI_Model {
     }
 
     public function getName($nickname){
+        
         $this->db->select("name");
         $this -> db -> from("esmFamil_user");
         $this -> db -> where("nickname",$nickname);

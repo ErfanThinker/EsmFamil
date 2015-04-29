@@ -156,6 +156,7 @@ class Authentication extends CI_Controller {
                 echo json_encode(array("result" => "29")); // email is not active
                 
             }else{
+                
             	$name = $this -> usermodel -> getName($nickname);	
                 session_start(); //we need to start session in order to access it through CI                   
                 $sess_array = array(
