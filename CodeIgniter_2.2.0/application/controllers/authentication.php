@@ -21,7 +21,7 @@ class Authentication extends CI_Controller {
     //
     public function registerUser(){
         
-        if(!isset($_POST)){
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
             
             echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
@@ -131,7 +131,7 @@ class Authentication extends CI_Controller {
     //
     public function signIn(){
 
-        if(!isset($_POST)){
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
 
             echo json_encode(array("result" => "20")); // Method should be POST
 

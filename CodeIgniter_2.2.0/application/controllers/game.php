@@ -8,51 +8,73 @@ class Game extends CI_Controller {
         $this -> load -> model("gamemodel");
         $this -> load -> model("namesmodel");
         $this -> load -> model("usermodel");
-        $this->load->library('session');
+        $this -> load -> library('session');
     }
-    
-    public function createNewGame(){//Checked
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function createNewGame(){ //Checked
         
-        if(!isset($_POST)){
-            $this->load->view('index');//TODO: change to related view
-            return;
-        }
-        
-        $gname = $this->input->post('gname');
-        $maxPlayer = intval($this->input->post('maxPlayer'));
-        $rounds = intval($this->input->post('rounds'));
-        $creatorNickname = $this->session->userdata('nickname');
-        $result = NULL;
-        if(!isset($creatorNickname)){
-            echo "Please first attemp to signin before you can create a game.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
-        }
-        
-        if(!isset($gname)){
-            echo "Game must have a name";
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
-        }else if(!isset($maxPlayer)){
-            echo "Game must have maximum number of players";
-        }
-        
-        else if(!isset($rounds)){
-            echo "Game must have number of rounds";
-        }
+        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) || count($_POST) != 2){
 
-        else if(($this -> gamemodel -> checkIfUserIsSomeoneElseGame($creatorNickname)) || 
-            ($this -> gamemodel -> checkIfUserHasGame($creatorNickname))){
-            echo "You should leave your current game in order to create a new one!";
-        }
-        
-        else $result = $this -> gamemodel -> createNewGame($gname,$maxPlayer,$rounds,$creatorNickname);
-        
-        if($result)
-            echo "Game Created Successfully";
-        else {
-            echo "There was an error in creating game.";
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+
+        }else if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else{
+
+            $maxPlayer = intval($this->input->post('maxPlayer'));
+            $rounds = intval($this->input->post('rounds'));
+            $creatorNickname = $this->session->userdata('nickname');
+
+            if($this -> gamemodel -> userIsParticipatingAnotherGame($creatorNickname)){
+
+                echo json_encode(array("result" => "38")); // Player can not creat new game while he is playing another game!
+
+            }else if($this -> gamemodel -> checkIfUserHasAnUnfinishedGame($creatorNickname)){
+
+                echo json_encode(array("result" => "39")); // Each player could be owner of at most 1 game.
+
+            }else{
+
+                $result = $this -> gamemodel -> createNewGame($maxPlayer,$rounds,$creatorNickname);
+                
+                if($result){
+
+                    echo json_encode(array("result" => "40")); // Game Created Successfully.
+
+                }
+                else {
+                    
+                    echo json_encode(array("result" => "41")); // There was an error in creating game
+
+                }
+
+            }
         }
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getListOfGames(){//checked
 
+        $data = array('gameList' => $this -> gamemodel ->getListOfGames());
+
+        echo json_encode($data);
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function addPlayerToGame(){//Checked
         
         if(!isset($_POST)){
@@ -72,8 +94,8 @@ class Game extends CI_Controller {
             echo "Game doesn't exist";
         }
         
-        else if(($this -> gamemodel -> checkIfUserIsSomeoneElseGame($pnickname)) || 
-            ($this -> gamemodel -> checkIfUserHasGame($pnickname))){
+        else if(($this -> gamemodel -> userIsParticipatingAnotherGame($pnickname)) || 
+            ($this -> gamemodel -> checkIfUserHasAnUnfinishedGame($pnickname))){
             echo "You should leave your current game in order to join another one!";
         }
         
@@ -86,7 +108,10 @@ class Game extends CI_Controller {
             echo "There was an error joining the game.";
         }
     }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function removePlayerFromGame(){//checked
         if(!isset($_POST)){
             $this->load->view('index');//TODO: change to related view
@@ -113,7 +138,10 @@ class Game extends CI_Controller {
             header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function removeGame(){
         if(!isset($_POST)){
             $this->load->view('index');
@@ -144,33 +172,10 @@ class Game extends CI_Controller {
             header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
-
-    public function getListOfGames(){//checked
-        $data = array('gameList' => $this -> gamemodel ->getListOfGames());
-
-        echo json_encode($data);
-        /* Usage in view:
-        *<body>
-        *<?php 
-        * foreach($gameList as $row){
-        *            echo $row['gid'];
-        *            echo $row['creaternickname'];
-        *            echo $row['rounds'];
-        *            echo $row['gname'];
-        *            ...
-        *        }
-        *        ?>
-        *
-        *</body>
-        */
-    }
-
-    public function refreshListOfGames(){
-        $data['gameList']=$this -> gamemodel ->getListOfGames();
-        $this->load->view('pages/refresh_gamelist', $data);//TODO: change to your view        
-
-    }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function createNewTurn($gid){
 
         if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
@@ -189,16 +194,21 @@ class Game extends CI_Controller {
         echo "Game rounds Completed";
 
     }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function test(){
 
-        echo "emadok";
+        $temp = $this -> gamemodel -> getGameMembers(2);
 
-        echo $this -> createNewTurn(2);
+        echo count($temp);
 
         //echo $this -> usermodel ->getUserIdByNickname("emadok");
     }
-
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
 }
 ?>

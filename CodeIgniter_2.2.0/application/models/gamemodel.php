@@ -6,10 +6,14 @@ class Gamemodel extends CI_Model {
         $this->load->database();
         $this->load->helper('array');
     }
-    
-    public function createNewGame($gname,$maxPlayer,$rounds,$creatorNickname){
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function createNewGame($maxPlayer,$rounds,$creatorNickname){
+
         $data = array(
-           'gname' => $gname ,
+           'gname' => '',
            'maxnumofplayers' => $maxPlayer ,
            'creaternickname' => $creatorNickname,
            'winnernickname' => '',
@@ -20,29 +24,44 @@ class Gamemodel extends CI_Model {
 
         $query = $this->db->insert('esmfamil_game', $data);
         return $query; 
+
     }
-
-
-
-    function checkIfUserIsSomeoneElseGame($nickname){
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function userIsParticipatingAnotherGame($nickname){ // Checked
 
         $this->db->select('*');
         $this->db->from("esmfamil_game_members");
+        $this->db->join('esmfamil_game','esmfamil_game.gid = esmfamil_game_members.gid');
         $this->db->where("pnickname",$nickname);
+        $this->db->where("isfinished",'0');
         $count = $this->db->count_all_results();
-        if($count != 0){
-            return TRUE;
-        }else {
-            return False;
-        }
-    }
 
-    function checkIfUserHasGame($nickname){
+        if($count != 0){
+
+            return TRUE;
+
+        }else {
+
+            return False;
+
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function checkIfUserHasAnUnfinishedGame($nickname){ // Checked
+
         $this->db->select('*');
         $this->db->from("esmfamil_game");
         $this->db->where('creaternickname', $nickname);
         $this->db->where('isfinished', 0);
         $count = $this->db->count_all_results();
+
         if($count == 0){
             return False;
         }else{
@@ -50,10 +69,48 @@ class Gamemodel extends CI_Model {
         }
 
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getListOfGames(){
 
-    
+        $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0));
+        $result = array();
+        if ($query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
 
-    function addPlayerToGame($gid, $pnickname){
+                $temp = $this -> getGameMembers($row['gid']);
+                $row['currentlyJoined'] = count($temp);
+
+                array_push($result, $row);
+                
+            }
+        }
+
+        return $result;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getGameMembers($gid){ // Checked
+
+        $this -> db -> select("pnickname");
+        $this -> db -> from("esmfamil_game_members");
+        $this -> db -> where("gid",$gid);
+        $query = $this -> db -> get();
+
+        return $query -> result_array();
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function addPlayerToGame($gid, $pnickname){
         $data = array(
                'gid' => $gid,
                'pnickname' => $pnickname
@@ -84,8 +141,11 @@ class Gamemodel extends CI_Model {
             return False;
         }
     }
-
-    function ownsTheGame($nickname,$gid){
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function ownsTheGame($nickname,$gid){
         $this->db->select('*');
         $this->db->from("esmfamil_game");
         $this->db->where('creaternickname', $nickname);
@@ -97,9 +157,11 @@ class Gamemodel extends CI_Model {
             return TRUE; 
         }
     }
-
-
-    function removeGame($gid){
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function removeGame($gid){
         $data = array(
            'gid' => $gid
         );
@@ -109,8 +171,11 @@ class Gamemodel extends CI_Model {
         $query = $this->db->delete('esmfamil_game', $data);
         return $query; 
     }
-
-    function removePlayerFromGame($gid,$pnickname){
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function removePlayerFromGame($gid,$pnickname){
 
         $this->db->delete('esmfamil_game_members', array(
            'gid' => $gid,
@@ -119,30 +184,12 @@ class Gamemodel extends CI_Model {
 
         return $query; 
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getListOfGamesUserCreatedAndFinished($creaternickname){
 
-    function getListOfGames(){ // Checked
-        $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0));
-        $result = array();
-        if ($query->num_rows() > 0){
-            foreach ($query->result_array() as $row)
-            {
-
-                $this->db->select();
-                $this->db->from("esmfamil_game_members");
-                $this->db->where("gid",$row['gid']);
-                $row['currentlyJoined'] = $this->db->count_all_results();
-
-                array_push($result, $row);
-            }
-        }
-
-        return $result;
-
-    }
-
-
-
-    function getListOfGamesUserCreatedAndFinished($creaternickname){
         $query = $this->db->get_where('esmfamil_game',array('isfinished' => 1,'creaternickname' => $creaternickname));
         $result = array();
         if ($query->num_rows() > 0){
@@ -153,20 +200,10 @@ class Gamemodel extends CI_Model {
         }
         return $result;
     }
-
-    public function getGameMembers($gid){ // Checked
-
-        $this -> db -> select("pnickname");
-        $this -> db -> from("esmfamil_game_members");
-        $this -> db -> where("gid",$gid);
-        $query = $this -> db -> get();
-
-        return $query -> result_array();
-
-
-    }
-
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function isGameRoundsCompleted($gid){ // Checked
 
         if($this -> getNumberOfGameRoundsPlayed($gid) >= $this -> gameRoundNumber($gid)){
@@ -176,8 +213,10 @@ class Gamemodel extends CI_Model {
         return False;
 
     }
-
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function getNumberOfGameRoundsPlayed($gid){ // Checked
 
         $this -> db -> from("esmfamil_game_turns");
@@ -187,7 +226,10 @@ class Gamemodel extends CI_Model {
         return $query;
 
     }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function gameRoundNumber($gid){ // Checked
 
         $this -> db -> select("rounds");
@@ -199,8 +241,10 @@ class Gamemodel extends CI_Model {
         return $row->rounds;
 
     }
-
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function createNewTurn($gid){ // Checked
 
         $letter = $this -> randomLetter();
@@ -226,7 +270,10 @@ class Gamemodel extends CI_Model {
         }
 
     }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function randomLetter(){ // Checked
 
         $pool = "abcdefghijklmnopqrstuvwxyz";
@@ -234,8 +281,10 @@ class Gamemodel extends CI_Model {
 
         return $pool[$rand];
     }
-
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function gameExists($gid){ // Checked
 
         $this->db->where('gid', $gid);
@@ -248,6 +297,9 @@ class Gamemodel extends CI_Model {
         return TRUE;
 
     }
-
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     
 };
