@@ -77,37 +77,34 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function removeGame(){
-        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+        if($this->session->userdata('nickname') == NULL){
 
-            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
         }else{
 
-        }
+            $nickname = $this->session->userdata('nickname');
 
-        $gid = $this->input->post('gid');
-        $nickname = $this->session->userdata('nickname');
-        $result = NULL;
-        if(!isset($pnickname)){
-            echo "Error: You are not signed in.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
-        }
-        if(!isset($gid)){
-            echo "Game doesn't exist";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        if(!($this -> gamemodel -> ownsTheGame($pnickname, $gid))){
-            echo "Error: Unauthorized access tried to remove a game";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        $result = $this -> gamemodel -> removeGame($gid);
-        if($result){
-            echo "Removed the game Successfully";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        else {
-            echo "There was an error removing the game.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+            if(!$this -> gamemodel -> userHasAnActiveGame($nickname)){
+
+                echo json_encode(array("result" => "42")); // User Do not have a Game
+
+            }else{
+
+                $gid    = $this -> gamemodel -> getUsersUnfinishedGameGid($nickname);
+                $result = $this -> gamemodel -> removeGame($gid);
+
+                if($result){
+
+                    echo json_encode(array("result" => "30")); // Sucsses
+
+                }else{
+
+                    echo json_encode(array("result" => "43")); // There was an error in removing Game
+
+                }
+
+            }
         }
     }
     //
@@ -205,9 +202,9 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> gamemodel -> getGameMembers(2);
+        $temp = $this -> gamemodel -> getUsersUnfinishedGameGid("erfan");
 
-        echo count($temp);
+        echo $temp;
 
         //echo $this -> usermodel ->getUserIdByNickname("emadok");
     }
