@@ -76,7 +76,7 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function removeGame(){
+    public function removeGame(){ // Checked
         if($this->session->userdata('nickname') == NULL){
 
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
@@ -113,65 +113,85 @@ class Game extends CI_Controller {
     //
     public function addPlayerToGame(){//Checked
         
-        if(!isset($_POST)){
-            $this->load->view('index');//TODO: change to related view
-            return;
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else if(!isset($_POST['gid']) || count($_POST) != 1){
+
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+
+        }else if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else{
+
+            $gid = $this->input->post('gid');
+            $nickname = $this->session->userdata('nickname');
+            
+            if($this -> gamemodel -> userIsParticipatingAnotherGame($nickname)){
+
+                echo json_encode(array("result" => "44")); // Player can not join new game when he is participating another game
+
+            }else if($this -> gamemodel -> checkIfUserHasAnUnfinishedGame($nickname)){
+
+                echo json_encode(array("result" => "39")); // Player is owner of another game that is not finished yet
+
+            }else{
+
+                $result = $this -> gamemodel -> addPlayerToGame($gid, $nickname);
+
+                if($result){
+
+                    echo json_encode(array("result" => "30")); // Success
+
+                }else{
+
+                    echo json_encode(array("result" => "45")); // Game do not have enough capacity for new player to add
+
+                }
+            }
         }
-        
-        $gid = $this->input->post('gid');
-        $pnickname = $this->session->userdata('nickname');
-        $result = NULL;
-        if(!isset($pnickname)){
-            echo "Please first attemp to signin before you can join a game.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
-        }
-        
-        if(!isset($gid)){
-            echo "Game doesn't exist";
-        }
-        
-        else if(($this -> gamemodel -> userIsParticipatingAnotherGame($pnickname)) || 
-            ($this -> gamemodel -> checkIfUserHasAnUnfinishedGame($pnickname))){
-            echo "You should leave your current game in order to join another one!";
-        }
-        
-        else $result = $this -> gamemodel -> addPlayerToGame($gid, $pnickname);
-        
-        if($result){
-            echo "Game Joined Successfully";
-        }
-        else {
-            echo "There was an error joining the game.";
-        }
+
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function removePlayerFromGame(){//checked
-        if(!isset($_POST)){
-            $this->load->view('index');//TODO: change to related view
-            return;
-        }
-        $gid = $this->input->post('gid');
-        $pnickname = $this->session->userdata('nickname');
-        $result = NULL;
-        if(!isset($pnickname)){
-            echo "Please first attemp to signin before you can join a game.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
-        }
-        if(!isset($gid)){
-            echo "Game doesn't exist";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        $result = $this -> gamemodel -> removePlayerFromGame($gid, $pnickname);
-        if($result){
-            echo "Left the game Successfully";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        else {
-            echo "There was an error leaving the game.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+        
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else if(!isset($_POST['gid']) || count($_POST) != 1){
+
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+
+        }else if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else{
+
+            $nickname = $this -> session -> userdata('nickname');
+            $gid      = $this -> input -> post('gid');
+
+            if($this -> gamemodel -> ownsTheGame($nickname,$gid)){
+
+                echo json_encode(array("result" => "46")); // Creator of Game can not remove himself from Game
+
+            }else if(!$this -> gamemodel -> isUserParticipatingThisGame($nickname,$gid)){
+                
+                echo json_encode(array("result" => "47")); // User does not participate in this game
+
+            }else{
+            
+                $result = $this -> gamemodel -> removePlayerFromGame($gid, $nickname);
+                  
+                echo json_encode(array("result" => "30")); // Succese
+            }
         }
     }
     //
@@ -202,9 +222,9 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> gamemodel -> getUsersUnfinishedGameGid("erfan");
+        $temp = $this -> gamemodel -> isUserParticipatingThisGame("emadagha",2);
 
-        echo $temp;
+        print_r($temp);
 
         //echo $this -> usermodel ->getUserIdByNickname("emadok");
     }
