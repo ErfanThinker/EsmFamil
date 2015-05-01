@@ -34,7 +34,7 @@
 	            
 	            if($checkNickname){
 	                
-	                echo json_encode(array("result" => "32")); // Edit was a success
+	                echo json_encode(array("result" => "30")); // Edit was a success
                     
 	            }else{
 	                
@@ -69,7 +69,7 @@
 		            
 		            if($changePassResult){
 
-		                echo json_encode(array("result" => "35")); // ChangePassword was a success
+		                echo json_encode(array("result" => "30")); // ChangePassword was a success
 
 		            }else{
 

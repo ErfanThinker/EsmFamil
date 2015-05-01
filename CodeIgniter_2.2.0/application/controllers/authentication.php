@@ -86,7 +86,7 @@ class Authentication extends CI_Controller {
                             $emailResult = $this -> sendEmail($from, $to, $message, $subject, $senderName);
 
                             if($emailResult){
-                                echo json_encode(array("result" => "22")); // Email sent successfuly
+                                echo json_encode(array("result" => "30")); // Email sent successfuly
 
                             }else{
                                 echo json_encode(array("result" => "23"));  // Email sending problem but user added successfully
@@ -121,7 +121,7 @@ class Authentication extends CI_Controller {
 
         $this-> session -> sess_destroy();
 
-        echo json_encode(array("result" => "31")); // Signout sucessfully
+        echo json_encode(array("result" => "30")); // Signout sucessfully
 		//header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
 
 	}

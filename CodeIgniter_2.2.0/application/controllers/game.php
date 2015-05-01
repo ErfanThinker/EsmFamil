@@ -20,8 +20,7 @@ class Game extends CI_Controller {
             
             echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
-        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) ||
-            !isset($_POST['gname']) || count($_POST) != 3){
+        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) || !isset($_POST['gname']) || count($_POST) != 3){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
@@ -30,6 +29,7 @@ class Game extends CI_Controller {
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
         }else{
+
             $gname = $this -> input -> post('gname');
             $maxPlayer = intval($this->input->post('maxPlayer'));
             $rounds = intval($this->input->post('rounds'));
@@ -49,7 +49,7 @@ class Game extends CI_Controller {
                 
                 if($result){
 
-                    echo json_encode(array("result" => "40")); // Game Created Successfully.
+                    echo json_encode(array("result" => "30")); // Game Created Successfully.
 
                 }
                 else {
@@ -71,6 +71,44 @@ class Game extends CI_Controller {
 
         echo json_encode($data);
 
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function removeGame(){
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else{
+
+        }
+
+        $gid = $this->input->post('gid');
+        $nickname = $this->session->userdata('nickname');
+        $result = NULL;
+        if(!isset($pnickname)){
+            echo "Error: You are not signed in.";
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+        }
+        if(!isset($gid)){
+            echo "Game doesn't exist";
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+        }
+        if(!($this -> gamemodel -> ownsTheGame($pnickname, $gid))){
+            echo "Error: Unauthorized access tried to remove a game";
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+        }
+        $result = $this -> gamemodel -> removeGame($gid);
+        if($result){
+            echo "Removed the game Successfully";
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+        }
+        else {
+            echo "There was an error removing the game.";
+            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
+        }
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,40 +174,6 @@ class Game extends CI_Controller {
         }
         else {
             echo "There was an error leaving the game.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-    }
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    public function removeGame(){
-        if(!isset($_POST)){
-            $this->load->view('index');
-            return;
-        }
-        $gid = $this->input->post('gid');
-        $pnickname = $this->session->userdata('nickname');
-        $result = NULL;
-        if(!isset($pnickname)){
-            echo "Error: You are not signed in.";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
-        }
-        if(!isset($gid)){
-            echo "Game doesn't exist";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        if(!($this -> gamemodel -> ownsTheGame($pnickname, $gid))){
-            echo "Error: Unauthorized access tried to remove a game";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        $result = $this -> gamemodel -> removeGame($gid);
-        if($result){
-            echo "Removed the game Successfully";
-            header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
-        }
-        else {
-            echo "There was an error removing the game.";
             header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/loader/loadDashbord");
         }
     }
