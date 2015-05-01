@@ -10,10 +10,10 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function createNewGame($maxPlayer,$rounds,$creatorNickname){
+    public function createNewGame($maxPlayer,$rounds,$creatorNickname, $gname){
 
         $data = array(
-           'gname' => '',
+           'gname' => $gname,
            'maxnumofplayers' => $maxPlayer ,
            'creaternickname' => $creatorNickname,
            'winnernickname' => '',

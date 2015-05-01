@@ -20,7 +20,8 @@ class Game extends CI_Controller {
             
             echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
-        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) || count($_POST) != 2){
+        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) ||
+            !isset($_POST['gname']) || count($_POST) != 3){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
@@ -29,7 +30,7 @@ class Game extends CI_Controller {
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
         }else{
-
+            $gname = $this -> input -> post('gname');
             $maxPlayer = intval($this->input->post('maxPlayer'));
             $rounds = intval($this->input->post('rounds'));
             $creatorNickname = $this->session->userdata('nickname');
@@ -44,7 +45,7 @@ class Game extends CI_Controller {
 
             }else{
 
-                $result = $this -> gamemodel -> createNewGame($maxPlayer,$rounds,$creatorNickname);
+                $result = $this -> gamemodel -> createNewGame($maxPlayer,$rounds,$creatorNickname, $gname);
                 
                 if($result){
 
