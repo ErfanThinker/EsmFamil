@@ -28,6 +28,10 @@ class Game extends CI_Controller {
 
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
+        }else if(intval($this->input->post('maxPlayer')) < 2){
+
+            echo json_encode(array("result" => "48")); // Max Number of Players should be at least 2
+
         }else{
 
             $gname = $this -> input -> post('gname');
@@ -49,6 +53,8 @@ class Game extends CI_Controller {
                 
                 if($result){
 
+                    // $result is gid of game
+                    $this -> gamemodel -> addPlayerToGame($result,$creatorNickname);
                     echo json_encode(array("result" => "30")); // Game Created Successfully.
 
                 }
@@ -65,7 +71,7 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function getListOfGames(){//checked
+    public function getListOfGames(){ //checked
 
         if($this->session->userdata('nickname') == NULL){
 
@@ -209,6 +215,13 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function startGame($gid){
+        
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function createNewTurn($gid){
 
         if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
@@ -233,7 +246,7 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> gamemodel -> getActiveGame("emadagha");
+        $temp = $this -> gamemodel -> createNewGame("3","4","emadagha","got");
 
         print_r($temp);
 

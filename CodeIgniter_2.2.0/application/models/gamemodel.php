@@ -23,7 +23,9 @@ class Gamemodel extends CI_Model {
         );
 
         $query = $this->db->insert('esmfamil_game', $data);
-        return $query; 
+        $id = $this->db->insert_id();
+        
+        return $id; 
 
     }
     //

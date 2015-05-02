@@ -9,6 +9,7 @@ class Authentication extends CI_Controller {
     {
         parent::__construct();
         $this -> load -> model("usermodel");
+        $this -> load -> model('gamemodel');
         $this -> load -> library("email");
         $this -> load -> library('session');
         $this->load->helper('file');
@@ -114,15 +115,25 @@ class Authentication extends CI_Controller {
     public function signOut() {
 
 		// Removing session data
+        if($this->session->userdata('nickname') != NULL){
 
-        $array_items = array('nickname' => '');
+            $nickname = $this->session->userdata('nickname');
 
-        $this-> session ->unset_userdata($array_items);
+            if($this -> gamemodel -> userHasAnActiveGame($nickname)){
 
-        $this-> session -> sess_destroy();
+                $gid    = $this -> gamemodel -> getUsersUnfinishedGameGid($nickname);
+                $result = $this -> gamemodel -> removeGame($gid);
 
-        echo json_encode(array("result" => "30")); // Signout sucessfully
-		//header("Location: http://namefamily.ir/EsmFamil/CodeIgniter_2.2.0/index.php/login");
+            }
+
+            $array_items = array('nickname' => '');
+
+            $this-> session ->unset_userdata($array_items);
+
+            $this-> session -> sess_destroy();
+
+            echo json_encode(array("result" => "30")); // Signout sucessfully
+        }
 
 	}
     //
