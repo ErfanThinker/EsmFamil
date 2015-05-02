@@ -67,9 +67,20 @@ class Game extends CI_Controller {
     //
     public function getListOfGames(){//checked
 
-        $data = array('gameList' => $this -> gamemodel ->getListOfGames());
+        if($this->session->userdata('nickname') == NULL){
 
-        echo json_encode($data);
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else{
+
+            $nickname = $this->session->userdata('nickname');
+
+            $data = array('gameList' => $this -> gamemodel ->getListOfGames(), 
+                          'activeGame' => $this -> gamemodel -> getActiveGame($nickname));
+
+            echo json_encode($data);
+
+        }
 
     }
     //
@@ -222,7 +233,7 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> gamemodel -> isUserParticipatingThisGame("emadagha",2);
+        $temp = $this -> gamemodel -> getActiveGame("emadagha");
 
         print_r($temp);
 

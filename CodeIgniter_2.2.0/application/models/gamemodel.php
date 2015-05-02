@@ -273,6 +273,22 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function getActiveGame($nickname){
+
+        $this -> db -> select('esmfamil_game.gid');
+        $this -> db -> from("esmfamil_game");
+        $this -> db -> join('esmfamil_game_members','esmfamil_game.gid = esmfamil_game_members.gid');
+        $this -> db -> where("pnickname",$nickname);
+        $this -> db -> where("isfinished !=",4);
+        $query = $this -> db -> get();
+
+        return $query -> result_array();
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function getListOfGamesUserCreatedAndFinished($creaternickname){
 
         $query = $this->db->get_where('esmfamil_game',array('isfinished' => 1,'creaternickname' => $creaternickname));
