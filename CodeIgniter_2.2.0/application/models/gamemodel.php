@@ -275,7 +275,7 @@ class Gamemodel extends CI_Model {
     //
     public function getActiveGame($nickname){
 
-        $this -> db -> select('esmfamil_game.gid');
+        $this -> db -> select('*');
         $this -> db -> from("esmfamil_game");
         $this -> db -> join('esmfamil_game_members','esmfamil_game.gid = esmfamil_game_members.gid');
         $this -> db -> where("pnickname",$nickname);
