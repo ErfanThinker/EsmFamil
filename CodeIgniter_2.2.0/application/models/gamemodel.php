@@ -282,12 +282,12 @@ class Gamemodel extends CI_Model {
         $this -> db -> join('esmfamil_game_members','esmfamil_game.gid = esmfamil_game_members.gid');
         $this -> db -> where("pnickname",$nickname);
         $this -> db -> where("isfinished !=",4);
-        $query = $this -> db -> get();
+        $count = $this->db->count_all_results();
 
-        if($query->num_rows() > 0){
-        	return TRUE;
+        if($count == 0){
+        	return False;
         }
-        return False;
+        return TRUE;
 
     }
     //
