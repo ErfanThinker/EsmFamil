@@ -166,5 +166,52 @@ class Namesmodel extends CI_Model {
         }
 
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function setScoreForNames($nid){
+
+        $data = array('name','family','car','color','city','objects');
+        $this -> db -> select($data);
+        $this -> db -> from("esmfamil_names");
+        $this -> db -> where('nid',$nid);
+        $query = $this -> db -> get();
+        $results = $query -> result_array();
+        $results = $results['0'];
+
+        $trueAnswers = 0;
+        foreach ($results as $result) {
+
+            if($result != NULL){
+                $trueAnswers = $trueAnswers + 1 ;
+            }
+
+        }
+
+        $score = $trueAnswers * 10;
+        $data = array("score" => $score);
+
+        $this -> db -> where("nid",$nid);
+        $this -> db -> update("esmfamil_names",$data);
+
+
+        return $score;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getTurnNamesIds($tid){
+
+        $this -> db -> select("nid");
+        $this -> db -> from("esmfamil_names");
+        $this -> db -> where("tid",$tid);
+        $query = $this -> db -> get();
+
+        return $query -> result_array();
+
+    }
 
 };

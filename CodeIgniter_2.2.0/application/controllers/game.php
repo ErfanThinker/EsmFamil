@@ -365,7 +365,27 @@ class Game extends CI_Controller {
     //
     public function getLastRoundResult($gid){
 
+        if($this -> gamemodel -> getNumberOfGameRoundsPlayed($gid) == 0 ){
 
+            echo json_encode(array("result" => "51")); // Game do not have a turn to calculate it's results
+
+        }else{
+
+            $gameState = $this -> gamemodel -> getGameState($gid);
+
+            if($gameState == 0 || $gameState == 4){
+
+                echo json_encode(array("result" => "52")); // You Can not have game results in this game state
+
+            }else{
+
+                $lastRoundResult = $this -> gamemodel -> calculateAndReturnLastRoundResults($gid);
+            
+                echo json_encode($lastRoundResult);
+
+            }
+
+        }
 
     }
     //
@@ -381,9 +401,8 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> gamemodel -> getActiveGame("emadagha");
+        $temp = $this -> getLastRoundResult(1);
         
-
         print_r($temp);
 
         //echo $this -> usermodel ->getUserIdByNickname("emadok");

@@ -3,6 +3,9 @@ class Gamemodel extends CI_Model {
 
     public function __construct()
     {
+        $this -> load -> model("usermodel");
+        $this -> load -> model("namesmodel");
+
         $this->load->database();
         $this->load->helper('array');
     }
@@ -429,6 +432,50 @@ class Gamemodel extends CI_Model {
         }
 
         return TRUE;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function calculateAndReturnLastRoundResults($gid){
+
+        $lastTurnId = $this -> getLastTurnId($gid);
+        $lastTurnNames = $this -> namesmodel -> getTurnNamesIds($lastTurnId);
+
+        $result = array();
+        foreach ($lastTurnNames as $name) {
+
+            $nid = $name['nid'];
+            $nickname = $this -> usermodel -> getNicknameByUid($name['uid']);
+            $score = $this -> namesmodel -> setScoreForNames($nameId);
+
+            $temp = array("nickname" => $nickname,
+                          "score" => $score
+                    );
+
+            array_push($result,$temp);
+            
+        }
+
+        return $result;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getLastTurnId($gid){ // checked
+
+        $this -> db -> select_max('tid');
+        $this -> db -> from("esmfamil_game_turns");
+        $this -> db -> where("gid",$gid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        $tid = $result[0]['tid'];
+
+        return $tid;
 
     }
     //
