@@ -80,7 +80,7 @@ class Game extends CI_Controller {
         }else{
 
             $nickname = $this->session->userdata('nickname');
-            if(checkActiveGame){
+            if(checkActiveGame($nickname)){
                 $data = array('gameList' => $this -> gamemodel ->getListOfGames(), 
                             'activeGame' => $this -> gamemodel -> getActiveGame($nickname));
             } else {
