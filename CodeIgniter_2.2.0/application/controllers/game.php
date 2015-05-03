@@ -80,9 +80,12 @@ class Game extends CI_Controller {
         }else{
 
             $nickname = $this->session->userdata('nickname');
-
-            $data = array('gameList' => $this -> gamemodel ->getListOfGames(), 
-                          'activeGame' => $this -> gamemodel -> getActiveGame($nickname));
+            if(checkActiveGame){
+                $data = array('gameList' => $this -> gamemodel ->getListOfGames(), 
+                            'activeGame' => $this -> gamemodel -> getActiveGame($nickname));
+            } else {
+                $data = array('gameList' => $this -> gamemodel ->getListOfGames());
+            }
 
             echo json_encode($data);
 
