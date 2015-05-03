@@ -161,6 +161,7 @@ class Game extends CI_Controller {
 
                 if($result){
 
+                    $this -> checkAndStartGame($gid);
                     echo json_encode(array("result" => "30")); // Success
 
                 }else{
@@ -215,29 +216,160 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function startGame($gid){
+    public function createNewRound($gid){ // checked
+
+        $tid = $this -> gamemodel -> createNewTurn($gid);
+
+        $users = $this -> gamemodel -> getGameMembers($gid);
+        $userIds = $this -> usermodel -> getUserIds($users);
+
+        $this -> namesmodel -> createNames($tid,$userIds);
         
+        $this -> gamemodel -> changeGameState($gid,1); // State 1 : Playing (90 seconds)
+                   
+        return $tid;
+
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function createNewTurn($gid){
+    public function checkAndStartGame($gid){ // checked
 
-        if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
+        if(!$this -> gamemodel -> gameHasFreeCapacity($gid)){
 
-            $tid = $this -> gamemodel -> createNewTurn($gid);
+            $this -> checkAndCreateNewRoundOrFinishGame($gid);
 
-            $users = $this -> gamemodel -> getGameMembers($gid);
-            $userIds = $this -> usermodel -> getUserIds($users);
+        }else{
 
-            $this -> namesmodel -> createNames($tid,$userIds);
-                       
-            return $tid;
+            return false;
 
         }
 
-        echo "Game rounds Completed";
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function checkAndCreateNewRoundOrFinishGame($gid){ // checked
+
+        if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
+
+            $this -> createNewRound($gid);
+
+        }else{
+
+            $this -> finishGame($gid);
+
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function finishGame($gid){ // checked
+
+        $this -> gamemodel -> changeGameState($gid,4); // State 4 : Finish Game
+
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function checkAndSetNames(){
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else if(!isset($_POST['gid']) || !isset($_POST['name']) || !isset($_POST['family']) || 
+                 !isset($_POST['car']) || !isset($_POST['color']) || !isset($_POST['city']) || 
+                 !isset($_POST['objects']) || count($_POST) != 7){
+
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+
+        }else if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else{
+
+            $nickname = $this -> session -> userdata("nickname");
+            $gid      = $this -> input   -> post("gid");
+
+            if(!$this -> gamemodel -> isUserParticipatingThisGame($nickname,$gid)){
+                
+                echo json_encode(array("result" => "47")); // User does not participate in this game
+
+            }else{
+
+                $userActiveGame = $this -> gamemodel -> getActiveGame($nickname);
+                $activeGameGid  =  $userActiveGame[0]['gid'];
+
+                if($activeGameGid != $gid){
+
+                    echo json_encode(array("result" => "49")); // User's active game is not this game!
+
+                }else{
+
+                    $name     = $this -> input   -> post("name");
+                    $family   = $this -> input   -> post("family");
+                    $car      = $this -> input   -> post("car");
+                    $color    = $this -> input   -> post("color");
+                    $city     = $this -> input   -> post("city");
+                    $objects  = $this -> input   -> post("objects");
+
+                    $result = $this -> namesmodel -> setNames($nickname,$gid,$name,$family,$car,$color,$objects,$city);
+
+                    if($result){
+                        
+                        $this -> updateGameStateOnFirstSetNames($nickname,$gid);
+                        echo json_encode(array("result" => "30")); // Success
+
+                    }else{
+
+                        echo json_encode(array("result" => "50")); // Names had been set before
+
+                    }
+                }
+            }
+        }
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function updateGameStateOnFirstSetNames($nickname,$gid){
+
+        if($this -> namesmodel -> firstSetNameInThisTurn($nickname,$gid) == 1){
+            
+            if($this -> gamemodel -> isGameRoundsCompleted($gid)){
+                
+                $this -> gamemodel -> changeGameState($gid,3);
+
+            }else{
+                
+                $this -> gamemodel -> changeGameState($gid,2);
+
+            }
+        }
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getLastRoundResult($gid){
+
+
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getGameTotalResult($gid){
 
     }
     //
@@ -246,7 +378,8 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> gamemodel -> createNewGame("3","4","emadagha","got");
+        $temp = $this -> gamemodel -> getActiveGame("emadagha");
+        
 
         print_r($temp);
 
