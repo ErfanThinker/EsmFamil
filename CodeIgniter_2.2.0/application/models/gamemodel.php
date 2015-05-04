@@ -41,7 +41,7 @@ class Gamemodel extends CI_Model {
         $this->db->from("esmfamil_game_members");
         $this->db->join('esmfamil_game','esmfamil_game.gid = esmfamil_game_members.gid');
         $this->db->where("pnickname",$nickname);
-        $this->db->where("isfinished",'0');
+        $this->db->where("isfinished !=",'4');
         $count = $this->db->count_all_results();
 
         if($count != 0){
@@ -64,7 +64,7 @@ class Gamemodel extends CI_Model {
         $this->db->select('*');
         $this->db->from("esmfamil_game");
         $this->db->where('creaternickname', $nickname);
-        $this->db->where('isfinished', 0);
+        $this->db->where('isfinished !=', 4);
         $count = $this->db->count_all_results();
 
         if($count == 0){
@@ -324,6 +324,20 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function changeTurnState($tid,$state){ // Checked
+
+        $data = array(
+               'state' => $state
+            );
+
+        $this->db->where('tid', $gid);
+        $this->db->update('esmfamil_turn', $data);
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function changeGameState($gid,$state){ // Checked
 
         $data = array(
@@ -498,5 +512,39 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    
+    public function getGameState($gid){
+
+        $this -> db -> select('isfinished');
+        $this -> db -> from('esmfamil_game');
+        $this -> db -> where('gid',$gid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        $state = $result[0]['isfinished'];
+
+        return $state;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getTurnState($tid){
+
+        $this -> db -> select('state');
+        $this -> db -> from('esmfamil_turn');
+        $this -> db -> where('tid',$tid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        $state = $result[0]['state'];
+
+        return $state;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //    
+
 };

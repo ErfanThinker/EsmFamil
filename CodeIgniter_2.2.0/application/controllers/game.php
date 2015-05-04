@@ -9,6 +9,8 @@ class Game extends CI_Controller {
         $this -> load -> model("namesmodel");
         $this -> load -> model("usermodel");
         $this -> load -> library('session');
+
+        require "../../../../../../home/emad/vendor/autoload.php";
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,10 +83,14 @@ class Game extends CI_Controller {
 
             $nickname = $this->session->userdata('nickname');
             if($this -> gamemodel -> checkActiveGame($nickname)){
+
                 $data = array('gameList' => $this -> gamemodel ->getListOfGames(), 
                             'activeGame' => $this -> gamemodel -> getActiveGame($nickname));
+
             } else {
+
                 $data = array('gameList' => $this -> gamemodel ->getListOfGames());
+
             }
 
             echo json_encode($data);
@@ -112,18 +118,25 @@ class Game extends CI_Controller {
             }else{
 
                 $gid    = $this -> gamemodel -> getUsersUnfinishedGameGid($nickname);
-                $result = $this -> gamemodel -> removeGame($gid);
 
-                if($result){
-
-                    echo json_encode(array("result" => "30")); // Sucsses
+                if($this -> gamemodel -> getGameState($gid) == 5){
+                
+                    echo json_encode(array("result" => "53")); // In this state users cannot leave game
 
                 }else{
 
-                    echo json_encode(array("result" => "43")); // There was an error in removing Game
+                    $result = $this -> gamemodel -> removeGame($gid);
 
+                    if($result){
+
+                        echo json_encode(array("result" => "30")); // Sucsses
+
+                    }else{
+
+                        echo json_encode(array("result" => "43")); // There was an error in removing Game
+
+                    }
                 }
-
             }
         }
     }
@@ -164,7 +177,7 @@ class Game extends CI_Controller {
 
                 if($result){
 
-                    $this -> checkAndStartGame($gid);
+                    $this -> scheduleCheckAndStartGame($gid);
                     echo json_encode(array("result" => "30")); // Success
 
                 }else{
@@ -174,7 +187,6 @@ class Game extends CI_Controller {
                 }
             }
         }
-
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -207,6 +219,10 @@ class Game extends CI_Controller {
                 
                 echo json_encode(array("result" => "47")); // User does not participate in this game
 
+            }else if($this -> gamemodel -> getGameState($gid) == 5){
+                
+                echo json_encode(array("result" => "53")); // In this state users cannot leave game
+
             }else{
             
                 $result = $this -> gamemodel -> removePlayerFromGame($gid, $nickname);
@@ -225,12 +241,141 @@ class Game extends CI_Controller {
 
         $users = $this -> gamemodel -> getGameMembers($gid);
         $userIds = $this -> usermodel -> getUserIds($users);
-
         $this -> namesmodel -> createNames($tid,$userIds);
         
         $this -> gamemodel -> changeGameState($gid,1); // State 1 : Playing (90 seconds)
-                   
+
+        $this -> scheduleStopTurn($gid,$tid);
+
         return $tid;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function scheduleCheckAndStartGame($gid){
+
+        if(!$this -> gamemodel -> gameHasFreeCapacity($gid)){
+
+            $this -> gamemodel -> changeGameState($gid,5); // in this state users can not leave game.
+
+            $loop = React\EventLoop\Factory::create();
+
+            $i = 0;
+            $loop->addPeriodicTimer(7, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+                $i++;
+                
+                $gameState = $this -> gamemodel -> getGameState($gid);
+                
+                if($gameState != 1){
+                
+                    $this -> checkAndStartGame($gid);
+                
+                }
+
+                if ($i >= 0) {
+                    $loop->cancelTimer($timer);
+                }
+            });
+
+            $loop->run();
+
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function scheduleFinishGame($gid){
+
+        $gameState = $this -> gamemodel -> getGameState($gid);
+        
+        if($gameState != 3){
+
+            $this -> gamemodel -> changeGameState($gid,3);
+
+        }
+
+        $loop = React\EventLoop\Factory::create();
+
+        $i = 0;
+        $loop->addPeriodicTimer(30, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+            $i++;
+            
+            $gameState = $this -> gamemodel -> getGameState($gid);
+            
+            if($gameState != 4){
+            
+                $this -> finishGame($gid);
+            
+            }
+
+            if ($i >= 0) {
+                $loop->cancelTimer($timer);
+            }
+        });
+
+        $loop->run();
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function scheduleStopTurn($gid,$tid){
+
+        $turnState = $this -> gamemodel -> getTurnState($tid);
+        
+        if($turnState == 0){
+
+            $loop = React\EventLoop\Factory::create();
+
+            $i = 0;
+            $loop->addPeriodicTimer(90, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+                $i++;
+                
+                $turnState = $this -> gamemodel -> getTurnState($tid);
+                $gameState = $this -> gamemodel -> getGameState($gid);
+                
+                if($turnState != 1 && $gameState == 1){
+                
+                    $this -> stopTurn($gid,$tid);
+                
+                }
+
+                if ($i >= 0) {
+                    $loop->cancelTimer($timer);
+                }
+            });
+
+            $loop->run();
+
+        } 
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function scheduleStartNewTurn($gid){
+
+        $loop = React\EventLoop\Factory::create();
+
+        $i = 0;
+        $loop->addPeriodicTimer(20, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+            $i++;
+                
+            $this -> checkAndCreateNewRoundOrFinishGame($gid);
+        
+
+            if ($i >= 0) {
+                $loop->cancelTimer($timer);
+            }
+        });
+
+        $loop->run();
 
     }
     //
@@ -262,7 +407,7 @@ class Game extends CI_Controller {
 
         }else{
 
-            $this -> finishGame($gid);
+            $this -> scheduleFinishGame($gid);
 
         }
 
@@ -274,6 +419,19 @@ class Game extends CI_Controller {
     public function finishGame($gid){ // checked
 
         $this -> gamemodel -> changeGameState($gid,4); // State 4 : Finish Game
+
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function stopTurn($gid,$tid){
+
+        $this -> gamemodel -> changeTurnState($tid,1);
+        $this -> gamemodel -> changeGameState($gid,2);
+
+        $this -> scheduleStartNewTurn($gid);
 
 
     }
@@ -348,22 +506,29 @@ class Game extends CI_Controller {
 
         if($this -> namesmodel -> firstSetNameInThisTurn($nickname,$gid) == 1){
             
-            if($this -> gamemodel -> isGameRoundsCompleted($gid)){
-                
-                $this -> gamemodel -> changeGameState($gid,3);
+            $tid = $this -> namesmodel -> getUserLastTurn($nickname,$gid);
+            $turnState = $this -> gamemodel -> getTurnState($tid);
 
-            }else{
-                
-                $this -> gamemodel -> changeGameState($gid,2);
-
+            if($turnState == 0){
+                $this -> stopTurn($gid,$tid);
             }
+
         }
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function getLastRoundResult($gid){
+    public function getLastRoundResult(){
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else if(!isset($_POST['gid']) || count($_POST) != 1){
+
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid.
+        }
 
         if($this -> gamemodel -> getNumberOfGameRoundsPlayed($gid) == 0 ){
 
@@ -373,7 +538,7 @@ class Game extends CI_Controller {
 
             $gameState = $this -> gamemodel -> getGameState($gid);
 
-            if($gameState == 0 || $gameState == 4){
+            if($gameState == 0 || $gameState == 4 || $gameState == 5 || $gameState == 1){
 
                 echo json_encode(array("result" => "52")); // You Can not have game results in this game state
 
@@ -401,11 +566,24 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> getLastRoundResult(1);
-        
-        print_r($temp);
+        /*$loop = React\EventLoop\Factory::create();
 
-        //echo $this -> usermodel ->getUserIdByNickname("emadok");
+        $i = 0;
+        $loop->addPeriodicTimer(5, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+            $i++;
+
+            $this -> finishGame(9+$i);
+
+            if ($i >= 0) {
+                $loop->cancelTimer($timer);
+            }
+        });
+
+        $loop->run();*/
+
+        $temp = $this -> gamemodel -> getTurnState(1);
+
+        print_r($temp);
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
