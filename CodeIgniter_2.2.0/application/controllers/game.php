@@ -263,7 +263,7 @@ class Game extends CI_Controller {
             $loop = React\EventLoop\Factory::create();
 
             $i = 0;
-            $loop->addPeriodicTimer(7, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+            $loop->addPeriodicTimer(7, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid) {
                 $i++;
                 
                 $gameState = $this -> gamemodel -> getGameState($gid);
@@ -301,7 +301,7 @@ class Game extends CI_Controller {
         $loop = React\EventLoop\Factory::create();
 
         $i = 0;
-        $loop->addPeriodicTimer(30, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+        $loop->addPeriodicTimer(30, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid) {
             $i++;
             
             $gameState = $this -> gamemodel -> getGameState($gid);
@@ -333,7 +333,7 @@ class Game extends CI_Controller {
             $loop = React\EventLoop\Factory::create();
 
             $i = 0;
-            $loop->addPeriodicTimer(90, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+            $loop->addPeriodicTimer(90, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid,$tid) {
                 $i++;
                 
                 $turnState = $this -> gamemodel -> getTurnState($tid);
@@ -364,7 +364,7 @@ class Game extends CI_Controller {
         $loop = React\EventLoop\Factory::create();
 
         $i = 0;
-        $loop->addPeriodicTimer(20, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop) {
+        $loop->addPeriodicTimer(20, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid) {
             $i++;
                 
             $this -> checkAndCreateNewRoundOrFinishGame($gid);
@@ -580,6 +580,8 @@ class Game extends CI_Controller {
         });
 
         $loop->run();*/
+
+        $this -> scheduleCheckAndStartGame(70);
 
         $temp = $this -> gamemodel -> getTurnState(1);
 
