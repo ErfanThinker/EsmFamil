@@ -330,7 +330,7 @@ class Gamemodel extends CI_Model {
                'state' => $state
             );
 
-        $this->db->where('tid', $gid);
+        $this->db->where('tid', $tid);
         $this->db->update('esmfamil_turn', $data);
 
     }

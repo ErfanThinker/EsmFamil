@@ -547,9 +547,7 @@ class Game extends CI_Controller {
                 echo json_encode($lastRoundResult);
 
             }
-
         }
-
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -579,9 +577,7 @@ class Game extends CI_Controller {
 
         $loop->run();*/
 
-        $this -> scheduleCheckAndStartGame(70);
-
-        $temp = $this -> gamemodel -> getTurnState(1);
+        $this -> scheduleCheckAndStartGame(1);
 
         print_r($temp);
     }
