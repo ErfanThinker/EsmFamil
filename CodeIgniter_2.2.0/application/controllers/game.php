@@ -368,7 +368,6 @@ class Game extends CI_Controller {
             $i++;
                 
             $this -> checkAndCreateNewRoundOrFinishGame($gid);
-        
 
             if ($i >= 0) {
                 $loop->cancelTimer($timer);
@@ -512,7 +511,6 @@ class Game extends CI_Controller {
             if($turnState == 0){
                 $this -> stopTurn($gid,$tid);
             }
-
         }
     }
     //
