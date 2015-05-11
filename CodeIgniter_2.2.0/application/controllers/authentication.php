@@ -12,7 +12,7 @@ class Authentication extends CI_Controller {
         $this -> load -> model('gamemodel');
         $this -> load -> library("email");
         $this -> load -> library('session');
-        $this->load->helper('file');
+        $this -> load -> helper('file');
 
         $emailConfig = $this-> config -> load("email");
     }
