@@ -570,7 +570,6 @@ class Gamemodel extends CI_Model {
             $nickname_result = $query -> result_array();
             array_push($result, array('nickname'=>$nickname_result[0]['nickname'] , 'score'=> $name['score']));
         }
-
         return $result; // array of (nickname, score)
     }    
 
