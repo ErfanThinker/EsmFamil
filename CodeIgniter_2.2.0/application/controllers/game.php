@@ -526,9 +526,8 @@ class Game extends CI_Controller {
         }else if(!isset($_POST['gid']) || count($_POST) != 1){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid.
-        }
-
-        if($this -> gamemodel -> getNumberOfGameRoundsPlayed($gid) == 0 ){
+            
+        }else if($this -> gamemodel -> getNumberOfGameRoundsPlayed($gid) == 0 ){
 
             echo json_encode(array("result" => "51")); // Game do not have a turn to calculate it's results
 
@@ -536,7 +535,7 @@ class Game extends CI_Controller {
 
             $gameState = $this -> gamemodel -> getGameState($gid);
 
-            if($gameState == 0 || $gameState == 4 || $gameState == 5 || $gameState == 1){
+            if($gameState != 2){
 
                 echo json_encode(array("result" => "52")); // You Can not have game results in this game state
 
@@ -597,7 +596,7 @@ class Game extends CI_Controller {
 
         }else{
 
-            $gid = $this->session->gamedata('gid');
+            $this->session->gamedata('gid');
 
             $data = $this->gamemodel->getTempResult($gid);
 

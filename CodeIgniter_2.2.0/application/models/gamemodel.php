@@ -562,7 +562,7 @@ class Gamemodel extends CI_Model {
         
         $result = array();
 
-        foreach ($names_result as $name) {
+        foreach($names_result as $name){
             $this -> db -> select('nickname');
             $this -> db -> from('esmfamil_user');
             $this -> db -> where('id',$name['uid']);
