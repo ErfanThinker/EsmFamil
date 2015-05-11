@@ -585,7 +585,6 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-        //calls after each round and shows score of players
     public function showTempResult(){
 
         if($_SERVER['REQUEST_METHOD'] != 'POST'){
@@ -600,12 +599,11 @@ class Game extends CI_Controller {
 
             $gid = $this->session->gamedata('gid');
 
-            $data = $this->gamemodel->getTempResult($gid));
+            $data = $this->gamemodel->getTempResult($gid);
 
             echo json_encode($data);
 
         }
-            
     }
 }
 ?>
