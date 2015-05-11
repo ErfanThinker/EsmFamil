@@ -1,0 +1,34 @@
+20 : Method should be POST
+21 : Email syntax is invalid
+//22 : Email sent successfuly
+23 : Email sending problem but user added successfully
+24 : Error in adding User
+25 : Nickname Exists
+26 : Email Exists
+27 : Post Parameters are invalid
+28 : Invalid nickname or password
+29 : Email is not active
+//30 : Login sucessfully
+//31 : Signout sucessfully
+//32 : Edit was a success
+33 : Edit was a Failure
+34 : cookie missing , Session do not have valid values!
+//35 : ChangePassword was a success
+36 : ChangePassword was a Failure
+37 : Wrong oldPassword
+38 : Player can not creat new game while he is playing another game!
+39 : Player is owner of another game that is not finished yet
+//40 : Game Created Successfully
+41 : There was an error in creating game
+42 : User Do not have a Game
+43 : There was an error in removing Game
+44 : Player can not join new game when he is participating another game
+45 : Game do not have enough capacity for new player to add
+46 : Creator of Game can not remove himself from Game
+47 : User does not participate in this game
+48 : Max Number of Players should be at least 2
+49 : User's active game is not this game!
+50 : Names had been set before
+51 : Game do not have a turn to complete it's results
+52 : You Can not have game results in this game state (0 and 4)
+53 : In this state users cannot leave game
