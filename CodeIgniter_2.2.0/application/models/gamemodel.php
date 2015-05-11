@@ -452,7 +452,7 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function calculateAndReturnLastRoundResults($gid){
+    public function getLastRoundResults($gid){
 
         $lastTurnId = $this -> getLastTurnId($gid);
         $lastTurnNames = $this -> namesmodel -> getTurnNamesIds($lastTurnId);
@@ -461,8 +461,9 @@ class Gamemodel extends CI_Model {
         foreach ($lastTurnNames as $name) {
 
             $nid = $name['nid'];
-            $nickname = $this -> usermodel -> getNicknameByUid($name['uid']);
-            $score = $this -> namesmodel -> setScoreForNames($nameId);
+            $uid = $name['uid'];
+            $nickname = $this -> usermodel -> getNicknameByUid($uid);
+            $score = $this -> namesmodel -> getNamesScore($nid);
 
             $temp = array("nickname" => $nickname,
                           "score" => $score

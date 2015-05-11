@@ -82,10 +82,28 @@ class Game extends CI_Controller {
         }else{
 
             $nickname = $this->session->userdata('nickname');
+
             if($this -> gamemodel -> checkActiveGame($nickname)){
 
-                $data = array('gameList' => $this -> gamemodel ->getListOfGames(), 
-                            'activeGame' => $this -> gamemodel -> getActiveGame($nickname));
+                $activeGame = $this -> gamemodel -> getActiveGame($nickname);
+                $gameList   = $this -> gamemodel ->getListOfGames();
+
+                $gid = $activeGame[0]['gid'];
+
+                if($this -> gamemodel -> getGameState($gid) != 2){
+
+                    $data = array('gameList' => $gameList, 
+                            'activeGame' => $activeGame);
+
+                }else{
+
+                    $lastTurnResult = $this -> gamemodel -> getLastRoundResults($gid);
+
+                    $data = array('gameList' => $gameList,
+                                  'activeGame' => $activeGame,
+                                  'turnResult' => $lastTurnResult);
+
+                }
 
             } else {
 
@@ -94,9 +112,7 @@ class Game extends CI_Controller {
             }
 
             echo json_encode($data);
-
         }
-
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -576,7 +592,9 @@ class Game extends CI_Controller {
 
         $loop->run();*/
 
-        $temp = $this -> gamemodel -> calculateAndReturnLastRoundResults($gid);
+        $temp = $this -> namesmodel -> getNamesScore(11);
+
+        //$gid = $temp[0]['gid'];
 
         print_r($temp);
     }

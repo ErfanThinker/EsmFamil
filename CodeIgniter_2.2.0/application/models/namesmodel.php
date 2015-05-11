@@ -197,12 +197,27 @@ class Namesmodel extends CI_Model {
     public function getTurnNamesIds($tid){
 
         $this -> db -> select("nid");
+        $this -> db -> select("uid");
         $this -> db -> from("esmfamil_names");
         $this -> db -> where("tid",$tid);
         $query = $this -> db -> get();
 
         return $query -> result_array();
 
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getNamesScore($nid){
+
+        $this -> db -> select("score");
+        $this -> db -> from("esmfamil_names");
+        $this -> db -> where("nid",$nid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        return $result[0]['score'];
     }
 
 };
