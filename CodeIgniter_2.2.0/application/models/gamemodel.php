@@ -317,9 +317,31 @@ class Gamemodel extends CI_Model {
             array_push($result[0]['members'], $member);
         }
 
+        array_push($result[0]['letter'], getTurnLetter($gid));
+
         return $result;
 
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getTurnLetter($gid){
+        $this -> db -> select_max('tid');
+        $this -> db -> from('esmfamil_game_turns');
+        $this -> db -> where('gid',$gid);
+        $query = $this -> db -> get();
+        $turn_result = $query -> result_array();
+
+        $this -> db -> select('letter');
+        $this -> db -> from('esmfamil_turn');
+        $this -> db -> where('tid',$turn_result[0]['tid']);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        return $result[0]['letter'];        
+    }
+
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
