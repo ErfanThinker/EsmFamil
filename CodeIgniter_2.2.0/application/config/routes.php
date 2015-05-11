@@ -38,6 +38,7 @@
 |
 */
 
+$route["tempResult"] = "game/showTempResult";
 $route["gameList"]="game/getListOfGames";
 $route["changePassword"]="usermanagement/changePassword";
 $route["editUser"]="usermanagement/editUser";
