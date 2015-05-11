@@ -585,27 +585,5 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    //calls after each round and shows score of players
-    public function showTempResult(){
-
-        if($_SERVER['REQUEST_METHOD'] != 'POST'){
-            
-            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
-
-        }else if($this->session->userdata('nickname') == NULL){
-
-            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
-
-        }else{
-
-            $gid = $this->session->gamedata('gid');
-
-            $data = $this->gamemodel->getTempResult($gid));
-
-            echo json_encode($data);
-
-        }
-            
-    }
 }
 ?>

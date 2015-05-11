@@ -546,32 +546,5 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    
-    public function getTempResult($gid){
-
-        $this -> db -> select_max('tid');
-        $this -> db -> from('esmfamil_game_turns');
-        $this -> db -> where('gid',$gid);
-        $query = $this -> db -> get();
-        $turn_result = $query -> result_array();
-    
-        $this -> db -> select('*');
-        $this -> db -> from('esmfamil_names');
-        $this -> db -> where('tid',$turn_result[0]['tid']);
-        $query = $this -> db -> get();
-        $names_result = $query -> result_array();
-        
-        $result = array();
-
-        foreach ($names_result as $name) {
-            $this -> db -> select('nickname');
-            $this -> db -> from('esmfamil_user');
-            $this -> db -> where('id',$name['uid']);
-            $query = $this -> db -> get();
-            $nickname_result = $query -> result_array();
-            array_push($result, array('nickname'=>$nickname_result[0]['nickname'] , 'score'=> $name['score']));
-        }
-
-        return $result // array of (nickname, score)
-    }    
 
 };
