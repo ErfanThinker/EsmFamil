@@ -571,7 +571,7 @@ class Gamemodel extends CI_Model {
             array_push($result, array('nickname'=>$nickname_result[0]['nickname'] , 'score'=> $name['score']));
         }
 
-        return $result // array of (nickname, score)
+        return $result; // array of (nickname, score)
     }    
 
 };
