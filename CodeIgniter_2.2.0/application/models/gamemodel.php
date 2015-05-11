@@ -424,11 +424,11 @@ class Gamemodel extends CI_Model {
     //
     public function randomLetter(){ // Checked
 
-        /*$pool = "ضصثقفغعهخحجچشسیبلاتنمکگظطزرذدپو";
-        $rand = rand(0,30);*/
+        $pool = "ضصثقفغعهخحجچشسیبلاتنمکگظطزرذدپو";
+        $rand = rand(0,30);
 
-        $pool = "abcdefghijklmnopqrstuvwxyz";
-        $rand = rand(0,25);        
+        /*$pool = "abcdefghijklmnopqrstuvwxyz";
+        $rand = rand(0,25);        */
 
         return $pool[$rand];
     }
