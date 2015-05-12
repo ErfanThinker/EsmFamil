@@ -309,6 +309,7 @@ class Gamemodel extends CI_Model {
 
         $result = $query -> result_array();
         $result[0]['members'] = array();
+        $result[0]['letter']  = array();
 
         $gid    = $result[0]['gid'];
         $gameMembers = $this -> getGameMembers($gid);
@@ -317,7 +318,11 @@ class Gamemodel extends CI_Model {
             array_push($result[0]['members'], $member);
         }
 
-        array_push($result[0]['letter'], getTurnLetter($gid));
+        $letter = $this -> getTurnLetter($gid);
+        if($letter != null){
+
+            array_push($result[0]['letter'], $letter);
+        }
 
         return $result;
 
@@ -327,19 +332,24 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function getTurnLetter($gid){
-        $this -> db -> select_max('tid');
-        $this -> db -> from('esmfamil_game_turns');
-        $this -> db -> where('gid',$gid);
-        $query = $this -> db -> get();
-        $turn_result = $query -> result_array();
+        
+        $tid = $this -> getLastTurnId($gid);
 
         $this -> db -> select('letter');
         $this -> db -> from('esmfamil_turn');
-        $this -> db -> where('tid',$turn_result[0]['tid']);
+        $this -> db -> where('tid',$tid);
         $query = $this -> db -> get();
         $result = $query -> result_array();
 
-        return $result[0]['letter'];        
+        if(isset($result[0])){
+
+            return $result[0]['letter'];        
+
+        }else{
+
+            return null;
+
+        }
     }
 
     //
