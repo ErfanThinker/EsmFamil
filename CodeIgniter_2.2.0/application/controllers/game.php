@@ -592,7 +592,7 @@ class Game extends CI_Controller {
 
         $loop->run();*/
 
-        $temp = $this -> namesmodel -> getNamesScore(11);
+        $temp = $this -> gamemodel -> createNewTurn(11);
 
         //$gid = $temp[0]['gid'];
 

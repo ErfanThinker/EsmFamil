@@ -431,7 +431,6 @@ class Gamemodel extends CI_Model {
 
         $letter = $this -> randomLetter();
 
-
         $data = array(
            'letter' => $letter
         );
@@ -458,11 +457,9 @@ class Gamemodel extends CI_Model {
     //
     public function randomLetter(){ // Checked
 
-        $pool = "ضصثقفغعهخحجچشسیبلاتنمکگظطزرذدپو";
-        $rand = rand(0,30);
 
-        /*$pool = "abcdefghijklmnopqrstuvwxyz";
-        $rand = rand(0,25);        */
+        $pool = array('ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج','چ','ش','س','ی','ب','ل','ا','ت','ن','م','ک','گ','ظ','ط','ز','ر','ذ','د','پ','و');
+        $rand = rand(0,30);
 
         return $pool[$rand];
     }
