@@ -569,7 +569,7 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function getGameTotalResult($gid){
-        
+
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -592,7 +592,7 @@ class Game extends CI_Controller {
 
         $loop->run();*/
 
-        $temp = $this -> gamemodel ->getTurnLetter(8);
+        $temp = $this -> namesmodel -> getNamesScore(11);
 
         //$gid = $temp[0]['gid'];
 
