@@ -309,7 +309,6 @@ class Gamemodel extends CI_Model {
 
         $result = $query -> result_array();
         $result[0]['members'] = array();
-        $result[0]['letter']  = array();
 
         $gid    = $result[0]['gid'];
         $gameMembers = $this -> getGameMembers($gid);
@@ -321,7 +320,10 @@ class Gamemodel extends CI_Model {
         $letter = $this -> getTurnLetter($gid);
         if($letter != null){
 
-            array_push($result[0]['letter'], $letter);
+            $result[0]['letter'] = $letter;
+        }else{
+
+            $result[0]['letter'] = '';
         }
 
         return $result;
