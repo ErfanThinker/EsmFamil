@@ -601,7 +601,7 @@ class Game extends CI_Controller {
 
         $loop->run();*/
 
-        $temp = $this -> get20BestUsersAcordingTotalScores();
+        $temp = $this -> gamemodel -> getGameResultUntilNow(197);
 
         print_r($temp);
 
