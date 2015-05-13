@@ -603,6 +603,21 @@ class Gamemodel extends CI_Model {
             array_push($result, array('nickname'=>$nickname_result[0]['nickname'] , 'score'=> $name['score']));
         }
         return $result; // array of (nickname, score)
-    }    
+    } 
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function get20BestUsersAcordingTotalScores(){
+
+        $this -> db -> select('*');
+        $this -> db -> from('esmFamil_user');
+        $this -> db -> order_by("totalscore", "asc");
+        $this -> db -> limit(20,0);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+            
+        return $result; // array of (nickname, score)
+    }   
 
 };

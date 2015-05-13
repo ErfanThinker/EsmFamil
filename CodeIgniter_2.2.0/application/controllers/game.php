@@ -10,7 +10,8 @@ class Game extends CI_Controller {
         $this -> load -> model("usermodel");
         $this -> load -> library('session');
 
-        require "../../../../../../home/emad/vendor/autoload.php";
+        //require "../../../../../../home/emad/vendor/autoload.php";
+        require "../../../../../../home/nelson/Downloads/vendor/autoload.php";
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -619,6 +620,24 @@ class Game extends CI_Controller {
             $this->session->gamedata('gid');
 
             $data = $this->gamemodel->getTempResult($gid);
+
+            echo json_encode($data);
+
+        }
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function get20BestUsersAcordingTotalScores(){
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else{
+
+            $data = $this->gamemodel->get20BestUsersAcordingTotalScores();
 
             echo json_encode($data);
 
