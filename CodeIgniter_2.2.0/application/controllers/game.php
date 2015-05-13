@@ -297,6 +297,8 @@ class Game extends CI_Controller {
 
             $loop->run();
 
+            return;
+
         }
 
     }
