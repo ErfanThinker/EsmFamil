@@ -10,8 +10,8 @@ class Game extends CI_Controller {
         $this -> load -> model("usermodel");
         $this -> load -> library('session');
 
-        //require "../../../../../../home/emad/vendor/autoload.php";
-        require "../../../../../../home/nelson/Downloads/vendor/autoload.php";
+        require "../../../../../../home/emad/vendor/autoload.php";
+
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,19 +90,28 @@ class Game extends CI_Controller {
                 $gameList   = $this -> gamemodel ->getListOfGames();
 
                 $gid = $activeGame[0]['gid'];
+                $gameState  = $this -> gamemodel -> getGameState($gid);
 
-                if($this -> gamemodel -> getGameState($gid) != 2){
+                if($gameState != 2 && $gameState != 3){
 
                     $data = array('gameList' => $gameList, 
                             'activeGame' => $activeGame);
 
-                }else{
+                }else if($gameState == 2){ // tempResult
 
                     $lastTurnResult = $this -> gamemodel -> getLastRoundResults($gid);
 
                     $data = array('gameList' => $gameList,
                                   'activeGame' => $activeGame,
                                   'turnResult' => $lastTurnResult);
+
+                }else if($gameState == 3){ // finalResult
+
+                    $finalGameResult = $this -> gamemodel -> getGameResultUntilNow($gid);
+
+                    $data = array('gameList' => $gameList,
+                                  'activeGame' => $activeGame,
+                                  'finalResult' => $finalGameResult);
 
                 }
 
@@ -282,7 +291,7 @@ class Game extends CI_Controller {
             $i = 0;
             $loop->addPeriodicTimer(7, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid) {
                 $i++;
-                
+
                 $gameState = $this -> gamemodel -> getGameState($gid);
                 
                 if($gameState != 1){
@@ -297,9 +306,6 @@ class Game extends CI_Controller {
             });
 
             $loop->run();
-
-            return;
-
         }
 
     }
@@ -595,11 +601,13 @@ class Game extends CI_Controller {
 
         $loop->run();*/
 
-        $temp = $this -> gamemodel -> createNewTurn(11);
+        $temp = $this -> get20BestUsersAcordingTotalScores();
+
+        print_r($temp);
 
         //$gid = $temp[0]['gid'];
 
-        print_r($temp);
+        //print_r($temp);
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
