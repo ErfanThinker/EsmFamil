@@ -193,8 +193,8 @@ class Game extends CI_Controller {
 
                 if($result){
 
-                    $this -> scheduleCheckAndStartGame($gid);
                     echo json_encode(array("result" => "30")); // Success
+                    $this -> scheduleCheckAndStartGame($gid);
 
                 }else{
 
@@ -501,8 +501,8 @@ class Game extends CI_Controller {
 
                     if($result){
                         
-                        $this -> updateGameStateOnFirstSetNames($nickname,$gid);
                         echo json_encode(array("result" => "30")); // Success
+                        $this -> updateGameStateOnFirstSetNames($nickname,$gid);
 
                     }else{
 
