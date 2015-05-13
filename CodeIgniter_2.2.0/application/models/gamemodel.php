@@ -486,10 +486,20 @@ class Gamemodel extends CI_Model {
     public function getLastRoundResults($gid){
 
         $lastTurnId = $this -> getLastTurnId($gid);
-        $lastTurnNames = $this -> namesmodel -> getTurnNamesIds($lastTurnId);
+
+        return $this -> getRoundResult($lastTurnId);
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getRoundResult($tid){
+
+        $turnNames = $this -> namesmodel -> getTurnNamesIds($tid);
 
         $result = array();
-        foreach ($lastTurnNames as $name) {
+        foreach ($turnNames as $name) {
 
             $nid = $name['nid'];
             $uid = $name['uid'];
@@ -505,6 +515,52 @@ class Gamemodel extends CI_Model {
         }
 
         return $result;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getGameResultUntilNow($gid){
+
+        $gameTids = $this -> getGameTurnsIds($gid);
+        $gameMembers = $this -> getGameMembers($gid);
+
+        $result = array();
+
+        foreach ($gameMembers as $member) {
+            
+            $temp = array('nickname' => '','totalScore' => 0);
+            $temp['nickname'] = $member['pnickname'];
+
+            array_push($result, $temp);
+
+        }
+
+        foreach($gameTids as $tempTid){
+
+            $tid = $tempTid['tid'];
+
+            $turnResult = $this -> getRoundResult($tid);
+
+            foreach ($turnResult as $userResult) {
+                
+                $nickname = $userResult['nickname'];
+                $userRoundScore = $userResult['score'];
+
+                $i = 0;
+                foreach ($result as $userTotalResult) {
+
+                    if($nickname == $userTotalResult['nickname']){
+
+                        $result[$i]['totalScore'] = $result[$i]['totalScore'] + $userRoundScore;
+
+                    }
+                    $i += 1;
+
+                }
+            }
+        }
 
     }
     //
@@ -577,33 +633,19 @@ class Gamemodel extends CI_Model {
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //    
-    public function getTempResult($gid){
+    //
+    public function getGameTurnsIds($gid){
 
-        $this -> db -> select_max('tid');
-        $this -> db -> from('esmfamil_game_turns');
-        $this -> db -> where('gid',$gid);
+        $this -> db -> select("tid");
+        $this -> db -> from("esmfamil_game_turns");
+        $this -> db -> where("gid",$gid);
         $query = $this -> db -> get();
-        $turn_result = $query -> result_array();
-    
-        $this -> db -> select('*');
-        $this -> db -> from('esmfamil_names');
-        $this -> db -> where('tid',$turn_result[0]['tid']);
-        $query = $this -> db -> get();
-        $names_result = $query -> result_array();
-        
-        $result = array();
 
-        foreach($names_result as $name){
-            $this -> db -> select('nickname');
-            $this -> db -> from('esmfamil_user');
-            $this -> db -> where('id',$name['uid']);
-            $query = $this -> db -> get();
-            $nickname_result = $query -> result_array();
-            array_push($result, array('nickname'=>$nickname_result[0]['nickname'] , 'score'=> $name['score']));
-        }
-        return $result; // array of (nickname, score)
-    } 
+        $result = $query -> result_array();
+
+        return $result;
+
+    }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -618,6 +660,6 @@ class Gamemodel extends CI_Model {
         $result = $query -> result_array();
             
         return $result; // array of (nickname, score)
-    }   
+    }
 
 };
