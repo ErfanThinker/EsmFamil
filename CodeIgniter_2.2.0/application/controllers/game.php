@@ -651,5 +651,20 @@ class Game extends CI_Controller {
 
         }
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function updateUserTotalScoreFromNamesTable($uid){
+            
+	$query = $this->namesmodel->getUserTotalNamesScore($uid);
+	$myScore = 0;
+
+	foreach ($query->result() as $myNameTable) {
+		$myScore = $myScore + $myNameTable->score;
+	}
+
+	$this->namesmodel->updateUserTotalScore($uid , $myScore);
+    }
 }
 ?>
