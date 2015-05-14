@@ -229,8 +229,6 @@ class Namesmodel extends CI_Model {
         $this -> db -> from("esmfamil_names");
         $this -> db -> where("uid",$uid);
         $query = $this -> db -> get();
-        $result = $query -> result_array();
-
-        return $result;
-    }
+   	return $query; 
+   }
 };
