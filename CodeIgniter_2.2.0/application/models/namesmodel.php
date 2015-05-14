@@ -219,5 +219,18 @@ class Namesmodel extends CI_Model {
 
         return $result[0]['score'];
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getUserTotalNamesScore($uid){
 
+        $this -> db -> select("score");
+        $this -> db -> from("esmfamil_names");
+        $this -> db -> where("uid",$uid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        return $result;
+    }
 };
