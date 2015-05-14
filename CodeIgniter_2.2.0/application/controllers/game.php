@@ -664,7 +664,7 @@ class Game extends CI_Controller {
 		$myScore = $myScore + $myNameTable->score;
 	}
 
-	$this->namesmodel->updateUserTotalScore($uid , $myScore);
+	$this->usermodel->updateUserTotalScore($uid , $myScore);
     }
 }
 ?>
