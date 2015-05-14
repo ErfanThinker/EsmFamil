@@ -340,7 +340,7 @@ class Usermodel extends CI_Model {
                'totalScore' => $score
             );
 
-        $this->db->where('esmFamil_usere', $uid);
+        $this->db->where('esmFamil_user', $uid);
         $this->db->update('esmFamil_user', $data); 
     }
     //
