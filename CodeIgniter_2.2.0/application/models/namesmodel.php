@@ -225,10 +225,16 @@ class Namesmodel extends CI_Model {
     //
     public function getUserTotalNamesScore($uid){
 
-        $this -> db -> select("score");
+        $this -> db -> select_sum("score");
         $this -> db -> from("esmfamil_names");
         $this -> db -> where("uid",$uid);
         $query = $this -> db -> get();
-   	return $query; 
+        $result = $query -> result_array();
+
+   	    return $result[0]['score']; 
    }
+   //
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //
 };
