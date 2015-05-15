@@ -523,44 +523,34 @@ class Gamemodel extends CI_Model {
     //
     public function getGameResultUntilNow($gid){
 
-        $gameTids = $this -> getGameTurnsIds($gid);
+        /*$gameTids = $this -> getGameTurnsIds($gid);*/
         $gameMembers = $this -> getGameMembers($gid);
+        $lastTurnResult = $this -> getLastRoundResults($gid);
 
         $result = array();
 
         foreach ($gameMembers as $member) {
             
-            $temp = array('nickname' => '','totalScore' => 0);
+            $temp = array('nickname' => '','totalScore' => 0,'score' => 0);
             $temp['nickname'] = $member['pnickname'];
+
+            $uid = $this -> usermodel -> getUserIdByNickname($member['pnickname']);
+            $userTotalScoreInGame = $this -> namesmodel -> getUserTotalScoreInGame($gid,$uid);
+            $temp['totalScore'] = $userTotalScoreInGame[0]['score'];
+
+            foreach($lastTurnResult as $userTurnResult){
+
+                if($userTurnResult['nickname'] == $temp['nickname']){
+                    $temp['score'] = $userTurnResult['score'];
+                }
+
+            }
 
             array_push($result, $temp);
 
         }
 
-        foreach($gameTids as $tempTid){
-
-            $tid = $tempTid['tid'];
-
-            $turnResult = $this -> getRoundResult($tid);
-
-            foreach ($turnResult as $userResult) {
-                
-                $nickname = $userResult['nickname'];
-                $userRoundScore = $userResult['score'];
-
-                $i = 0;
-                foreach ($result as $userTotalResult) {
-
-                    if($nickname == $userTotalResult['nickname']){
-
-                        $result[$i]['totalScore'] = $result[$i]['totalScore'] + $userRoundScore;
-
-                    }
-                    $i += 1;
-
-                }
-            }
-        }
+        return $result;
 
     }
     //

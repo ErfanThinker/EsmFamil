@@ -97,21 +97,13 @@ class Game extends CI_Controller {
                     $data = array('gameList' => $gameList, 
                             'activeGame' => $activeGame);
 
-                }else if($gameState == 2){ // tempResult
+                }else{ // tempResult and ResutTillNow
 
-                    $lastTurnResult = $this -> gamemodel -> getLastRoundResults($gid);
-
-                    $data = array('gameList' => $gameList,
-                                  'activeGame' => $activeGame,
-                                  'turnResult' => $lastTurnResult);
-
-                }else if($gameState == 3){ // finalResult
-
-                    $finalGameResult = $this -> gamemodel -> getGameResultUntilNow($gid);
+                    $resultTillNow = $this -> gamemodel -> getGameResultUntilNow($gid);
 
                     $data = array('gameList' => $gameList,
                                   'activeGame' => $activeGame,
-                                  'finalResult' => $finalGameResult);
+                                  'result' => $resultTillNow);
 
                 }
 
@@ -639,7 +631,9 @@ class Game extends CI_Controller {
     //
     public function test(){
 
-        $temp = $this -> updateUserTotalScore(11);
+        //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
+
+        $temp = $this -> namesmodel -> getUserTotalScoreInGame(12,23);
 
         print_r($temp);
 

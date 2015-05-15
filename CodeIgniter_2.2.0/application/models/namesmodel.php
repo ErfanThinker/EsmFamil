@@ -237,4 +237,16 @@ class Namesmodel extends CI_Model {
    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    //
+    public function getUserTotalScoreInGame($gid,$uid){
+
+        $this -> db -> select_sum('esmfamil_names.score');
+        $this -> db -> from('esmfamil_names');
+        $this -> db -> join('esmfamil_game_turns','esmfamil_game_turns.tid = esmfamil_names.tid');
+        $this -> db -> where("esmfamil_game_turns.gid",$gid);
+        $this -> db -> where("esmfamil_names.uid",$uid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        return $result;
+    }
 };
