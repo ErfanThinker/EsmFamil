@@ -541,6 +541,7 @@ class Game extends CI_Controller {
                 $this -> stopTurn($gid,$tid);
 
             }
+            
         }
     }
     //

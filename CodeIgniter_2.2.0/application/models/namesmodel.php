@@ -124,13 +124,13 @@ class Namesmodel extends CI_Model {
         $this -> db -> where("isSet !=",0);
         $result = $this -> db -> count_all_results();
 
-        if($result != 0){
+        if($result == 1){
 
-            return 0;
+            return 1;
 
         }else{
 
-            return 1;
+            return 0;
 
         }
 
