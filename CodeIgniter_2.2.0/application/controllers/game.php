@@ -447,7 +447,10 @@ class Game extends CI_Controller {
 
         $this -> gamemodel -> changeTurnState($tid,1);
 
-        if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
+        $this -> gamemodel -> changeGameState($gid,6);
+        $this -> gamemodel -> setReferies($tid);
+
+        /*if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
 
             $this -> gamemodel -> changeGameState($gid,2);
             $this -> scheduleStartNewTurn($gid);
@@ -457,7 +460,7 @@ class Game extends CI_Controller {
             $this -> gamemodel -> changeGameState($gid,3);
             $this -> scheduleFinishGame($gid);
 
-        }
+        }*/
 
     }
     //
@@ -532,9 +535,11 @@ class Game extends CI_Controller {
         if($this -> namesmodel -> firstSetNameInThisTurn($nickname,$gid) == 1){
             
             $tid = $this -> namesmodel -> getUserLastTurn($nickname,$gid);
-            $turnState = $this -> gamemodel -> getTurnState($tid);
 
-            if($turnState == 0){
+            $turnState = $this -> gamemodel -> getTurnState($tid);
+            $gameState = $this -> gamemodel -> getGameState($gid);
+
+            if($turnState != 1 && $gameState == 1){
                 $this -> stopTurn($gid,$tid);
             }
         }
@@ -642,7 +647,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this -> namesmodel -> firstSetNameInThisTurn('erfan',16);
+        $temp = $this -> stopTurn(16,19);
 
         print_r($temp);
 
