@@ -534,9 +534,11 @@ class Gamemodel extends CI_Model {
             $temp = array('nickname' => '','totalScore' => 0,'score' => 0);
             $temp['nickname'] = $member['pnickname'];
 
+            
             $uid = $this -> usermodel -> getUserIdByNickname($member['pnickname']);
             $userTotalScoreInGame = $this -> namesmodel -> getUserTotalScoreInGame($gid,$uid);
             $temp['totalScore'] = $userTotalScoreInGame[0]['score'];
+
 
             foreach($lastTurnResult as $userTurnResult){
 

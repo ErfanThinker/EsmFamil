@@ -384,7 +384,7 @@ class Game extends CI_Controller {
         $loop->addPeriodicTimer(20, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid) {
             $i++;
                 
-            $this -> checkAndCreateNewRoundOrFinishGame($gid);
+            $this -> checkAndCreateNewRound($gid);
 
             if ($i >= 0) {
                 $loop->cancelTimer($timer);
@@ -402,7 +402,7 @@ class Game extends CI_Controller {
 
         if(!$this -> gamemodel -> gameHasFreeCapacity($gid)){
 
-            $this -> checkAndCreateNewRoundOrFinishGame($gid);
+            $this -> checkAndCreateNewRound($gid);
 
         }else{
 
@@ -415,7 +415,7 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function checkAndCreateNewRoundOrFinishGame($gid){ // checked
+    public function checkAndCreateNewRound($gid){ // checked
 
         if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
 
@@ -423,7 +423,8 @@ class Game extends CI_Controller {
 
         }else{
 
-            $this -> scheduleFinishGame($gid);
+            return false;
+            //$this -> scheduleFinishGame($gid);
 
         }
 
@@ -445,10 +446,18 @@ class Game extends CI_Controller {
     public function stopTurn($gid,$tid){
 
         $this -> gamemodel -> changeTurnState($tid,1);
-        $this -> gamemodel -> changeGameState($gid,2);
 
-        $this -> scheduleStartNewTurn($gid);
+        if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
 
+            $this -> gamemodel -> changeGameState($gid,2);
+            $this -> scheduleStartNewTurn($gid);
+
+        }else{
+
+            $this -> gamemodel -> changeGameState($gid,3);
+            $this -> scheduleFinishGame($gid);
+
+        }
 
     }
     //
