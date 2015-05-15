@@ -57,7 +57,8 @@ class Namesmodel extends CI_Model {
                           "color" => $color,
                           "objects" => $objects,
                           "city" => $city,
-                          "score" => 1
+                          "score" => 0,
+                          "isSet" => 1
                     );
 
             $this->db->where('nid', $userLastNamesId);
@@ -120,16 +121,16 @@ class Namesmodel extends CI_Model {
 
         $this -> db -> from("esmfamil_names");
         $this -> db -> where("tid",$lastTurnId);
-        $this -> db -> where("score !=",0);
+        $this -> db -> where("isSet !=",0);
         $result = $this -> db -> count_all_results();
 
-        if($result == 1){
+        if($result != 0){
 
-            return 1;
+            return 0;
 
         }else{
 
-            return 0;
+            return 1;
 
         }
 
@@ -140,54 +141,23 @@ class Namesmodel extends CI_Model {
     //
     public function namesSetBefore($nid){ // checked
 
-        $this -> db -> select('*');
+        $this -> db -> select('isSet');
         $this -> db -> from("esmfamil_names");
         $this -> db -> where("nid",$nid);
-        $this -> db -> where("score !=",0);
-        $result = $this -> db -> count_all_results();
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
 
-        if($result != 0){
+        $isSet = $result[0]['isSet'];
 
-            return 1;
-
-        }else{
+        if($isSet == 0){
 
             return 0;
 
-        }
+        }else{
 
-    }
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    public function setScoreForNames($nid){
-
-        $data = array('name','family','car','color','city','objects');
-        $this -> db -> select($data);
-        $this -> db -> from("esmfamil_names");
-        $this -> db -> where('nid',$nid);
-        $query = $this -> db -> get();
-        $results = $query -> result_array();
-        $results = $results['0'];
-
-        $trueAnswers = 0;
-        foreach ($results as $result) {
-
-            if($result != NULL){
-                $trueAnswers = $trueAnswers + 1 ;
-            }
+            return 1;
 
         }
-
-        $score = $trueAnswers * 10;
-        $data = array("score" => $score);
-
-        $this -> db -> where("nid",$nid);
-        $this -> db -> update("esmfamil_names",$data);
-
-
-        return $score;
 
     }
     //

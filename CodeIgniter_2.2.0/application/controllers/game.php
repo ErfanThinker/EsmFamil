@@ -629,9 +629,9 @@ class Game extends CI_Controller {
     //
     public function updateUserTotalScore($uid){
             
-	$userTotalScore = $this -> namesmodel -> getUserTotalNamesScore($uid);
+    	$userTotalScore = $this -> namesmodel -> getUserTotalNamesScore($uid);
 	
-    $this -> usermodel -> updateUserTotalScore($uid , $userTotalScore);
+        $this -> usermodel -> updateUserTotalScore($uid , $userTotalScore);
 
 	}
     //
@@ -642,7 +642,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this -> namesmodel -> getUserTotalScoreInGame(12,23);
+        $temp = $this -> namesmodel -> firstSetNameInThisTurn('erfan',16);
 
         print_r($temp);
 
