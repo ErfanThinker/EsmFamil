@@ -32,3 +32,5 @@
 51 : Game do not have a turn to complete it's results
 52 : You Can not have game results in this game state (0 and 4)
 53 : In this state users cannot leave game
+54 : This name is scored before
+55 : The user is not valid for judging this name

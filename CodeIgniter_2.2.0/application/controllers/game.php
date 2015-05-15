@@ -656,5 +656,39 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function judge(){
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else if(!isset($_POST['name']) || !isset($_POST['family']) || !isset($_POST['car']) || !isset($_POST['color']) ||
+                    !isset($_POST['city']) || !isset($_POST['object']) ){
+
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid
+
+        }else if($this -> gamemodel -> checkNameIsScored($_POST['nid']) == 1){
+
+            echo json_encode(array("result" => "54")); // This name is scored before
+
+        }else if($this -> gamemodel -> checkUserIsValidForJudgment($_POST['nid'], $this->session->userdata('nickname')) == 0 ){
+
+            echo json_encode(array("result" => "55")); // The user is not valid for judging this name
+
+        }else{
+
+            $score = ($_POST['name'] * 10) + ($_POST['family'] * 10) + ($_POST['car'] * 10) + 
+                     ($_POST['color'] * 10) + ($_POST['city'] * 10) + ($_POST['object'] * 10) ;
+
+            $this -> gamemodel -> setNameScore($score, $_POST['nid']);
+
+            //check last judge
+
+        }
+    }
+
 }
 ?>

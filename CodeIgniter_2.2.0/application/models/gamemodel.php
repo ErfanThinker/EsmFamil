@@ -703,4 +703,51 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function checkNameIsScored($nid){
+        
+        $this -> db -> select('isScored');
+        $this -> db -> from('esmfamil_names');
+        $this -> db -> where('nid', $nid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        if($result[0]['isScored'] == 1)
+            return 1;
+        else
+            return 0;
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function checkUserIsValidForJudgment($nid, $nickname){
+
+        $user_id = $this -> usermodel -> getUserIdByNickname($nickname);        
+
+        $this -> db -> select('uid');
+        $this -> db -> from('esmfamil_judgments');
+        $this -> db -> where('nid', $nid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        if( count($result) > 0 && $result[0]['uid'] == $user_id)
+            return 1;
+        else
+            return 0;
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function setNameScore($score, $nid){
+        $data = array(
+               'score' => $score,
+               'isScored' => '1'
+            );
+
+        $this -> db -> where('nid', $nid);
+        return $this -> db -> update('esmfamil_names', $data);
+
+    }
+    
 };
