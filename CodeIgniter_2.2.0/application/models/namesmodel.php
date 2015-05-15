@@ -219,4 +219,70 @@ class Namesmodel extends CI_Model {
 
         return $result;
     }
+    //
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //
+    public function isNidInThisTurn($nidToJudge,$tid){
+
+        $this -> db -> select();
+        $this -> db -> from("esmfamil_names");
+        $this -> db -> where("tid",$tid);
+        $this -> db -> where("nid",$nidToJudge);
+        $result = $this -> db -> count_all_results();
+
+        if($result == 0){
+
+            return 0;
+
+        }else{
+
+            return 1;
+
+        }
+    }
+    //
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   //
+    public function getNames($nid){
+
+        $data = array('name','family','car','color','objects','city','nid');
+        $this -> db -> select($data);
+        $this -> db -> from('esmfamil_names');
+        $this -> db -> where("nid",$nid);
+        $query = $this -> db -> get();
+        $result = $query -> result_array();
+
+        if(count($result) != 0){
+
+            return $result[0];
+
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function lastJudgeInThisTurn($tid){
+
+        $this -> db -> select();
+        $this -> db -> from("esmfamil_names");
+        $this -> db -> where("tid",$tid);
+        $this -> db -> where("isScored", 0);
+        $query = $this -> db -> count_all_results();
+
+        if($query == 0){
+
+            return 1;
+
+        }else{
+
+            return 0;
+
+        }
+
+    }
+
 };

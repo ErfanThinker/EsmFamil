@@ -92,18 +92,27 @@ class Game extends CI_Controller {
                 $gid = $activeGame[0]['gid'];
                 $gameState  = $this -> gamemodel -> getGameState($gid);
 
-                if($gameState != 2 && $gameState != 3){
+                if($gameState != 2 && $gameState != 3 && $gameState != 6){
 
                     $data = array('gameList' => $gameList, 
                             'activeGame' => $activeGame);
 
-                }else{ // tempResult and ResutTillNow
+                }else if($gameState == 2 || $gameState == 3){ // tempResult and ResutTillNow
 
                     $resultTillNow = $this -> gamemodel -> getGameResultUntilNow($gid);
 
                     $data = array('gameList' => $gameList,
                                   'activeGame' => $activeGame,
                                   'result' => $resultTillNow);
+
+                }else if($gameState == 6){
+
+                    $resultTillNow = $this -> gamemodel -> getGameResultUntilNow($gid);
+                    $ToJudgeNames  = $this -> gamemodel -> getToJudgeNamesForUser($gid,$nickname);
+
+                    $data = array('activeGame' => $activeGame,
+                                  'result' => $resultTillNow,
+                                  'toJudge' => $ToJudgeNames);
 
                 }
 
@@ -447,20 +456,8 @@ class Game extends CI_Controller {
 
         $this -> gamemodel -> changeTurnState($tid,1);
 
-        $this -> gamemodel -> changeGameState($gid,6);
         $this -> gamemodel -> setReferies($tid);
-
-        /*if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
-
-            $this -> gamemodel -> changeGameState($gid,2);
-            $this -> scheduleStartNewTurn($gid);
-
-        }else{
-
-            $this -> gamemodel -> changeGameState($gid,3);
-            $this -> scheduleFinishGame($gid);
-
-        }*/
+        $this -> gamemodel -> changeGameState($gid,6);
 
     }
     //
@@ -540,8 +537,38 @@ class Game extends CI_Controller {
             $gameState = $this -> gamemodel -> getGameState($gid);
 
             if($turnState != 1 && $gameState == 1){
+
                 $this -> stopTurn($gid,$tid);
+
             }
+        }
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function updateGameStateOnLastJudge($nid,$gid){
+
+        $lastTurnId = $this -> gamemodel -> getLastTurnId($gid);
+        $turnState  = $this -> gamemodel -> getTurnState($lastTurnId);
+
+        if($this -> namesmodel -> lastJudgeInThisTurn($lastTurnId) == 1 && $turnState != 2){
+
+            $this -> gamemodel -> changeTurnState($lastTurnId,2);
+
+            if(!$this -> gamemodel -> isGameRoundsCompleted($gid)){
+
+                $this -> gamemodel -> changeGameState($gid,2);
+                $this -> scheduleStartNewTurn($gid);
+
+            }else{
+
+                $this -> gamemodel -> changeGameState($gid,3);
+                $this -> scheduleFinishGame($gid);
+
+            }
+
+
         }
     }
     //
@@ -647,7 +674,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this -> stopTurn(16,19);
+        $temp = $this -> namesmodel ->  lastJudgeInThisTurn(19);
 
         print_r($temp);
 
@@ -657,6 +684,7 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function judge(){
+
         if($_SERVER['REQUEST_METHOD'] != 'POST'){
             
             echo json_encode(array("result" => "20")); // errorCode : Method should be POST
@@ -666,7 +694,7 @@ class Game extends CI_Controller {
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
         }else if(!isset($_POST['name']) || !isset($_POST['family']) || !isset($_POST['car']) || !isset($_POST['color']) ||
-                    !isset($_POST['city']) || !isset($_POST['object']) ){
+                    !isset($_POST['city']) || !isset($_POST['objects']) ||  !isset($_POST['nid']) || !isset($_POST['gid']) || count($_POST)!= 8){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid
 
@@ -681,11 +709,28 @@ class Game extends CI_Controller {
         }else{
 
             $score = ($_POST['name'] * 10) + ($_POST['family'] * 10) + ($_POST['car'] * 10) + 
-                     ($_POST['color'] * 10) + ($_POST['city'] * 10) + ($_POST['object'] * 10) ;
+                     ($_POST['color'] * 10) + ($_POST['city'] * 10) + ($_POST['objects'] * 10) ;
 
-            $this -> gamemodel -> setNameScore($score, $_POST['nid']);
+            $result = $this -> gamemodel -> setNameScore($score, $_POST['nid']);
 
-            //check last judge
+            if($result){
+                
+                echo json_encode(array("result" => "30")); // Success
+
+                $nid = $_POST['nid'];
+                $gid = $_POST['gid'];
+                /*$nickname = $this->session->userdata('nickname');
+
+                $uid = $this -> usermodel -> getUserIdByNickname($nickname);
+
+                $this -> updateUserTotalScore($uid);*/
+                $this -> updateGameStateOnLastJudge($nid,$gid);
+
+            }else{
+
+                echo json_encode(array("result" => "56")); // Error in judging names
+
+            }
 
         }
     }
