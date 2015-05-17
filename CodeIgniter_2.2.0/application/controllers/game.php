@@ -680,7 +680,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this -> gamemodel -> namesIsForThisGames(30,17);
+        $temp  = $this -> gamemodel -> getToJudgeNamesForUser(3,"emadagha");
 
         print_r($temp);
 
