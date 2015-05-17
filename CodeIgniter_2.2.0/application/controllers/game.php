@@ -680,7 +680,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this -> usermodel -> getUserTotalScore('emadagha');
+        $temp = $this -> gamemodel -> namesIsForThisGames(30,17);
 
         print_r($temp);
 
@@ -705,36 +705,44 @@ class Game extends CI_Controller {
             echo json_encode(array("result" => "27")); // Post Parameters are invalid
 
         }else {
-            $checkNameIsScored = $this -> gamemodel -> checkNameIsScored($_POST['nid']);
+
+            $nickname = $this->session->userdata('nickname');
+            $nid = $_POST['nid'];
+            $gid = $_POST['gid'];
+
+            $checkNameIsScored = $this -> gamemodel -> checkNameIsScored($nid);
+
             if($checkNameIsScored == 1 ){
 
-                echo json_encode(array("result" => "56")); // This name was not found
+                echo json_encode(array("result" => "57")); // This name was not found
 
             } else if($checkNameIsScored == -1){
 
                 echo json_encode(array("result" => "54")); // This name is scored before
                 
-            }else if($this -> gamemodel -> checkUserIsValidForJudgment($_POST['nid'], $this->session->userdata('nickname')) == 0 ){
+            }else if($this -> gamemodel -> checkUserIsValidForJudgment($nid,$nickname) == 0 ){
 
                 echo json_encode(array("result" => "55")); // The user is not valid for judging this name
+
+            }else if($this -> gamemodel -> namesIsForThisGame($nid,$gid) == 0){
+
+                echo json_encode(array("result" => "58")); // names is not for this game
 
             }else{
 
                 $score = ($_POST['name'] * 10) + ($_POST['family'] * 10) + ($_POST['car'] * 10) + 
                          ($_POST['color'] * 10) + ($_POST['city'] * 10) + ($_POST['objects'] * 10) ;
 
-                $result = $this -> gamemodel -> setNameScore($score, $_POST['nid']);
+                $result = $this -> gamemodel -> setNameScore($score, $nid);
 
                 if($result){
                     
-                    echo json_encode(array("result" => "30")); // Success
+                    $uidWhoHasBeenJudged = $this -> namesmodel -> getUserIdByNid($nid);
+                    $this -> updateUserTotalScore($uidWhoHasBeenJudged);
 
-                    $uidWhoJudged = $this -> namesmodel -> getUserIdByNid($nid);
-                    $this -> updateUserTotalScore($uidWhoJudged);
-
-                    $nid = $_POST['nid'];
-                    $gid = $_POST['gid'];
                     $this -> updateGameStateOnLastJudge($nid,$gid);
+
+                    echo json_encode(array("result" => "30")); // Success
 
                 }else{
 

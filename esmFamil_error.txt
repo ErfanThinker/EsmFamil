@@ -35,3 +35,5 @@
 54 : This name is scored before
 55 : The user is not valid for judging this name
 56 : Error in judging names
+57 : This name was not found
+58 : Names is not for this game

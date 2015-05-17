@@ -201,7 +201,11 @@ class Namesmodel extends CI_Model {
         $query = $this -> db -> get();
         $result = $query -> result_array();
 
-   	    return $result[0]['score']; 
+        if(count($result) != 0){
+   	        return $result[0]['score']; 
+        }else{
+            return 0;
+        }
    }
    //
    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

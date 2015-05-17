@@ -755,17 +755,17 @@ class Gamemodel extends CI_Model {
         $this -> db -> from('esmfamil_names');
         $this -> db -> where('nid', $nid);
         $query = $this -> db -> get();
-        if($query -> num_rows() > 0){
-        	$result = $query -> result_array();
+        $result = $query -> result_array();
 
-	        if($result[0]['isScored'] == 1)
-	            return 1;
-	        else
-	            return 0;
-        } else {
-        	return -1;//error
+        if(count($result) != 0){
+            if($result[0]['isScored'] == 1)
+                return 1;
+            else
+                return 0;
+        }else{
+
+            return -1;
         }
-        
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -791,17 +791,44 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function setNameScore($score, $nid){
+
         $data = array(
                'score' => $score,
                'isScored' => '1'
             );
 
         $this -> db -> where('nid', $nid);
-        return $this -> db -> update('esmfamil_names', $data);
+        $query = $this -> db -> update('esmfamil_names', $data);
+
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
 
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function namesIsForThisGame($nid,$gid){
+
+        $this -> db -> select();
+        $this -> db -> from('esmfamil_names');
+        $this -> db -> join('esmfamil_game_turns','esmfamil_game_turns.tid = esmfamil_names.tid');
+        $this -> db -> where('esmfamil_names.nid',$nid);
+        $this -> db -> where('esmfamil_game_turns.gid',$gid);
+        $query = $this -> db -> count_all_results();
+
+        if($query == 0){
+
+            return 0;
+
+        }else{
+
+            return 1;
+
+        }
+
+    }
 };
