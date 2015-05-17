@@ -694,19 +694,9 @@ class Gamemodel extends CI_Model {
 
         $uid = $this -> usermodel -> getUserIdByNickname($nickname);
         $nidToJudge = $this -> getLastNidUserShouldJudge($uid);
-        print_r("nid = ");
-        print_r($nidToJudge);
-
-        print_r("tid");
-        print_r($tid);
 
         $isNidInThisTurn = $this -> namesmodel -> isNidInThisTurn($nidToJudge,$tid);
         $isScored = $this -> checkNameIsScored($nidToJudge);
-
-        print_r("isNidInThisTurn = ");
-        print_r($isNidInThisTurn);
-        print_r("isScored = ");
-        print_r($isScored);
 
         if($isNidInThisTurn && $isScored == 0){
 

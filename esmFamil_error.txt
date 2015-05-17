@@ -37,3 +37,13 @@
 56 : Error in judging names
 57 : This name was not found
 58 : Names is not for this game
+
+
+
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE `esmfamil_game`;
+TRUNCATE `esmfamil_game_members`;
+TRUNCATE `esmfamil_game_turns`;
+TRUNCATE `esmfamil_judgments`;
+TRUNCATE `esmfamil_names`;
+TRUNCATE `esmfamil_turn`;
