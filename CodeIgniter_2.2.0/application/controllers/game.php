@@ -695,7 +695,7 @@ class Game extends CI_Controller {
 
         $userIds = $this -> usermodel -> getUserIds($temp);
 
-        print_r($temp);
+        print_r($userIds);
 
     }
     //
