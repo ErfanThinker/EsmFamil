@@ -649,9 +649,9 @@ class Game extends CI_Controller {
     //
     public function get20BestUsersAcordingTotalScores(){
 
-        if($_SERVER['REQUEST_METHOD'] != 'POST'){
-            
-            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+        if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
         }else{
 
