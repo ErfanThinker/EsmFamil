@@ -397,8 +397,16 @@ class Game extends CI_Controller {
         $i = 0;
         $loop->addPeriodicTimer(20, function(React\EventLoop\Timer\Timer $timer) use (&$i, $loop,$gid) {
             $i++;
+
+            $lastTurnId = $this -> gamemodel -> getLastTurnId($gid);
+            $turnState  = $this -> gamemodel -> getTurnState($lastTurnId);
+            $gameState  = $this -> gamemodel -> getGameState($gid);
+
+            if($turnState == 2 && $gameState == 2){
                 
-            $this -> checkAndCreateNewRound($gid);
+                $this -> checkAndCreateNewRound($gid);
+
+            }
 
             if ($i >= 0) {
                 $loop->cancelTimer($timer);
