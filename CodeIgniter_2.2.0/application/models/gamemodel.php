@@ -755,12 +755,17 @@ class Gamemodel extends CI_Model {
         $this -> db -> from('esmfamil_names');
         $this -> db -> where('nid', $nid);
         $query = $this -> db -> get();
-        $result = $query -> result_array();
+        if($query -> num_rows() > 0){
+        	$result = $query -> result_array();
 
-        if($result[0]['isScored'] == 1)
-            return 1;
-        else
-            return 0;
+	        if($result[0]['isScored'] == 1)
+	            return 1;
+	        else
+	            return 0;
+        } else {
+        	return -1;//error
+        }
+        
     }
     //
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
