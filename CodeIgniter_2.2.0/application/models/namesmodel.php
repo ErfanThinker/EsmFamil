@@ -25,15 +25,6 @@ class Namesmodel extends CI_Model {
 			$this->db->insert('esmfamil_names', $data);
 			$nid = $this -> db -> insert_id();
 
-			// Add names to user_names
-			$data = array(
-    			'nid' => $nid ,
-    			'uid' => $id
-			);
-
-			$this->db->insert('esmfamil_user_names', $data);
-
-
     	}
 
     }
