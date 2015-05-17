@@ -734,9 +734,11 @@ class Gamemodel extends CI_Model {
     //
     public function get20BestUsersAcordingTotalScores(){
 
-        $this -> db -> select('*');
+        $data = array('id','nickname','totalscore');
+
+        $this -> db -> select($data);
         $this -> db -> from('esmFamil_user');
-        $this -> db -> order_by("totalscore", "asc");
+        $this -> db -> order_by("totalscore", "desc");
         $this -> db -> limit(20,0);
         $query = $this -> db -> get();
         $result = $query -> result_array();

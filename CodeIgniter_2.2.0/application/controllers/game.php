@@ -83,6 +83,7 @@ class Game extends CI_Controller {
         }else{
 
             $nickname = $this->session->userdata('nickname');
+            $userTotalScore = $this -> usermodel -> getUserTotalScore($nickname);
 
             if($this -> gamemodel -> checkActiveGame($nickname)){
 
@@ -95,7 +96,8 @@ class Game extends CI_Controller {
                 if($gameState != 2 && $gameState != 3 && $gameState != 6){
 
                     $data = array('gameList' => $gameList, 
-                            'activeGame' => $activeGame);
+                                  'activeGame' => $activeGame,
+                                  'totalScore' => $userTotalScore);
 
                 }else if($gameState == 2 || $gameState == 3){ // tempResult and ResutTillNow
 
@@ -103,7 +105,8 @@ class Game extends CI_Controller {
 
                     $data = array('gameList' => $gameList,
                                   'activeGame' => $activeGame,
-                                  'result' => $resultTillNow);
+                                  'result' => $resultTillNow,
+                                  'totalScore' => $userTotalScore);
 
                 }else if($gameState == 6){
 
@@ -112,13 +115,15 @@ class Game extends CI_Controller {
 
                     $data = array('activeGame' => $activeGame,
                                   'result' => $resultTillNow,
-                                  'toJudge' => $ToJudgeNames);
+                                  'toJudge' => $ToJudgeNames,
+                                  'totalScore' => $userTotalScore);
 
                 }
 
             } else {
 
-                $data = array('gameList' => $this -> gamemodel ->getListOfGames());
+                $data = array('gameList' => $this -> gamemodel ->getListOfGames(),
+                              'totalScore' => $userTotalScore);
 
             }
 
@@ -675,7 +680,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this ->    updateUserTotalScore(11);
+        $temp = $this -> usermodel -> getUserTotalScore('emadagha');
 
         print_r($temp);
 
