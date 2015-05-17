@@ -675,7 +675,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp = $this -> namesmodel ->  lastJudgeInThisTurn(19);
+        $temp = $this ->    updateUserTotalScore(11);
 
         print_r($temp);
 
@@ -718,13 +718,11 @@ class Game extends CI_Controller {
                 
                 echo json_encode(array("result" => "30")); // Success
 
+                $uidWhoJudged = $this -> namesmodel -> getUserIdByNid($nid);
+                $this -> updateUserTotalScore($uidWhoJudged);
+
                 $nid = $_POST['nid'];
                 $gid = $_POST['gid'];
-                /*$nickname = $this->session->userdata('nickname');
-
-                $uid = $this -> usermodel -> getUserIdByNickname($nickname);
-
-                $this -> updateUserTotalScore($uid);*/
                 $this -> updateGameStateOnLastJudge($nid,$gid);
 
             }else{
