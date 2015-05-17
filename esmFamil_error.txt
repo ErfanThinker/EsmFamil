@@ -47,3 +47,4 @@ TRUNCATE `esmfamil_game_turns`;
 TRUNCATE `esmfamil_judgments`;
 TRUNCATE `esmfamil_names`;
 TRUNCATE `esmfamil_turn`;
+TRUNCATE `esmfamil_user_names`;
