@@ -268,11 +268,12 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
     public function createNewRound($gid){ // checked
-
+        print_r("emadTest");
         $tid = $this -> gamemodel -> createNewTurn($gid);
-
+        print_r($tid);
         $users = $this -> gamemodel -> getGameMembers($gid);
         $userIds = $this -> usermodel -> getUserIds($users);
+        print_r($userIds);
         $this -> namesmodel -> createNames($tid,$userIds);
         
         $this -> gamemodel -> changeGameState($gid,1); // State 1 : Playing (90 seconds)
