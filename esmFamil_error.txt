@@ -37,7 +37,8 @@
 56 : Error in judging names
 57 : This name was not found
 58 : Names is not for this game
-
+59 : Add News Unsuccessful
+60 : You are not admin
 
 
 SET FOREIGN_KEY_CHECKS = 0;

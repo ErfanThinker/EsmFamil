@@ -176,7 +176,8 @@ class Authentication extends CI_Controller {
                 // Add user data in session
                 $this->session->set_userdata('nickname', $nickname);
 
-                echo json_encode(array("result" => "30", "name" => $name)); // Login Sucessfully
+                $isAdmin = $this -> usermodel -> isAdmin($nickname);
+                echo json_encode(array("result" => "30", "name" => $name, "isAdmin" => $isAdmin)); // Login Sucessfully
 
             }
         }
