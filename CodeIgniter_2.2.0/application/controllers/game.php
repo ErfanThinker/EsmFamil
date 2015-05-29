@@ -102,7 +102,8 @@ class Game extends CI_Controller {
                     $data = array('gameList' => $gameList, 
                                   'activeGame' => $activeGame,
                                   'totalScore' => $userTotalScore,
-                                  'isThereNews' => $isThereNews);
+                                  'isThereNews' => $isThereNews,
+                                  'isAdmin' => $isAdmin);
 
                 }else if($gameState == 2 || $gameState == 3){ // tempResult and ResutTillNow
 
@@ -112,7 +113,8 @@ class Game extends CI_Controller {
                                   'activeGame' => $activeGame,
                                   'result' => $resultTillNow,
                                   'totalScore' => $userTotalScore,
-                                  'isThereNews' => $isThereNews);
+                                  'isThereNews' => $isThereNews,
+                                  'isAdmin' => $isAdmin);
 
                 }else if($gameState == 6){
 
@@ -123,7 +125,8 @@ class Game extends CI_Controller {
                                   'result' => $resultTillNow,
                                   'toJudge' => $ToJudgeNames,
                                   'totalScore' => $userTotalScore,
-                                  'isThereNews' => $isThereNews);
+                                  'isThereNews' => $isThereNews,
+                                  'isAdmin' => $isAdmin);
 
                 }
 
@@ -131,7 +134,8 @@ class Game extends CI_Controller {
 
                 $data = array('gameList' => $this -> gamemodel ->getListOfGames(),
                               'totalScore' => $userTotalScore,
-                              'isThereNews' => $isThereNews);
+                              'isThereNews' => $isThereNews,
+                              'isAdmin' => $isAdmin);
 
             }
 
