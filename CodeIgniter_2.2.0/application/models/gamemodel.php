@@ -872,7 +872,8 @@ class Gamemodel extends CI_Model {
             {
 
                 $temp = $this -> getGamesCreatorname($row['gid']);
-                $row['creatornickname'] = $temp;
+                if($temp)
+                    $row['creatornickname'] = $temp;
 
 
                 array_push($result, $row);
@@ -903,7 +904,7 @@ class Gamemodel extends CI_Model {
 
         }else{
 
-            return "False";
+            return 0;
 
         }
 

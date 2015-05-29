@@ -787,14 +787,19 @@ class Game extends CI_Controller {
 
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
-        }else if(!isset($_POST['gid']) || !isset($_POST['dudeCount']) || count($_POST) != ($_POST['dudeCount']+2) ){
+        }else if(!isset($_POST['dudeCount']) || count($_POST) != ($_POST['dudeCount']+1) ){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid
 
         }else{
 
             $userCount = intval($_POST['dudeCount']);
-            $gid = intval($_POST['gid']);
+            
+            $nickname = $this->session->userdata('nickname');
+
+            $activeGame = $this -> gamemodel -> getActiveGame($nickname);
+            $gid = $activeGame[0]['gid'];
+
             $invitationIds = array();
 
             for($i =0 ; $i < $userCount ; $i++){
