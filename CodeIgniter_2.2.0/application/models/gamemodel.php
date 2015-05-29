@@ -79,9 +79,18 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function getListOfGames(){
+    public function getListOfGames($isAdmin){
 
-        $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0));
+        if($isAdmin == 0){
+
+            $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0, 'isPrivate' => 0));
+
+        }else{
+
+            $query = $this->db->get_where('esmfamil_game',array('isfinished' => 0));            
+
+        }
+        
         $result = array();
         if ($query->num_rows() > 0){
             foreach ($query->result_array() as $row)

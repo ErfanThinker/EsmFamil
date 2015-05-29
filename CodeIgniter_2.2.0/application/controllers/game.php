@@ -25,7 +25,7 @@ class Game extends CI_Controller {
             echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
         }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) || !isset($_POST['gname']) 
-                    || !isset($_POST['isPrivate']) || count($_POST) != 3){
+                    || !isset($_POST['isPrivate']) || count($_POST) != 4){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
@@ -90,10 +90,11 @@ class Game extends CI_Controller {
             $isAdmin = $this -> usermodel -> isAdmin($nickname);
             $isThereNews = $this -> newsmodel -> isThereNews($nickname);
 
+            $gameList   = $this -> gamemodel ->getListOfGames($isAdmin);
+
             if($this -> gamemodel -> checkActiveGame($nickname)){
 
                 $activeGame = $this -> gamemodel -> getActiveGame($nickname);
-                $gameList   = $this -> gamemodel ->getListOfGames();
 
                 $gid = $activeGame[0]['gid'];
                 $gameState  = $this -> gamemodel -> getGameState($gid);
@@ -133,7 +134,7 @@ class Game extends CI_Controller {
 
             } else {
 
-                $data = array('gameList' => $this -> gamemodel ->getListOfGames(),
+                $data = array('gameList' => $gameList,
                               'totalScore' => $userTotalScore,
                               'isThereNews' => $isThereNews,
                               'isAdmin' => $isAdmin);
