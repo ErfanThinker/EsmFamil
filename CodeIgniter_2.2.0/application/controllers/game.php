@@ -777,11 +777,89 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
+    public function inviteUser(){
+
+        if($_SERVER['REQUEST_METHOD'] != 'POST'){
+            
+            echo json_encode(array("result" => "20")); // errorCode : Method should be POST
+
+        }else if($this->session->userdata('nickname') == NULL){
+
+            echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
+
+        }else if(!isset($_POST['gid']) || !isset($_POST['dudeCount']) || count($_POST) != ($_POST['dudeCount']+2) ){
+
+            echo json_encode(array("result" => "27")); // Post Parameters are invalid
+
+        }else{
+
+            $userCount = intval($_POST['dudeCount']);
+            $gid = intval($_POST['gid']);
+            $invitationIds = array();
+
+            for($i =0 ; $i < $userCount ; $i++){
+
+                $user = $_POST['dude'.$i];
+
+                if($this -> gamemodel -> userIsNotInvitedToGame($gid,$user)){
+                    if($this -> gamemodel -> ownsTheGame($user,$gid) == 0){
+
+                        $invitationId = $this -> gamemodel -> inviteUserToGame($gid,$user);
+
+                        array_push($invitationIds,$invitationId);
+                    }
+
+                }   
+            }
+
+            $this -> scheduleFinishInvitation($invitationIds);
+
+
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function scheduleFinishInvitation($invitationIds){
+
+
+        $loop = React\EventLoop\Factory::create();
+
+        $i = 0;
+        $loop->addPeriodicTimer(30, function(React\EventLoop\Timer\Timer $timer) use (&$i, $invitationIds,$loop){
+            $i++;
+            
+
+            foreach ($invitationIds as $invitationId){
+
+                if($this -> gamemodel -> invitationIsFinished($invitationId) == 0){
+                
+                    $this -> gamemodel -> finishInvitation($invitationId);
+                
+                }
+
+            }
+
+            if ($i >= 0) {
+                $loop->cancelTimer($timer);
+            }
+        });
+
+        $loop->run();
+
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
     public function test(){
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp  = $this -> gamemodel -> getGamesUserInvitedTo("emadagha3");
+        $temp  = $this -> gamemodel -> finishInvitation(5);
 
         print_r($temp);
 
