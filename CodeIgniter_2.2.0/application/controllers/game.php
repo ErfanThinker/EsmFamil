@@ -90,7 +90,8 @@ class Game extends CI_Controller {
             $isAdmin = $this -> usermodel -> isAdmin($nickname);
             $isThereNews = $this -> newsmodel -> isThereNews($nickname);
 
-            $gameList   = $this -> gamemodel ->getListOfGames($isAdmin);
+            $gameList   = $this -> gamemodel ->getListOfGames($isAdmin,$nickname);
+            $invitations = $this -> gamemodel -> getGamesUserInvitedTo($nickname);
 
             if($this -> gamemodel -> checkActiveGame($nickname)){
 
@@ -136,6 +137,7 @@ class Game extends CI_Controller {
 
                 $data = array('gameList' => $gameList,
                               'totalScore' => $userTotalScore,
+                              'invitations' => $invitations,
                               'isThereNews' => $isThereNews,
                               'isAdmin' => $isAdmin);
 
@@ -699,23 +701,6 @@ class Game extends CI_Controller {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function test(){
-
-        //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
-
-        $temp  = $this -> gamemodel -> getGameMembers(1);
-
-        print_r($temp);
-
-        $userIds = $this -> usermodel -> getUserIds($temp);
-
-        print_r($userIds);
-
-    }
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
     public function judge(){
 
         if($_SERVER['REQUEST_METHOD'] != 'POST'){
@@ -780,6 +765,25 @@ class Game extends CI_Controller {
             }
         }
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function test(){
+
+        //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
+
+        $temp  = $this -> gamemodel -> getGamesUserInvitedTo("emadagha3");
+
+        print_r($temp);
+
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+
 
 }
 ?>

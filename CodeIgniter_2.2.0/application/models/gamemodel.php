@@ -79,7 +79,7 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function getListOfGames($isAdmin){
+    public function getListOfGames($isAdmin,$nickname){
 
         if($isAdmin == 0){
 
@@ -102,6 +102,13 @@ class Gamemodel extends CI_Model {
                 array_push($result, $row);
                 
             }
+        }
+
+        if($this -> checkActiveGame($nickname)){
+
+            $activeGame = $this -> getActiveGame($nickname);
+
+            array_push($result,$activeGame['0']);
         }
 
         return $result;
@@ -841,4 +848,66 @@ class Gamemodel extends CI_Model {
         }
 
     }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getGamesUserInvitedTo($nickname)
+    {
+        $uid = $this -> usermodel -> getUserIdByNickname($nickname);
+
+        $this -> db -> select('gid');
+        $this -> db -> from('esmfamil_invitations');
+        $this -> db -> where('uid',$uid);
+        $this -> db -> where('status',0);
+
+        $query = $this -> db -> get();
+
+        $result = array();
+
+        if ($query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+
+                $temp = $this -> getGamesCreatorname($row['gid']);
+                $row['creatornickname'] = $temp;
+
+
+                array_push($result, $row);
+                
+            }
+        }
+
+        return $result;
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    public function getGamesCreatorname($gid)
+    {
+
+        $this -> db -> select('creaternickname');
+        $this -> db -> from('esmfamil_game');
+        $this -> db -> where('gid',$gid);
+        $qeury = $this -> db -> get();
+
+        $result = $qeury -> result_array();
+
+        if(count($result) > 0){
+
+            return $result[0]['creaternickname'];
+
+        }else{
+
+            return "False";
+
+        }
+
+    }
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
 };
