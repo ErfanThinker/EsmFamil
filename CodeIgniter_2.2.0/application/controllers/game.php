@@ -24,7 +24,8 @@ class Game extends CI_Controller {
             
             echo json_encode(array("result" => "20")); // errorCode : Method should be POST
 
-        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) || !isset($_POST['gname']) || count($_POST) != 3){
+        }else if(!isset($_POST['maxPlayer']) || !isset($_POST['rounds']) || !isset($_POST['gname']) 
+                    || !isset($_POST['isPrivate']) || count($_POST) != 3){
 
             echo json_encode(array("result" => "27")); // Post Parameters are invalid.
 
@@ -53,7 +54,7 @@ class Game extends CI_Controller {
 
             }else{
 
-                $result = $this -> gamemodel -> createNewGame($maxPlayer,$rounds,$creatorNickname, $gname);
+                $result = $this -> gamemodel -> createNewGame($maxPlayer,$rounds,$creatorNickname, $gname, $_POST['isPrivate']);
                 
                 if($result){
 

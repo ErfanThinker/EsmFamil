@@ -13,7 +13,7 @@ class Gamemodel extends CI_Model {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
-    public function createNewGame($maxPlayer,$rounds,$creatorNickname, $gname){
+    public function createNewGame($maxPlayer,$rounds,$creatorNickname, $gname, $isPrivate){
 
         $data = array(
            'gname' => $gname,
@@ -22,7 +22,8 @@ class Gamemodel extends CI_Model {
            'winnernickname' => '',
            'rounds' => $rounds,
            'isfinished' => 0,
-           'pass' => ''
+           'pass' => '',
+           'isPrivate' => $isPrivate
         );
 
         $query = $this->db->insert('esmfamil_game', $data);
