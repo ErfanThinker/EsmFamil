@@ -20,7 +20,7 @@ class Chatmodel extends CI_Model {
 
     public function getLastMessages( $gid ){
 
-    	$this -> db -> select('text');
+    	$this -> db -> select('text, uid');
     	$this -> db -> from('esmfamil_messages');
     	$this -> db -> where('gid', $gid);
     	$this -> db -> order_by('time', 'desc');
@@ -30,7 +30,8 @@ class Chatmodel extends CI_Model {
 
     	$messages = array();
     	foreach ($result as $record) {
-    		array_push($messages, $record['text']);
+            $nickname = $this -> usermodel -> getNicknameByUid($record['uid']);
+    		array_push($messages, array( 'text' => $record['text'], 'nickname' => $nickname ));
     	}
 
     	return $messages;
