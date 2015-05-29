@@ -8,6 +8,7 @@ class Game extends CI_Controller {
         $this -> load -> model("gamemodel");
         $this -> load -> model("namesmodel");
         $this -> load -> model("usermodel");
+        $this -> load -> model("newsmodel");
         $this -> load -> library('session');
 
         require "../../../../../../home/emad/vendor/autoload.php";
@@ -85,6 +86,9 @@ class Game extends CI_Controller {
             $nickname = $this->session->userdata('nickname');
             $userTotalScore = $this -> usermodel -> getUserTotalScore($nickname);
 
+            $isAdmin = $this -> usermodel -> isAdmin($nickname);
+            $isThereNews = $this -> newsmodel -> isThereNews($nickname);
+
             if($this -> gamemodel -> checkActiveGame($nickname)){
 
                 $activeGame = $this -> gamemodel -> getActiveGame($nickname);
@@ -97,7 +101,8 @@ class Game extends CI_Controller {
 
                     $data = array('gameList' => $gameList, 
                                   'activeGame' => $activeGame,
-                                  'totalScore' => $userTotalScore);
+                                  'totalScore' => $userTotalScore,
+                                  'isThereNews' => $isThereNews);
 
                 }else if($gameState == 2 || $gameState == 3){ // tempResult and ResutTillNow
 
@@ -106,7 +111,8 @@ class Game extends CI_Controller {
                     $data = array('gameList' => $gameList,
                                   'activeGame' => $activeGame,
                                   'result' => $resultTillNow,
-                                  'totalScore' => $userTotalScore);
+                                  'totalScore' => $userTotalScore,
+                                  'isThereNews' => $isThereNews);
 
                 }else if($gameState == 6){
 
@@ -116,14 +122,16 @@ class Game extends CI_Controller {
                     $data = array('activeGame' => $activeGame,
                                   'result' => $resultTillNow,
                                   'toJudge' => $ToJudgeNames,
-                                  'totalScore' => $userTotalScore);
+                                  'totalScore' => $userTotalScore,
+                                  'isThereNews' => $isThereNews);
 
                 }
 
             } else {
 
                 $data = array('gameList' => $this -> gamemodel ->getListOfGames(),
-                              'totalScore' => $userTotalScore);
+                              'totalScore' => $userTotalScore,
+                              'isThereNews' => $isThereNews);
 
             }
 

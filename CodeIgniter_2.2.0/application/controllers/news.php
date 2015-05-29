@@ -11,14 +11,14 @@ class News extends CI_Controller {
 
 
     public function getNews(){
-
+        $nickname = $this-> session-> userdata('nickname');
     	if($this-> session-> userdata('nickname') == NULL){
 
             echo json_encode(array("result" => "34")); // cookie missing , Session do not have valid values!
 
         }else {
 
-	    	$data = $model = $this -> newsmodel -> getNews();
+	    	$data = $model = $this -> newsmodel -> getNews($nickname);
 	    	echo json_encode($data);
 	    }
     }
