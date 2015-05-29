@@ -39,7 +39,7 @@
 58 : Names is not for this game
 59 : Add News Unsuccessful
 60 : You are not admin
-
+61 : add message Unsuccessful
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE `esmfamil_game`;
