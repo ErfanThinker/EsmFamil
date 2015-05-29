@@ -9,6 +9,7 @@ class Game extends CI_Controller {
         $this -> load -> model("namesmodel");
         $this -> load -> model("usermodel");
         $this -> load -> model("newsmodel");
+        $this -> load -> model("chatmodel");
         $this -> load -> library('session');
 
         require "../../../../../../home/emad/vendor/autoload.php";
@@ -132,6 +133,13 @@ class Game extends CI_Controller {
                                   'isAdmin' => $isAdmin);
 
                 }
+
+                //add 10 last messages to data
+                if($gameState == 6 || $gameState == 2 || $gameState == 3){
+                   $data['messages'] = $this -> chatmodel -> getLastMessages($gid);
+                }
+
+
 
             } else {
 
