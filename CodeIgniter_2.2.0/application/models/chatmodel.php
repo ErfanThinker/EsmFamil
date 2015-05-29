@@ -30,8 +30,10 @@ class Chatmodel extends CI_Model {
 
     	$messages = array();
     	foreach ($result as $record) {
+
             $nickname = $this -> usermodel -> getNicknameByUid($record['uid']);
     		array_push($messages, array( 'text' => $record['text'], 'nickname' => $nickname ));
+            
     	}
 
     	return $messages;
