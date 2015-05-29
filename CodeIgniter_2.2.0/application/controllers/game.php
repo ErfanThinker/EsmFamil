@@ -395,7 +395,7 @@ class Game extends CI_Controller {
                 $turnState = $this -> gamemodel -> getTurnState($tid);
                 $gameState = $this -> gamemodel -> getGameState($gid);
                 
-                if($turnState != 1 && $gameState == 1){
+                if($turnState != 1 && $turnState != 2 && $gameState == 1){
                 
                     $this -> stopTurn($gid,$tid);
                 
