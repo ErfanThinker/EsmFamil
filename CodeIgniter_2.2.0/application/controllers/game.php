@@ -864,7 +864,7 @@ class Game extends CI_Controller {
 
         //$uid = $this -> usermodel -> getUserIdByNickname('emadagha');
 
-        $temp  = $this -> gamemodel -> finishInvitation(5);
+        $temp = $this -> chatmodel -> getLastMessages(12);
 
         print_r($temp);
 
