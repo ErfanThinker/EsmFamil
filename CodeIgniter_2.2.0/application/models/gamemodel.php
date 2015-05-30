@@ -108,7 +108,9 @@ class Gamemodel extends CI_Model {
 
             $activeGame = $this -> getActiveGame($nickname);
 
-            array_push($result,$activeGame['0']);
+            if($activeGame['0']['isPrivate'] == 1 && $isAdmin == 0)
+                array_push($result,$activeGame['0']);
+
         }
 
         return $result;
